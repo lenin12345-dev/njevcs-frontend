@@ -181,7 +181,7 @@ const EVChargingStationsMap = () => {
         </Backdrop>
       )}
       <LoadScript
-        googleMapsApiKey="AIzaSyB2k4OWeX0_6QgYbQ6KsrkCeH4i_p-DzQ0" // Replace with your actual API key
+        googleMapsApiKey={process.env.REACT_APP_GOOGLE_API_KEY} // Replace with your actual API key
         libraries={["places"]}
       >
         <GoogleMap
