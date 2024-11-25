@@ -18,6 +18,7 @@ const center = {
   lng: -74.4057, // New Jersey's central longitude
 };
 
+
 const EVChargingStationsMap = () => {
   const [isMapLoaded, setIsMapLoaded] = useState(false);
   const [places, setPlaces] = useState([]);
@@ -181,7 +182,7 @@ const EVChargingStationsMap = () => {
         </Backdrop>
       )}
       <LoadScript
-        googleMapsApiKey={process.env.REACT_APP_GOOGLE_API_KEY} // Replace with your actual API key
+        googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_API_KEY} // Replace with your actual API key
         libraries={["places"]}
       >
         <GoogleMap
