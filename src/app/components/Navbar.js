@@ -19,10 +19,30 @@ export default function ButtonAppBar() {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             NJ EVCS Awnings
           </Typography>
-          <Button color="inherit" component={Link} href="/">Home</Button>
-          <Button color="inherit" component={Link} href="/about">About</Button>
-          <Button color="inherit" component={Link} href="/solarpotential">Solar Potential</Button>
-          <Button color="inherit" component={Link} href="/contact">Contact Us</Button>
+          <Button           sx={{
+              ":hover": {
+                color: "#FF4500", // Orange-red color on hover
+               
+              },
+            }} color="inherit" component={Link} href="/">Home</Button>
+          <Button           sx={{
+              ":hover": {
+                color: "#FF4500", // Orange-red color on hover
+               
+              },
+            }} color="inherit" component={Link} href="/about">About</Button>
+          <Button           sx={{
+              ":hover": {
+                color: "#FF4500", // Orange-red color on hover
+               
+              },
+            }} color="inherit" component={Link} href="/solarpotential">Solar Potential</Button>
+          <Button           sx={{
+              ":hover": {
+                color: "#FF4500", // Orange-red color on hover
+               
+              },
+            }} color="inherit" component={Link} href="/contact">Contact Us</Button>
         </Toolbar>
       </AppBar>
     </Box>

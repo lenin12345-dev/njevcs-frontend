@@ -5,8 +5,17 @@ import {
   LoadScript,
   Marker,
   InfoWindow,
+  useJsApiLoader,
 } from "@react-google-maps/api";
-import { Box, Snackbar, Alert, Typography, CircularProgress,Backdrop } from "@mui/material";
+import {
+  Box,
+  Snackbar,
+  Alert,
+  Typography,
+  CircularProgress,
+  Backdrop,
+  TextField,
+} from "@mui/material";
 
 const containerStyle = {
   width: "100%",
@@ -17,7 +26,7 @@ const center = {
   lat: 40.0583, // New Jersey's central latitude
   lng: -74.4057, // New Jersey's central longitude
 };
-
+const key = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
 
 const EVChargingStationsMap = () => {
   const [isMapLoaded, setIsMapLoaded] = useState(false);
@@ -30,10 +39,16 @@ const EVChargingStationsMap = () => {
   const autocompleteRef = useRef(null); // Ref for the autocomplete instance
   const mapRef = useRef(null); // Ref for the Google Map instance
 
+  // Load Google Maps API
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: key, // Replace with your actual API key
+    libraries: ["places"],
+  });
 
   // Initialize Autocomplete
   useEffect(() => {
     if (
+      isLoaded &&
       typeof window !== "undefined" &&
       window.google &&
       inputRef.current &&
@@ -65,7 +80,7 @@ const EVChargingStationsMap = () => {
         handlePlaceSelected(place);
       });
     }
-  }, [inputRef.current]);
+  }, [isLoaded, inputRef]);
 
   const handlePlaceSelected = (place) => {
     if (place && place.geometry) {
@@ -78,7 +93,9 @@ const EVChargingStationsMap = () => {
       const cityComponent = place.address_components.find((component) =>
         component.types.includes("locality")
       );
-      const cityName = cityComponent ? cityComponent.long_name : "Unknown City";
+      let cityName = cityComponent ? cityComponent.long_name : "Unknown City";
+
+      console.log("cityname", cityName);
 
       const isInNewJersey = place.address_components.some(
         (component) =>
@@ -102,7 +119,8 @@ const EVChargingStationsMap = () => {
 
   // Fetch Charging Stations
   const getChargingStations = (location, bounds, cityName) => {
-
+    cityName = cityName.replace(/ Township$/i, "");
+    cityName = cityName.trim();
     // Make API call to fetch charging station details by city name
     fetch(`http://localhost:8080/evcs/city/${cityName}`, {})
       .then((response) => {
@@ -129,9 +147,6 @@ const EVChargingStationsMap = () => {
     setIsMapLoaded(true);
   };
 
-
-  
-
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
       <Box
@@ -152,7 +167,7 @@ const EVChargingStationsMap = () => {
             padding: "10px",
             fontSize: "16px",
             border: "1px solid #ccc",
-            borderRadius: "4px",
+            borderRadius: "8px",
           }}
         />
       </Box>
@@ -169,22 +184,20 @@ const EVChargingStationsMap = () => {
       </Snackbar>
 
       {/* Google Map */}
-    
-      {!isMapLoaded && (
+
+      {!isLoaded && (
         <Backdrop
           sx={{
             color: "#fff",
             zIndex: (theme) => theme.zIndex.drawer + 1,
           }}
-          open={!isMapLoaded} // Open the backdrop while the map is loading
+          open={!isLoaded} // Open the backdrop while the map is loading
         >
           <CircularProgress color="inherit" />
         </Backdrop>
       )}
-      <LoadScript
-        googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_API_KEY} // Replace with your actual API key
-        libraries={["places"]}
-      >
+
+      {isLoaded && (
         <GoogleMap
           mapContainerStyle={containerStyle}
           center={cityCoordinates}
@@ -299,7 +312,7 @@ const EVChargingStationsMap = () => {
             </InfoWindow>
           )}
         </GoogleMap>
-      </LoadScript>
+      )}
     </div>
   );
 };
