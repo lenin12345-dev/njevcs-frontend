@@ -21,25 +21,29 @@ export default function ButtonAppBar() {
           </Typography>
           <Button           sx={{
               ":hover": {
-                color: "#FF4500", // Orange-red color on hover
+                color: "white",
+                 fontWeight:'bold'
                
               },
             }} color="inherit" component={Link} href="/">Home</Button>
           <Button           sx={{
               ":hover": {
-                color: "#FF4500", // Orange-red color on hover
+                color: "white",
+                 fontWeight:'bold'
                
               },
             }} color="inherit" component={Link} href="/about">About</Button>
           <Button           sx={{
               ":hover": {
-                color: "#FF4500", // Orange-red color on hover
+                color: "white",
+                 fontWeight:'bold'
                
               },
             }} color="inherit" component={Link} href="/solarpotential">Solar Potential</Button>
           <Button           sx={{
               ":hover": {
-                color: "#FF4500", // Orange-red color on hover
+                color: "white",
+                 fontWeight:'bold'
                
               },
             }} color="inherit" component={Link} href="/contact">Contact Us</Button>
