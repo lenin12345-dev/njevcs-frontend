@@ -273,6 +273,8 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
     setPlaces([]); 
     setCityCoordinates(center); // Reset the map to default center
      setCityBoundary(null)
+     setSelectedCategory("charging");
+
      clearInput()
   };
   const clearInput = () => {
