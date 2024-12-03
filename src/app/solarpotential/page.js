@@ -6,6 +6,7 @@ import {
   Marker,
   InfoWindow,
   useJsApiLoader,
+  Polygon,
 } from "@react-google-maps/api";
 import {
   Box,
@@ -18,6 +19,7 @@ import {
   Button,
   Grid,
 } from "@mui/material";
+import * as turf from "@turf/turf";
 
 const containerStyle = {
   width: "100%",
@@ -38,7 +40,8 @@ const EVChargingStationsMap = () => {
   const [hoveredPlace, setHoveredPlace] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState("charging");
   const [showFilter, setShowFilter] = useState(false);
-  const [loading,setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [cityBoundary, setCityBoundary] = useState(null);
 
   const inputRef = useRef(null); // Ref for the input field
   const autocompleteRef = useRef(null); // Ref for the autocomplete instance
@@ -49,8 +52,6 @@ const EVChargingStationsMap = () => {
     googleMapsApiKey: key, // Replace with your actual API key
     libraries: ["places"],
   });
-
-  console.log('selectedCategory',selectedCategory)
 
   // Initialize Autocomplete
   useEffect(() => {
@@ -89,7 +90,10 @@ const EVChargingStationsMap = () => {
     }
   }, [isLoaded, inputRef]);
 
-  const handlePlaceSelected = (place) => {
+  const handlePlaceSelected = async (place) => {
+    if (cityBoundary) {
+      cityBoundary.setMap(null); // Remove the previous boundary
+    }
     if (place && place.geometry) {
       const location = {
         lat: place.geometry.location.lat(),
@@ -115,7 +119,8 @@ const EVChargingStationsMap = () => {
         // Use the city bounds for charging station search
         const bounds = place.geometry.viewport; // Get the viewport (bounds) of the selected city
         setShowFilter(true);
-        // getChargingStations(location, bounds, cityName); // Get EV charging stations within the bounds
+        // Create the polygon path based on the viewport
+        await fetchCityBoundary(cityName);
 
         fetchPlaces(location, bounds, cityName, selectedCategory); // Fetch initial places based on category
       } else {
@@ -123,13 +128,95 @@ const EVChargingStationsMap = () => {
       }
     }
   };
+  const fetchCityBoundary = async (cityName) => {
+    try {
+      // Step 1: Fetch the place ID
+      const placeIdUrl = `https://api.geoapify.com/v1/geocode/search?text=${encodeURIComponent(
+        cityName
+      )}&format=json&apiKey=b8568cb9afc64fad861a69edbddb2658`;
+
+      const placeIdResponse = await fetch(placeIdUrl);
+      const placeIdData = await placeIdResponse.json();
+
+      if (
+        !placeIdData ||
+        !placeIdData.results ||
+        placeIdData.results.length === 0
+      ) {
+        console.error("Failed to fetch place ID.");
+        return;
+      }
+
+      const placeId = placeIdData.results[0].place_id;
+      console.log("place_id", placeId);
+
+      // Step 2: Fetch the boundary data using the place ID
+      const boundaryUrl = `
+https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=b8568cb9afc64fad861a69edbddb2658`;
+
+      const boundaryResponse = await fetch(boundaryUrl);
+      const boundaryData = await boundaryResponse.json();
+
+      if (
+        !boundaryData ||
+        !boundaryData.features ||
+        boundaryData.features.length === 0
+      ) {
+        console.error("No boundary data found.");
+        return;
+      }
+
+      // Parse boundary coordinates
+      const coordinates = boundaryData.features[0].geometry.coordinates.flat(1);
+
+      // Create and render the boundary on the map
+      createDottedBoundary(coordinates);
+    } catch (error) {
+      console.error("Error fetching city boundary:", error);
+    }
+  };
+
+  const createDottedBoundary = (coordinates) => {
+    const mapInstance = mapRef.current;
+    if (!mapInstance) return;
+
+    // Clear previous boundary
+    if (cityBoundary) {
+      cityBoundary.setMap(null);
+    }
+
+    // Validate coordinates
+    console.log("coordinates", coordinates);
+
+    // Validate and format coordinates
+    const path = coordinates
+      .map(([lng, lat]) => ({ lat, lng })) // GeoJSON uses [lng, lat] format
+      .filter(Boolean);
+
+    if (path.length === 0) {
+      console.error("No valid path coordinates to draw.");
+      return;
+    }
+
+    // // Draw the polygon for the city boundary
+    // const polygon = new google.maps.Polygon({
+    //   paths: path,
+    //   strokeColor: '#FF0000',
+    //   strokeOpacity: 0.8,
+    //   strokeWeight: 2,
+    //   fillColor: '#FF0000',
+    //   fillOpacity: 0.35,
+    // });
+
+    // polygon.setMap(mapInstance);
+    setCityBoundary(path); // Optionally store the boundary on the map
+  };
 
   const fetchPlaces = (location, bounds, cityName, category) => {
     cityName = cityName.replace(/ Township$/i, "").trim();
     let apiUrl;
 
-    console.log('category',category);
-    setLoading(true)
+    setLoading(true);
 
     if (category === "charging") {
       apiUrl = `http://localhost:8080/evcs/city/${cityName}`;
@@ -150,7 +237,7 @@ const EVChargingStationsMap = () => {
       })
       .then((data) => {
         setPlaces(data);
-        setLoading(false)
+        setLoading(false);
         console.log(`${category} in ${cityName}:`, data);
       })
       .catch((error) => {
@@ -177,8 +264,7 @@ const EVChargingStationsMap = () => {
     // If input is cleared, reset place and location
     if (value === "") {
       setPlaces(null); // Clear selected place
-      setSelectedCategory('charging')
-   
+      setSelectedCategory("charging");
     }
   };
 
@@ -202,7 +288,7 @@ const EVChargingStationsMap = () => {
           ref={inputRef}
           type="text"
           placeholder="Enter a city in NJ"
-          onChange={handleInputChange} 
+          onChange={handleInputChange}
           style={{
             width: "100%",
             padding: "10px",
@@ -333,17 +419,18 @@ const EVChargingStationsMap = () => {
 
       {/* Google Map */}
 
-      {!isLoaded || loading && (
-        <Backdrop
-          sx={{
-            color: "#fff",
-            zIndex: (theme) => theme.zIndex.drawer + 1,
-          }}
-          open={!isLoaded || loading} // Open the backdrop while the map is loading
-        >
-          <CircularProgress color="inherit" />
-        </Backdrop>
-      )}
+      {!isLoaded ||
+        (loading && (
+          <Backdrop
+            sx={{
+              color: "#fff",
+              zIndex: (theme) => theme.zIndex.drawer + 1,
+            }}
+            open={!isLoaded || loading} // Open the backdrop while the map is loading
+          >
+            <CircularProgress color="inherit" />
+          </Backdrop>
+        ))}
 
       {isLoaded && (
         <GoogleMap
@@ -352,45 +439,61 @@ const EVChargingStationsMap = () => {
           zoom={12}
           onLoad={onLoad}
         >
-          {places && places.length>0 && places.map((place, index) => {
-            // Define a mapping of store names to their respective logo URLs
-            const storeIcons = {
-              Costco:
-                "https://e7.pngegg.com/pngimages/378/178/png-clipart-costco-wholesale-united-kingdom-ltd-app-store-retail-others-miscellaneous-text.png",
-              BJs: "https://pbs.twimg.com/profile_images/1696971074200592384/UZstsMwK_400x400.jpg",
-              Walmart:
-                "https://wallpapers.com/images/hd/walmart-round-logo-7r8yqrjrr1e7nav1.jpg",
-              Target:
-                "https://banner2.cleanpng.com/20180202/rfe/av2kg164h.webp",
-              "Home Depot":
-                "https://i.pinimg.com/originals/3d/cf/2f/3dcf2fe5252d4e5233c2a334498661f8.png",
-            };
+          {cityBoundary && (
+            <Polygon
+              paths={cityBoundary} // The path for the city's boundary
+              options={{
+                strokeColor: "#FF0000", // Red color for the boundary line
+                strokeOpacity: 1, // Fully opaque stroke
+                strokeWeight: 2, // Line thickness
+                strokeDasharray: "5, 5", // Dotted line (5px dash, 5px gap)
+                fillColor: null, // No fill color
+                fillOpacity: 0,
+              }}
+            />
+          )}
 
-            // Determine icon based on category or store name
-            const isChargingStation = selectedCategory === "charging";
-            const iconUrl = isChargingStation
-              ? "https://energysolutions.homeserve.ca/wp-content/uploads/2022/02/BS_PD_2618_ev_icon_400px.png" // Charging station icon
-              : storeIcons[place.name] || "https://via.placeholder.com/30"; // Store icon or fallback
+          {places &&
+            places.length > 0 &&
+            places.map((place, index) => {
+              // Define a mapping of store names to their respective logo URLs
+              const storeIcons = {
+                Costco:
+                  "https://e7.pngegg.com/pngimages/378/178/png-clipart-costco-wholesale-united-kingdom-ltd-app-store-retail-others-miscellaneous-text.png",
+                BJs: "https://pbs.twimg.com/profile_images/1696971074200592384/UZstsMwK_400x400.jpg",
+                Walmart:
+                  "https://wallpapers.com/images/hd/walmart-round-logo-7r8yqrjrr1e7nav1.jpg",
+                Target:
+                  "https://banner2.cleanpng.com/20180202/rfe/av2kg164h.webp",
+                "Home Depot":
+                  "https://i.pinimg.com/originals/3d/cf/2f/3dcf2fe5252d4e5233c2a334498661f8.png",
+              };
 
-            // Set size dynamically
-            const iconSize = isChargingStation
-              ? new window.google.maps.Size(30, 30) // Charging stations: smaller size
-              : new window.google.maps.Size(40, 45); // Stores: larger size
+              // Determine icon based on category or store name
+              const isChargingStation = selectedCategory === "charging";
+              const iconUrl = isChargingStation
+                ? "https://energysolutions.homeserve.ca/wp-content/uploads/2022/02/BS_PD_2618_ev_icon_400px.png" // Charging station icon
+                : storeIcons[place.name] || "https://via.placeholder.com/30"; // Store icon or fallback
 
-            return (
-              <Marker
-                key={index}
-                position={{ lat: place.latitude, lng: place.longitude }}
-                title={place.name}
-                icon={{
-                  url: iconUrl,
-                  scaledSize: iconSize // Adjust size as needed
-                }}
-                onMouseOver={() => setHoveredPlace(place)} // Show InfoWindow on hover
-                onMouseOut={() => setHoveredPlace(null)} // Hide InfoWindow when not hovering
-              />
-            );
-          })}
+              // Set size dynamically
+              const iconSize = isChargingStation
+                ? new window.google.maps.Size(30, 30) // Charging stations: smaller size
+                : new window.google.maps.Size(40, 45); // Stores: larger size
+
+              return (
+                <Marker
+                  key={index}
+                  position={{ lat: place.latitude, lng: place.longitude }}
+                  title={place.name}
+                  icon={{
+                    url: iconUrl,
+                    scaledSize: iconSize, // Adjust size as needed
+                  }}
+                  onMouseOver={() => setHoveredPlace(place)} // Show InfoWindow on hover
+                  onMouseOut={() => setHoveredPlace(null)} // Hide InfoWindow when not hovering
+                />
+              );
+            })}
 
           {hoveredPlace && (
             <InfoWindow
@@ -418,7 +521,7 @@ const EVChargingStationsMap = () => {
                     marginBottom: 0.2,
                     color: "primary.main",
                     fontWeight: "bold",
-                    fontSize: "0.75rem", // Title font size smaller
+                    fontSize: "0.75rem",
                   }}
                 >
                   {hoveredPlace.name}
@@ -428,23 +531,39 @@ const EVChargingStationsMap = () => {
                   variant="body2"
                   sx={{
                     marginBottom: 0.2,
-                    fontSize: "0.75rem", // Smaller text
+                    fontSize: "0.75rem",
                     fontWeight: "normal",
                   }}
                 >
                   <strong>Address:</strong> {hoveredPlace.address}
                 </Typography>
 
-                <Typography
-                  variant="body2"
-                  sx={{
-                    marginBottom: 0.2,
-                    fontSize: "0.75rem", // Smaller text
-                    fontWeight: "normal",
-                  }}
-                >
-                  <strong>Total Points:</strong> {hoveredPlace.totalPoints}
-                </Typography>
+                {hoveredPlace.totalPoints && (
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      marginBottom: 0.2,
+                      fontSize: "0.75rem",
+                      fontWeight: "normal",
+                    }}
+                  >
+                    <strong>Total Points:</strong> {hoveredPlace.totalPoints}
+                  </Typography>
+                )}
+
+                {hoveredPlace.parkingArea && (
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      marginBottom: 0.2,
+                      fontSize: "0.75rem",
+                      fontWeight: "normal",
+                    }}
+                  >
+                    <strong>Parking Area:</strong> {hoveredPlace.parkingArea}{" "}
+                    <span>m²</span>
+                  </Typography>
+                )}
 
                 <Typography
                   variant="body2"
@@ -463,7 +582,7 @@ const EVChargingStationsMap = () => {
                     sx={{
                       color: "success.main",
                       fontWeight: "normal",
-                      fontSize: "0.75rem", // Smaller text for the J1772 feature
+                      fontSize: "0.75rem",
                     }}
                   >
                     ✅ Supports J1772
@@ -476,7 +595,7 @@ const EVChargingStationsMap = () => {
                     sx={{
                       color: "success.main",
                       fontWeight: "normal",
-                      fontSize: "0.75rem", // Smaller text for Tesla feature
+                      fontSize: "0.75rem",
                     }}
                   >
                     ✅ Tesla Destination
