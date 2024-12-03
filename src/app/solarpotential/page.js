@@ -235,7 +235,7 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
         }
         return response.json();
       })
-      .then((data) => {
+      .then(({data}) => {
         setPlaces(data);
         setLoading(false);
         console.log(`${category} in ${cityName}:`, data);
@@ -267,6 +267,20 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
       setSelectedCategory("charging");
     }
   };
+  const resetFilters = () => {
+   
+    setShowFilter(false);
+    setPlaces([]); 
+    setCityCoordinates(center); // Reset the map to default center
+     setCityBoundary(null)
+     clearInput()
+  };
+  const clearInput = () => {
+    if (inputRef.current) {
+      inputRef.current.value = ""; // Clear the input field
+    }
+   
+  };
 
   const onLoad = (map) => {
     mapRef.current = map;
@@ -275,7 +289,7 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
 
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
-      <Box
+     <Box
         sx={{
           position: "absolute",
           top: "150px",
@@ -387,7 +401,7 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
               <Grid item xs={6}>
                 <Button
                   fullWidth
-                  onClick={() => handleCategoryChange("other")}
+                  onClick={() => resetFilters()}
                   variant={
                     selectedCategory === "other" ? "contained" : "outlined"
                   }
