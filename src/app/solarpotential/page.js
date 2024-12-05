@@ -18,8 +18,13 @@ import {
   ButtonGroup,
   Button,
   Grid,
+  Drawer,
+  IconButton,
+  Divider,
+  Avatar,
 } from "@mui/material";
 import * as turf from "@turf/turf";
+import CloseIcon from "@mui/icons-material/Close";
 
 const containerStyle = {
   width: "100%",
@@ -42,6 +47,13 @@ const EVChargingStationsMap = () => {
   const [showFilter, setShowFilter] = useState(false);
   const [loading, setLoading] = useState(false);
   const [cityBoundary, setCityBoundary] = useState(null);
+  const [polygonOptions, setPolygonOptions] = useState(null);
+  const [cityInfo, setCityInfo] = useState(null);
+  const [sidebarVisible, setSidebarVisible] = useState(false);
+  const [countyBoundaries, setCountyBoundaries] = useState([]);
+  const [incomeData, setIncomeData] = useState([]);
+  const [zoomLevel, setZoomLevel] = useState("12");
+  const [hoveredCounty, setHoveredCounty] = useState(null);
 
   const inputRef = useRef(null); // Ref for the input field
   const autocompleteRef = useRef(null); // Ref for the autocomplete instance
@@ -52,6 +64,11 @@ const EVChargingStationsMap = () => {
     googleMapsApiKey: key, // Replace with your actual API key
     libraries: ["places"],
   });
+  const incomeColors = {
+    Low: "#ff0000", // Red for low income
+    Medium: "#ffa500", // Orange for medium income
+    High: "#008000", // Green for high income
+  };
 
   // Initialize Autocomplete
   useEffect(() => {
@@ -119,8 +136,11 @@ const EVChargingStationsMap = () => {
         // Use the city bounds for charging station search
         const bounds = place.geometry.viewport; // Get the viewport (bounds) of the selected city
         setShowFilter(true);
+        setSelectedCategory("charging");
+
         // Create the polygon path based on the viewport
         await fetchCityBoundary(cityName);
+        await fetchEconomyDetails(cityName);
 
         fetchPlaces(location, bounds, cityName, selectedCategory); // Fetch initial places based on category
       } else {
@@ -128,12 +148,37 @@ const EVChargingStationsMap = () => {
       }
     }
   };
+  const parseCoordinates = (geometry) => {
+   
+    
+    if (!geometry || geometry.type !== "MultiPolygon" && geometry.type=='Polygon'){
+      return geometry.coordinates.flat(1);
+    }   
+    // Flatten nested MultiPolygon coordinates into a single array
+    const flattenedCoordinates = geometry.coordinates.flat(Infinity);
+
+    if (flattenedCoordinates.length % 2 !== 0) {
+      console.error("Invalid coordinate data, missing pairs of longitude and latitude.");
+      return [];
+    }
+  
+    // Group flattened array into lat-lng pairs
+    const latLngPairs = [];
+    for (let i = 0; i < flattenedCoordinates.length; i += 2) {
+      const lng = flattenedCoordinates[i];
+      const lat = flattenedCoordinates[i + 1];
+      latLngPairs.push([lng,lat ]);
+    }
+    
+  
+    return latLngPairs;
+  };
   const fetchCityBoundary = async (cityName) => {
     try {
       // Step 1: Fetch the place ID
       const placeIdUrl = `https://api.geoapify.com/v1/geocode/search?text=${encodeURIComponent(
-        cityName
-      )}&format=json&apiKey=b8568cb9afc64fad861a69edbddb2658`;
+        `${cityName}, NJ`
+      )}&format=json&apiKey=b8568cb9afc64fad861a69edbddb2658`
 
       const placeIdResponse = await fetch(placeIdUrl);
       const placeIdData = await placeIdResponse.json();
@@ -148,7 +193,7 @@ const EVChargingStationsMap = () => {
       }
 
       const placeId = placeIdData.results[0].place_id;
-      console.log("place_id", placeId);
+      
 
       // Step 2: Fetch the boundary data using the place ID
       const boundaryUrl = `
@@ -167,7 +212,7 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
       }
 
       // Parse boundary coordinates
-      const coordinates = boundaryData.features[0].geometry.coordinates.flat(1);
+      const coordinates = parseCoordinates(boundaryData.features[0].geometry);
 
       // Create and render the boundary on the map
       createDottedBoundary(coordinates);
@@ -185,31 +230,95 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
       cityBoundary.setMap(null);
     }
 
-    // Validate coordinates
-    console.log("coordinates", coordinates);
+  
 
-    // Validate and format coordinates
-    const path = coordinates
-      .map(([lng, lat]) => ({ lat, lng })) // GeoJSON uses [lng, lat] format
-      .filter(Boolean);
+ // Validate and format coordinates
+ 
+ const path = coordinates
+ .map((coord) =>
+   Array.isArray(coord) && coord.length >= 2
+     ? { lat: parseFloat(coord[1]), lng: parseFloat(coord[0]) }
+     : null
+ )
+ .filter((point) => point && !isNaN(point.lat) && !isNaN(point.lng));
+
+
+      
 
     if (path.length === 0) {
       console.error("No valid path coordinates to draw.");
       return;
     }
 
-    // // Draw the polygon for the city boundary
-    // const polygon = new google.maps.Polygon({
-    //   paths: path,
-    //   strokeColor: '#FF0000',
-    //   strokeOpacity: 0.8,
-    //   strokeWeight: 2,
-    //   fillColor: '#FF0000',
-    //   fillOpacity: 0.35,
-    // });
 
-    // polygon.setMap(mapInstance);
     setCityBoundary(path); // Optionally store the boundary on the map
+  };
+  const fetchEconomyDetails = async (cityName) => {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/economy/city/${cityName}`
+      );
+      const data = await response.json();
+
+      if (data && data.data) {
+        const { income, incomeLevel } = data.data;
+        setCityInfo({ cityName, income, incomeLevel });
+        updatePolygonFillColor(incomeLevel);
+        setSidebarVisible(true);
+      } else {
+        console.error("No economy details found for the city.");
+      }
+    } catch (error) {
+      console.error("Error fetching economy details:", error);
+    }
+  };
+  const updatePolygonFillColor = (incomeLevel) => {
+    let fillColor = "#FFFFFF"; // Default to white (no fill)
+
+    switch (incomeLevel) {
+      case "Low":
+        fillColor = "#FF9999"; // Light red for low income
+        break;
+      case "Medium":
+        fillColor = "#FFFF99"; // Light yellow for medium income
+        break;
+      case "High":
+        fillColor = "#99FF99"; // Light green for high income
+        break;
+      default:
+        console.warn(`Unknown income level: ${incomeLevel}`);
+    }
+
+    setPolygonOptions((prevOptions) => ({
+      ...prevOptions,
+      fillColor, // Update the fill color dynamically
+      fillOpacity: 0.5, // Adjust fill opacity
+    }));
+  };
+  const fetchCountyData = async () => {
+    setLoading(true);
+
+    try {
+      // Fetch county boundaries from the API
+      const countyBoundariesResponse = await fetch(
+        "https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/us-county-boundaries/records?limit=20&refine=stusab%3A%22NJ%22"
+      );
+      const countyBoundariesData = await countyBoundariesResponse.json();
+
+      // Fetch income data from your local API
+      const incomeResponse = await fetch(
+        "http://localhost:8080/economy/counties"
+      );
+      const incomeDataResponse = await incomeResponse.json();
+
+      setCountyBoundaries(countyBoundariesData.results);
+      setIncomeData(incomeDataResponse.data);
+      stateView();
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const fetchPlaces = (location, bounds, cityName, category) => {
@@ -222,8 +331,6 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
       apiUrl = `http://localhost:8080/evcs/city/${cityName}`;
     } else if (category === "stores") {
       apiUrl = `http://localhost:8080/stores/city/${cityName}`;
-    } else if (category === "economicZones") {
-      apiUrl = `http://localhost:8080/economic-zones/city/${cityName}`;
     } else if (category === "demand") {
       apiUrl = `http://localhost:8080/demand-zones/city/${cityName}`;
     }
@@ -235,10 +342,14 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
         }
         return response.json();
       })
-      .then(({data}) => {
+      .then(({ data }) => {
         setPlaces(data);
         setLoading(false);
-        console.log(`${category} in ${cityName}:`, data);
+        setCountyBoundaries(null);
+        setIncomeData(null);
+        setZoomLevel("12");
+
+        
       })
       .catch((error) => {
         console.error(`Error fetching ${category} for ${cityName}:`, error);
@@ -254,7 +365,11 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
           )?.long_name
       : "Unknown City";
 
-    if (cityName !== "Unknown City") {
+    if (category === "economicZones" && cityName !== "Unknown City") {
+      // Trigger fetching of county data for New Jersey
+      fetchCountyData();
+    } else {
+      // Handle other categories
       fetchPlaces(cityCoordinates, null, cityName, category);
     }
   };
@@ -265,25 +380,187 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
     if (value === "") {
       setPlaces(null); // Clear selected place
       setSelectedCategory("charging");
+      setCityBoundary(null)
     }
   };
-  const resetFilters = () => {
-   
-    setShowFilter(false);
-    setPlaces([]); 
+  const stateView = () => {
+    setPlaces([]);
     setCityCoordinates(center); // Reset the map to default center
-     setCityBoundary(null)
-     setSelectedCategory("charging");
-
-     clearInput()
+    setCityBoundary(null);
+    clearInput();
+    setZoomLevel("8");
+  };
+  const resetFilters = () => {
+    setShowFilter(false);
+    setPlaces([]);
+    setCityCoordinates(center); // Reset the map to default center
+    setCityBoundary(null);
+    setSelectedCategory("charging");
+    setCountyBoundaries(null);
+    setIncomeData(null);
+    clearInput();
   };
   const clearInput = () => {
     if (inputRef.current) {
       inputRef.current.value = ""; // Clear the input field
     }
-   
+  };
+  // Combine income level data with county boundaries
+  const getIncomeLevel = (countyName) => {
+    const countyIncome = incomeData.find((item) => item.county === countyName);
+    return countyIncome ? countyIncome.incomeLevel : "Medium"; // Default to "Medium" if not found
   };
 
+
+
+  // Render polygons with color-coding
+  const renderCountyBoundaries = () => {
+    return countyBoundaries.map((county, index) => {
+      const handleMouseOver = (county, polygon) => {
+        // Set the county data when hovering over a county
+        const countyName = county.name;
+        const incomeLevel = getIncomeLevel(countyName);
+        const coordinates = county.geo_shape.geometry.coordinates[0].map(
+          ([lng, lat]) => ({
+            lat,
+            lng,
+          })
+        );
+    
+        const bounds = new google.maps.LatLngBounds();
+        coordinates.forEach(({ lat, lng }) => bounds.extend(new google.maps.LatLng(lat, lng)));
+    
+        const center = bounds.getCenter();
+        setHoveredCounty({
+          name: countyName,
+          incomeLevel,
+          latitude: center.lat(),
+          longitude: center.lng(),
+        });
+      };
+    
+      const handleMouseOut = () => {
+        setHoveredCounty(null); // Clear the hovered county when mouse leaves
+      };
+      const countyName = county.name;
+      const incomeLevel = getIncomeLevel(countyName);
+      const coordinates = county.geo_shape.geometry.coordinates[0].map(
+        ([lng, lat]) => ({
+          lat,
+          lng,
+        })
+      );
+
+      return (
+        <Polygon
+          key={index}
+          paths={coordinates}
+          options={{
+           
+            strokeColor: "#FF0000",
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: incomeColors[incomeLevel],
+            fillOpacity: 0.4,
+          }}
+          onMouseOver={() => handleMouseOver(county)}
+          onMouseOut={handleMouseOut}
+        />
+      );
+    });
+  };
+  const closeSidebar = () => setSidebarVisible(false);
+
+  const Sidebar = ({ cityInfo, visible, onClose }) => (
+    <Drawer
+      anchor="right"
+      open={visible}
+      onClose={onClose}
+      PaperProps={{
+        sx: {
+          width: 350,
+          height: "auto", // Auto height based on content
+          maxHeight: "90vh", // Optional: Cap height to prevent overflow
+          padding: 2,
+          backgroundColor: "#f9f9f9",
+          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+          borderRadius: "8px 0 0 8px", // Rounded edges for better style
+        },
+      }}
+    >
+      {/* Header Section */}
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          mb: 2,
+        }}
+      >
+        <Typography variant="h6" fontWeight="bold" color="primary">
+          {cityInfo?.cityName || "City Details"}
+        </Typography>
+        <IconButton onClick={onClose}>
+          <CloseIcon />
+        </IconButton>
+      </Box>
+      <Divider />
+
+      {/* Content Section */}
+      <Box sx={{ mt: 2 }}>
+        <Typography variant="body1" sx={{ mb: 1, fontSize: 16 }}>
+          <strong>Income Level:</strong> {cityInfo?.incomeLevel}
+        </Typography>
+        <Typography variant="body1" sx={{ mb: 1, fontSize: 16 }}>
+          <strong>Average Income:</strong> ${cityInfo?.income.toLocaleString()}
+        </Typography>
+      </Box>
+
+      {/* Visual Section */}
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          mt: 3,
+          p: 2,
+          border: "1px solid #e0e0e0",
+          borderRadius: 2,
+          backgroundColor: "#f0f4f8",
+        }}
+      >
+        <Avatar
+          sx={{
+            width: 80,
+            height: 80,
+            bgcolor:
+              cityInfo?.incomeLevel === "High"
+                ? "green"
+                : cityInfo?.incomeLevel === "Medium"
+                ? "orange"
+                : "red",
+          }}
+        >
+          {cityInfo?.incomeLevel.charAt(0)}
+        </Avatar>
+        <Typography
+          variant="body2"
+          sx={{ ml: 2, color: "#555", textAlign: "center" }}
+        >
+          The income level of {cityInfo?.cityName} is categorized as{" "}
+          <strong>{cityInfo?.incomeLevel}</strong>. The average income is
+          approximately ${cityInfo?.income.toLocaleString()}.
+        </Typography>
+      </Box>
+
+      {/* Footer Section */}
+      <Box sx={{ mt: 3, textAlign: "center" }}>
+        <Typography variant="caption" sx={{ color: "#888" }}>
+          We will be adding more Solar Potential info for {cityInfo?.cityName}.
+        </Typography>
+      </Box>
+    </Drawer>
+  );
   const onLoad = (map) => {
     mapRef.current = map;
     setIsMapLoaded(true);
@@ -291,7 +568,7 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
 
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
-     <Box
+      <Box
         sx={{
           position: "absolute",
           top: "150px",
@@ -452,19 +729,17 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
         <GoogleMap
           mapContainerStyle={containerStyle}
           center={cityCoordinates}
-          zoom={12}
+          zoom={Number(zoomLevel)}
           onLoad={onLoad}
         >
           {cityBoundary && (
             <Polygon
               paths={cityBoundary} // The path for the city's boundary
               options={{
+                ...polygonOptions, // Spread dynamically updated polygon options
                 strokeColor: "#FF0000", // Red color for the boundary line
                 strokeOpacity: 1, // Fully opaque stroke
                 strokeWeight: 2, // Line thickness
-                strokeDasharray: "5, 5", // Dotted line (5px dash, 5px gap)
-                fillColor: null, // No fill color
-                fillOpacity: 0,
               }}
             />
           )}
@@ -551,7 +826,8 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
                     fontWeight: "normal",
                   }}
                 >
-                  <strong>Address:</strong> {hoveredPlace.address}
+                  <strong>Address:</strong> {hoveredPlace.address} {","}{" "}
+                  {hoveredPlace?.zipCode?.city}
                 </Typography>
 
                 {hoveredPlace.totalPoints && (
@@ -585,11 +861,11 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
                   variant="body2"
                   sx={{
                     marginBottom: 0.2,
-                    fontSize: "0.75rem", // Smaller text
+                    fontSize: "0.75rem", // Smaller textAAAAA
                     fontWeight: "normal",
                   }}
                 >
-                  <strong>Zip Code:</strong> {hoveredPlace.zipCode}
+                  <strong>Zip Code:</strong> {hoveredPlace?.zipCode?.zipCode}
                 </Typography>
 
                 {hoveredPlace.j1772 && (
@@ -620,8 +896,61 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
               </Box>
             </InfoWindow>
           )}
+          {hoveredCounty && (
+  <InfoWindow
+    position={{
+      lat: hoveredCounty.latitude,
+      lng: hoveredCounty.longitude,
+    }}
+    options={{
+      pixelOffset: new window.google.maps.Size(0, -30), // Adjust InfoWindow position
+      closeBoxURL: "", // This hides the close button
+      disableAutoPan: true, // Optional: Disable auto panning when the InfoWindow is opened
+    }}
+  >
+    <Box
+      sx={{
+        maxWidth: "150px",
+        backgroundColor: "white",
+        boxShadow: 2,
+        borderRadius: 1,
+      }}
+    >
+      <Typography
+        variant="body2"
+        sx={{
+          marginBottom: 0.2,
+          color: "primary.main",
+          fontWeight: "bold",
+          fontSize: "0.75rem",
+        }}
+      >
+        {hoveredCounty.name} County
+      </Typography>
+      <Typography
+        variant="body2"
+        sx={{
+          marginBottom: 0.2,
+          color: "primary.main",
+          fontWeight: "normal",
+          fontSize: "0.75rem",
+        }}
+      >
+        Income Level: {hoveredCounty.incomeLevel}
+      </Typography>
+    </Box>
+  </InfoWindow>
+)}
+          {countyBoundaries?.length &&
+            incomeData?.length &&
+            renderCountyBoundaries()}
         </GoogleMap>
       )}
+      <Sidebar
+        cityInfo={cityInfo}
+        visible={sidebarVisible}
+        onClose={closeSidebar}
+      />
     </div>
   );
 };
