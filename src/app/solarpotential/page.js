@@ -571,7 +571,7 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
   
   const getEvcsCount = (countyName) => {
     const countyEvcs = evcsData.find((item) => item.county === countyName);
-    return countyEvcs ? countyEvcs.evsCount : 0; // Return count or 0
+    return countyEvcs ? countyEvcs.numberOfEvs : 0; // Return count or 0
   };
   const getAvgIncome = (countyName) => {
     const countyIncome = incomeData.find((item) => item.county === countyName);
@@ -582,7 +582,7 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
       const handleMouseOver = () => {
         const countyName = county.name;
         const evsLevel = getEvcsLevel(countyName); // Fetch EVCS level
-        const evsCount = getEvcsCount(countyName); // Fetch EVCS count
+        const evsCountyCount = getEvcsCount(countyName); // Fetch EVCS count
   
         const coordinates = county.geo_shape.geometry.coordinates[0].map(
           ([lng, lat]) => ({
@@ -600,7 +600,7 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
         setHoveredEvCounty({
           name: countyName,
           evsLevel,
-          evsCount,
+          evsCountyCount,
           latitude: center.lat(),
           longitude: center.lng(),
         });
@@ -1023,7 +1023,7 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
                     <strong>Total Points:</strong> {hoveredPlace.totalPoints}
                   </Typography>
                 )}
-                {hoveredPlace.isPublic ? (
+                {hoveredPlace.isPublic && (
                   <Typography
                     variant="body2"
                     sx={{
@@ -1032,20 +1032,10 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
                       fontSize: "0.75rem",
                     }}
                   >
-                   Public Charging Station
-                  </Typography>
-                ) : (
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      color: "text.secondary", 
-                      fontWeight: "bold",
-                      fontSize: "0.75rem",
-                    }}
-                  >
-                   Private Charging Station
-                  </Typography>
+                  {hoveredPlace.isPublic?  "Public Charging Station ":"Private Charging station"}
+                   </Typography>
                 )}
+             
 
                 {hoveredPlace.parkingArea && (
                   <Typography
@@ -1076,7 +1066,7 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
                   </Typography>
                 )}
 
-                {supportedChargingTypes.map(({ key, label }) => {
+                {selectedCategory =="charging" && supportedChargingTypes.map(({ key, label }) => {
                   return (
                     <Typography
                       key={key}
@@ -1201,7 +1191,7 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
                     fontSize: "0.75rem",
                   }}
                 >
-                 Number of EVs: {evsCount}
+                 Number of EVs: {hoveredEvCounty.evsCountyCount}
                 </Typography>
               </Box>
             </InfoWindow>
