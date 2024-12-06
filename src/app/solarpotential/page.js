@@ -25,6 +25,7 @@ import {
 } from "@mui/material";
 import * as turf from "@turf/turf";
 import CloseIcon from "@mui/icons-material/Close";
+import { useTheme } from "@mui/material/styles";
 
 const containerStyle = {
   width: "100%",
@@ -54,10 +55,18 @@ const EVChargingStationsMap = () => {
   const [incomeData, setIncomeData] = useState([]);
   const [zoomLevel, setZoomLevel] = useState("12");
   const [hoveredCounty, setHoveredCounty] = useState(null);
+  const [hoveredEvCounty, setHoveredEvCounty] = useState(null);
+
+  const [evsCount,setEvsCount] = useState('')
+  const [evcsData, setEvcsData] = useState([]);
+  const [ demand,setDemand] = useState([]);
 
   const inputRef = useRef(null); // Ref for the input field
   const autocompleteRef = useRef(null); // Ref for the autocomplete instance
   const mapRef = useRef(null); // Ref for the Google Map instance
+
+  const theme = useTheme(); // Access the theme
+  const appBarHeight = (theme.mixins.toolbar.minHeight || 56) + 8;
 
   // Load Google Maps API
   const { isLoaded } = useJsApiLoader({
@@ -69,6 +78,21 @@ const EVChargingStationsMap = () => {
     Medium: "#ffa500", // Orange for medium income
     High: "#008000", // Green for high income
   };
+  const evcsColor = {
+    Low: "orange", // Red for low income
+    Medium: "grey", // Orange for medium income
+    High: "blue", // Green for high income
+  };
+  const supportedChargingTypes = [
+    { key: "j1772", label: "SAE J1772" },
+    { key: "tesla", label: "Tesla" },
+    { key: "chademo", label: "CHAdeMO" },
+    { key: "nema1450", label: "NEMA 1450" },
+    { key: "nema515", label: "NEMA 5-15" },
+    { key: "nema520", label: "NEMA 5-20" },
+    { key: "j1772COMBO", label: "SAE J1772 Combo" },
+  ];
+
 
   // Initialize Autocomplete
   useEffect(() => {
@@ -148,29 +172,49 @@ const EVChargingStationsMap = () => {
       }
     }
   };
+  const fetchEvCount = async (cityName) => {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/evs/city/${cityName}`
+      );
+      const data = await response.json();
+
+      if (data && data.data) {
+        const { numberOfEvs } = data.data;
+        setEvsCount(numberOfEvs);
+     ;
+      } else {
+        console.error("No economy details found for the city.");
+      }
+    } catch (error) {
+      console.error("Error fetching economy details:", error);
+    }
+  };
   const parseCoordinates = (geometry) => {
-   
-    
-    if (!geometry || geometry.type !== "MultiPolygon" && geometry.type=='Polygon'){
+    if (
+      !geometry ||
+      (geometry.type !== "MultiPolygon" && geometry.type == "Polygon")
+    ) {
       return geometry.coordinates.flat(1);
-    }   
+    }
     // Flatten nested MultiPolygon coordinates into a single array
     const flattenedCoordinates = geometry.coordinates.flat(Infinity);
 
     if (flattenedCoordinates.length % 2 !== 0) {
-      console.error("Invalid coordinate data, missing pairs of longitude and latitude.");
+      console.error(
+        "Invalid coordinate data, missing pairs of longitude and latitude."
+      );
       return [];
     }
-  
+
     // Group flattened array into lat-lng pairs
     const latLngPairs = [];
     for (let i = 0; i < flattenedCoordinates.length; i += 2) {
       const lng = flattenedCoordinates[i];
       const lat = flattenedCoordinates[i + 1];
-      latLngPairs.push([lng,lat ]);
+      latLngPairs.push([lng, lat]);
     }
-    
-  
+
     return latLngPairs;
   };
   const fetchCityBoundary = async (cityName) => {
@@ -178,7 +222,7 @@ const EVChargingStationsMap = () => {
       // Step 1: Fetch the place ID
       const placeIdUrl = `https://api.geoapify.com/v1/geocode/search?text=${encodeURIComponent(
         `${cityName}, NJ`
-      )}&format=json&apiKey=b8568cb9afc64fad861a69edbddb2658`
+      )}&format=json&apiKey=b8568cb9afc64fad861a69edbddb2658`;
 
       const placeIdResponse = await fetch(placeIdUrl);
       const placeIdData = await placeIdResponse.json();
@@ -193,7 +237,6 @@ const EVChargingStationsMap = () => {
       }
 
       const placeId = placeIdData.results[0].place_id;
-      
 
       // Step 2: Fetch the boundary data using the place ID
       const boundaryUrl = `
@@ -230,26 +273,20 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
       cityBoundary.setMap(null);
     }
 
-  
+    // Validate and format coordinates
 
- // Validate and format coordinates
- 
- const path = coordinates
- .map((coord) =>
-   Array.isArray(coord) && coord.length >= 2
-     ? { lat: parseFloat(coord[1]), lng: parseFloat(coord[0]) }
-     : null
- )
- .filter((point) => point && !isNaN(point.lat) && !isNaN(point.lng));
-
-
-      
+    const path = coordinates
+      .map((coord) =>
+        Array.isArray(coord) && coord.length >= 2
+          ? { lat: parseFloat(coord[1]), lng: parseFloat(coord[0]) }
+          : null
+      )
+      .filter((point) => point && !isNaN(point.lat) && !isNaN(point.lng));
 
     if (path.length === 0) {
       console.error("No valid path coordinates to draw.");
       return;
     }
-
 
     setCityBoundary(path); // Optionally store the boundary on the map
   };
@@ -265,6 +302,8 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
         setCityInfo({ cityName, income, incomeLevel });
         updatePolygonFillColor(incomeLevel);
         setSidebarVisible(true);
+        await fetchEvCount(cityName);
+
       } else {
         console.error("No economy details found for the city.");
       }
@@ -331,9 +370,7 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
       apiUrl = `http://localhost:8080/evcs/city/${cityName}`;
     } else if (category === "stores") {
       apiUrl = `http://localhost:8080/stores/city/${cityName}`;
-    } else if (category === "demand") {
-      apiUrl = `http://localhost:8080/demand-zones/city/${cityName}`;
-    }
+    } 
 
     fetch(apiUrl)
       .then((response) => {
@@ -346,15 +383,18 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
         setPlaces(data);
         setLoading(false);
         setCountyBoundaries(null);
-        setIncomeData(null);
+        setIncomeData([]);
         setZoomLevel("12");
-
-        
       })
       .catch((error) => {
         console.error(`Error fetching ${category} for ${cityName}:`, error);
       });
   };
+
+
+
+
+  
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
     const cityName = autocompleteRef.current
@@ -368,9 +408,53 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
     if (category === "economicZones" && cityName !== "Unknown City") {
       // Trigger fetching of county data for New Jersey
       fetchCountyData();
-    } else {
+      setHoveredEvCounty(null)
+      setHoveredCounty(null)
+       setEvcsData([])
+      setSidebarVisible(false);
+      setCountyBoundaries([])
+    } else if (category === "demand" && cityName !== "Unknown City"){
+      fetchCountyEvData();
+      setHoveredCounty(null)
+      setHoveredEvCounty(null)
+      setIncomeData([])
+      setSidebarVisible(false);
+      setCountyBoundaries([])
+
+      setDemand(true)
+    }
+    
+    else {
       // Handle other categories
       fetchPlaces(cityCoordinates, null, cityName, category);
+    }
+  };
+  const fetchCountyEvData = async () => {
+    setLoading(true);
+  
+    try {
+      // Fetch county boundaries from the API
+      const countyBoundariesResponse = await fetch(
+        "https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/us-county-boundaries/records?limit=20&refine=stusab%3A%22NJ%22"
+      );
+      const countyBoundariesData = await countyBoundariesResponse.json();
+  
+
+  
+      // Fetch EVCS data from your local API
+      const evcsResponse = await fetch("http://localhost:8080/evs/counties");
+      const evcsDataResponse = await evcsResponse.json();
+      
+      // Update state with the fetched data
+      setCountyBoundaries(countyBoundariesData.results);
+  
+      setEvcsData(evcsDataResponse.data);
+  
+      stateView();
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
     }
   };
   const handleInputChange = (event) => {
@@ -380,7 +464,8 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
     if (value === "") {
       setPlaces(null); // Clear selected place
       setSelectedCategory("charging");
-      setCityBoundary(null)
+      setCityBoundary(null);
+      setSidebarVisible(false)
     }
   };
   const stateView = () => {
@@ -393,12 +478,13 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
   const resetFilters = () => {
     setShowFilter(false);
     setPlaces([]);
-    setCityCoordinates(center); // Reset the map to default center
+    // setCityCoordinates(center); // Reset the map to default center
     setCityBoundary(null);
     setSelectedCategory("charging");
     setCountyBoundaries(null);
-    setIncomeData(null);
+    setIncomeData([]);
     clearInput();
+    setSidebarVisible(false)
   };
   const clearInput = () => {
     if (inputRef.current) {
@@ -412,7 +498,6 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
   };
 
 
-
   // Render polygons with color-coding
   const renderCountyBoundaries = () => {
     return countyBoundaries.map((county, index) => {
@@ -420,27 +505,33 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
         // Set the county data when hovering over a county
         const countyName = county.name;
         const incomeLevel = getIncomeLevel(countyName);
+        const income = getAvgIncome(countyName); // Fetch EVCS count
         const coordinates = county.geo_shape.geometry.coordinates[0].map(
           ([lng, lat]) => ({
             lat,
             lng,
           })
         );
-    
+
         const bounds = new google.maps.LatLngBounds();
-        coordinates.forEach(({ lat, lng }) => bounds.extend(new google.maps.LatLng(lat, lng)));
-    
+        coordinates.forEach(({ lat, lng }) =>
+          bounds.extend(new google.maps.LatLng(lat, lng))
+        );
+
         const center = bounds.getCenter();
         setHoveredCounty({
           name: countyName,
           incomeLevel,
+          income,
           latitude: center.lat(),
           longitude: center.lng(),
         });
       };
-    
+
       const handleMouseOut = () => {
         setHoveredCounty(null); // Clear the hovered county when mouse leaves
+        setHoveredEvCounty(null)
+
       };
       const countyName = county.name;
       const incomeLevel = getIncomeLevel(countyName);
@@ -456,7 +547,6 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
           key={index}
           paths={coordinates}
           options={{
-           
             strokeColor: "#FF0000",
             strokeOpacity: 0.8,
             strokeWeight: 2,
@@ -469,11 +559,97 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
       );
     });
   };
+  const getEvcsLevel = (countyName) => {
+    const countyEvcs = evcsData.find((item) => item.county === countyName);
+  
+    if (!countyEvcs) {
+      return "Medium"; // Default when EVCS data is not found
+    }
+  
+    return countyEvcs.evsLevel || "Medium";
+  };
+  
+  const getEvcsCount = (countyName) => {
+    const countyEvcs = evcsData.find((item) => item.county === countyName);
+    return countyEvcs ? countyEvcs.evsCount : 0; // Return count or 0
+  };
+  const getAvgIncome = (countyName) => {
+    const countyIncome = incomeData.find((item) => item.county === countyName);
+    return countyIncome ? countyIncome.income : 0; // Return count or 0
+  };
+  const renderCountyEvBoundaries = () => {
+    return countyBoundaries.map((county, index) => {
+      const handleMouseOver = () => {
+        const countyName = county.name;
+        const evsLevel = getEvcsLevel(countyName); // Fetch EVCS level
+        const evsCount = getEvcsCount(countyName); // Fetch EVCS count
+  
+        const coordinates = county.geo_shape.geometry.coordinates[0].map(
+          ([lng, lat]) => ({
+            lat,
+            lng,
+          })
+        );
+  
+        const bounds = new google.maps.LatLngBounds();
+        coordinates.forEach(({ lat, lng }) =>
+          bounds.extend(new google.maps.LatLng(lat, lng))
+        );
+  
+        const center = bounds.getCenter();
+        setHoveredEvCounty({
+          name: countyName,
+          evsLevel,
+          evsCount,
+          latitude: center.lat(),
+          longitude: center.lng(),
+        });
+      };
+  
+      const handleMouseOut = () => {
+        setHoveredEvCounty(null); // Clear hover data
+        setHoveredCounty(null)
+      };
+  
+      const countyName = county.name;
+      const evsLevel = getEvcsLevel(countyName); // Get EVCS level
+      const coordinates = county.geo_shape.geometry.coordinates[0].map(
+        ([lng, lat]) => ({
+          lat,
+          lng,
+        })
+      );
+  
+      return (
+        <Polygon
+          key={index}
+          paths={coordinates}
+          options={{
+            strokeColor: "#0000FF",
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: evcsColor[evsLevel],
+            fillOpacity: 0.6,
+          }}
+          onMouseOver={handleMouseOver}
+          onMouseOut={handleMouseOut}
+        />
+      );
+    });
+  };
+  
+
+
+
+
+
+
   const closeSidebar = () => setSidebarVisible(false);
 
-  const Sidebar = ({ cityInfo, visible, onClose }) => (
+  const Sidebar = ({ cityInfo, visible, onClose,evsCount }) => (
     <Drawer
       anchor="right"
+      variant="persistent"
       open={visible}
       onClose={onClose}
       PaperProps={{
@@ -481,6 +657,7 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
           width: 350,
           height: "auto", // Auto height based on content
           maxHeight: "90vh", // Optional: Cap height to prevent overflow
+          top: `${appBarHeight}px`, // Align with navbar,
           padding: 2,
           backgroundColor: "#f9f9f9",
           boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
@@ -513,6 +690,9 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
         </Typography>
         <Typography variant="body1" sx={{ mb: 1, fontSize: 16 }}>
           <strong>Average Income:</strong> ${cityInfo?.income.toLocaleString()}
+        </Typography>
+        <Typography variant="body1" sx={{ mb: 1, fontSize: 16 }}>
+          <strong>Number Of Electric Vehicles:</strong>  {evsCount}
         </Typography>
       </Box>
 
@@ -561,6 +741,7 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
       </Box>
     </Drawer>
   );
+
   const onLoad = (map) => {
     mapRef.current = map;
     setIsMapLoaded(true);
@@ -827,7 +1008,7 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
                   }}
                 >
                   <strong>Address:</strong> {hoveredPlace.address} {","}{" "}
-                  {hoveredPlace?.zipCode?.city}
+                  {hoveredPlace?.zipCode?.city} {hoveredPlace?.zipCode?.zipCode}
                 </Typography>
 
                 {hoveredPlace.totalPoints && (
@@ -840,6 +1021,29 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
                     }}
                   >
                     <strong>Total Points:</strong> {hoveredPlace.totalPoints}
+                  </Typography>
+                )}
+                {hoveredPlace.isPublic ? (
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      color: "text.secondary", 
+                      fontWeight: "bold",
+                      fontSize: "0.75rem",
+                    }}
+                  >
+                   Public Charging Station
+                  </Typography>
+                ) : (
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      color: "text.secondary", 
+                      fontWeight: "bold",
+                      fontSize: "0.75rem",
+                    }}
+                  >
+                   Private Charging Station
                   </Typography>
                 )}
 
@@ -856,101 +1060,166 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
                     <span>m²</span>
                   </Typography>
                 )}
-
-                <Typography
-                  variant="body2"
-                  sx={{
-                    marginBottom: 0.2,
-                    fontSize: "0.75rem", // Smaller textAAAAA
-                    fontWeight: "normal",
-                  }}
-                >
-                  <strong>Zip Code:</strong> {hoveredPlace?.zipCode?.zipCode}
-                </Typography>
-
-                {hoveredPlace.j1772 && (
+                     {hoveredPlace.solarPotential && (
                   <Typography
                     variant="body2"
+                    c
                     sx={{
                       color: "success.main",
-                      fontWeight: "normal",
+                      marginBottom: 0.2,
                       fontSize: "0.75rem",
+                      fontWeight: "normal",
                     }}
                   >
-                    ✅ Supports J1772
+                    <strong>Solar Potential:</strong> {hoveredPlace.solarPotential}{" "}
+                    <span>kWh</span>
                   </Typography>
                 )}
 
-                {hoveredPlace.tesla && (
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      color: "success.main",
-                      fontWeight: "normal",
-                      fontSize: "0.75rem",
-                    }}
-                  >
-                    ✅ Tesla Destination
-                  </Typography>
-                )}
+                {supportedChargingTypes.map(({ key, label }) => {
+                  return (
+                    <Typography
+                      key={key}
+                      variant="body2"
+                      sx={{
+                        color: "success.main",
+                        fontWeight: "normal",
+                        fontSize: "0.75rem",
+                      }}
+                    >
+                      {hoveredPlace[key] ? `✅ ${label}` : ""}
+                    </Typography>
+                  );
+                })}
               </Box>
             </InfoWindow>
           )}
           {hoveredCounty && (
-  <InfoWindow
-    position={{
-      lat: hoveredCounty.latitude,
-      lng: hoveredCounty.longitude,
-    }}
-    options={{
-      pixelOffset: new window.google.maps.Size(0, -30), // Adjust InfoWindow position
-      closeBoxURL: "", // This hides the close button
-      disableAutoPan: true, // Optional: Disable auto panning when the InfoWindow is opened
-    }}
-  >
-    <Box
-      sx={{
-        maxWidth: "150px",
-        backgroundColor: "white",
-        boxShadow: 2,
-        borderRadius: 1,
-      }}
-    >
-      <Typography
-        variant="body2"
-        sx={{
-          marginBottom: 0.2,
-          color: "primary.main",
-          fontWeight: "bold",
-          fontSize: "0.75rem",
-        }}
-      >
-        {hoveredCounty.name} County
-      </Typography>
-      <Typography
-        variant="body2"
-        sx={{
-          marginBottom: 0.2,
-          color: "primary.main",
-          fontWeight: "normal",
-          fontSize: "0.75rem",
-        }}
-      >
-        Income Level: {hoveredCounty.incomeLevel}
-      </Typography>
-    </Box>
-  </InfoWindow>
-)}
+            <InfoWindow
+              position={{
+                lat: hoveredCounty.latitude,
+                lng: hoveredCounty.longitude,
+              }}
+              options={{
+                pixelOffset: new window.google.maps.Size(0, -30), // Adjust InfoWindow position
+                closeBoxURL: "", // This hides the close button
+                disableAutoPan: true, // Optional: Disable auto panning when the InfoWindow is opened
+              }}
+            >
+              <Box
+                sx={{
+                  maxWidth: "150px",
+                  backgroundColor: "white",
+                  boxShadow: 2,
+                  borderRadius: 1,
+                }}
+              >
+                <Typography
+                  variant="body2"
+                  sx={{
+                    marginBottom: 0.2,
+                    color: "primary.main",
+                    fontWeight: "bold",
+                    fontSize: "0.75rem",
+                  }}
+                >
+                  {hoveredCounty.name} County
+                </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{
+                    marginBottom: 0.2,
+                    color: "primary",
+                    fontWeight: "normal",
+                    fontSize: "0.75rem",
+                  }}
+                >
+                  Income Level: {hoveredCounty.incomeLevel}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{
+                    marginBottom: 0.2,
+                    color: "primary",
+                    fontWeight: "normal",
+                    fontSize: "0.75rem",
+                  }}
+                >
+                 Average Income: {hoveredCounty.income} $
+                </Typography>
+              </Box>
+            </InfoWindow>
+          )}
+            {hoveredEvCounty && (
+            <InfoWindow
+              position={{
+                lat: hoveredEvCounty.latitude,
+                lng: hoveredEvCounty.longitude,
+              }}
+              options={{
+                pixelOffset: new window.google.maps.Size(0, -30), // Adjust InfoWindow position
+                closeBoxURL: "", // This hides the close button
+                disableAutoPan: true, // Optional: Disable auto panning when the InfoWindow is opened
+              }}
+            >
+              <Box
+                sx={{
+                  maxWidth: "150px",
+                  backgroundColor: "white",
+                  boxShadow: 2,
+                  borderRadius: 1,
+                }}
+              >
+                <Typography
+                  variant="body2"
+                  sx={{
+                    marginBottom: 0.2,
+                    color: "primary.main",
+                    fontWeight: "bold",
+                    fontSize: "0.75rem",
+                  }}
+                >
+                  {hoveredEvCounty.name} County
+                </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{
+                    marginBottom: 0.2,
+                    color: "primary",
+                    fontWeight: "normal",
+                    fontSize: "0.75rem",
+                  }}
+                >
+                  Electric Vehicle Level: {hoveredEvCounty.evsLevel}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{
+                    marginBottom: 0.2,
+                    color: "primary",
+                    fontWeight: "normal",
+                    fontSize: "0.75rem",
+                  }}
+                >
+                 Number of EVs: {evsCount}
+                </Typography>
+              </Box>
+            </InfoWindow>
+          )}
           {countyBoundaries?.length &&
             incomeData?.length &&
             renderCountyBoundaries()}
+                 {countyBoundaries?.length &&
+            evcsData?.length &&
+            renderCountyEvBoundaries()}
+          <Sidebar
+            cityInfo={cityInfo}
+            visible={sidebarVisible}
+            onClose={closeSidebar}
+            evsCount = {evsCount}
+          />
         </GoogleMap>
       )}
-      <Sidebar
-        cityInfo={cityInfo}
-        visible={sidebarVisible}
-        onClose={closeSidebar}
-      />
     </div>
   );
 };
