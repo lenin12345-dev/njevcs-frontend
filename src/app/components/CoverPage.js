@@ -42,8 +42,8 @@ export default function CoverPage() {
         >
           {/* Main Heading */}
           <Typography
-            variant="h2"
-            component="h1"
+            variant="h3"
+            component="h2"
             sx={{
               color: "#FFFFFF", // White for headings
               fontWeight: "bold",
