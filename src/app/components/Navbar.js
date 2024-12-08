@@ -18,6 +18,8 @@ export default function ButtonAppBar() {
             NJ EVCS Awnings
           </Typography>
           <Button           sx={{
+              textTransform: "none",
+
               ":hover": {
                 color: "white",
                  fontWeight:'bold'
@@ -25,6 +27,8 @@ export default function ButtonAppBar() {
               },
             }} color="inherit" component={Link} href="/">Home</Button>
           <Button           sx={{
+              textTransform: "none",
+
               ":hover": {
                 color: "white",
                  fontWeight:'bold'
@@ -32,6 +36,8 @@ export default function ButtonAppBar() {
               },
             }} color="inherit" component={Link} href="/about">About</Button>
           <Button           sx={{
+              textTransform: "none",
+
               ":hover": {
                 color: "white",
                  fontWeight:'bold'
@@ -39,6 +45,8 @@ export default function ButtonAppBar() {
               },
             }} color="inherit" component={Link} href="/solarpotential">Solar Potential</Button>
           <Button           sx={{
+              textTransform: "none",
+
               ":hover": {
                 color: "white",
                  fontWeight:'bold'

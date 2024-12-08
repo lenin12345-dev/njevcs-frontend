@@ -8,6 +8,8 @@ import {
 } from "@mui/material";
 import Container from "@mui/material/Container";
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import Link from 'next/link'; 
+
 
 export default function CoverPage() {
   return (
@@ -92,6 +94,8 @@ export default function CoverPage() {
           <Button
             variant="contained"
             endIcon={<ArrowForwardIcon />}
+            component={Link} 
+            href="/solarpotential"
             sx={{
               marginTop: "20px",
               padding: "10px 20px",
