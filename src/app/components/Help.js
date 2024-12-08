@@ -1,5 +1,6 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
+import Image from 'next/image'
 
 const RenewableEnergySection = () => {
   return (
@@ -33,23 +34,29 @@ const RenewableEnergySection = () => {
             marginBottom: 4,
           }}
         >
-          How We Help You
+          How We <span style={{ color:"#4E9268"}}>Help You</span>
         </Typography>
 
         {/* Image */}
         <Box
-          component="img"
-          src="/h1.jpeg" // Replace with actual image path
-          alt="Renewable Innovation"
-          sx={{
-            width: "100%",
-            maxWidth: "700px",
-            borderRadius: "10px",
-            height: "400px", // Let height adjust according to the aspect ratio
-            objectFit: "cover", // Ensures the image covers the box without distortion
-            boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
-          }}
-        />
+      sx={{
+        width: "100%",
+        maxWidth: "700px",
+        height: "400px", // Adjusts height based on aspect ratio
+        position: "relative", // Ensures the Image is positioned properly
+        boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
+        borderRadius: "10px",
+      }}
+    >
+      <Image
+        src="/h1.jpeg" // Replace with actual image path
+        alt="Renewable Innovation"
+        layout="fill" // This ensures the image fills the container while preserving the aspect ratio
+        objectFit="cover" // Ensures the image covers the box without distortion
+        objectPosition="center" // Keeps the image centered
+        style={{borderRadius: "10px",}}
+      />
+    </Box>
 
         {/* Subtitle */}
 
@@ -130,18 +137,24 @@ const RenewableEnergySection = () => {
       >
         {/* Image */}
         <Box
-          component="img"
-          src="/h2.jpeg" // Replace with actual image path
-          alt="Clean Energy"
-          sx={{
-            width: "100%",
-            maxWidth: "700px",
-            height: "400px", // Let height adjust according to the aspect ratio
-            objectFit: "cover", // Ensures the image covers the box without distortion
-            borderRadius: "10px",
-            boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
-          }}
-        />
+      sx={{
+        width: "100%",
+        maxWidth: "700px",
+        height: "400px", // Adjusts height based on aspect ratio
+        position: "relative", // Ensures the Image is positioned properly
+        borderRadius: "10px",
+        boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
+      }}
+    >
+      <Image
+        src="/h2.jpeg" // Replace with actual image path
+        alt="Clean Energy"
+        layout="fill" // This ensures the image fills the container while preserving the aspect ratio
+        objectFit="cover" // Ensures the image covers the box without distortion
+        objectPosition="center" // Keeps the image centered
+        style={{borderRadius: "10px",}}
+      />
+    </Box>
 
         {/* Description */}
         <Typography

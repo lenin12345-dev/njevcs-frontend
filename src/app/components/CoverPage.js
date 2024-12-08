@@ -1,3 +1,4 @@
+"use client";
 import {
   Box,
   Typography,
@@ -7,9 +8,9 @@ import {
   CardMedia,
 } from "@mui/material";
 import Container from "@mui/material/Container";
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import Link from 'next/link'; 
-
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import Link from "next/link";
+import { TypeAnimation } from "react-type-animation";
 
 export default function CoverPage() {
   return (
@@ -51,50 +52,41 @@ export default function CoverPage() {
               lineHeight: "1.2",
             }}
           >
-            Empower Your Future <br /> with Solar Wave
+            Transform Your Future <br /> with Solar Wave's Clean Energy
           </Typography>
-
           <Typography
-  variant="h5"
-  component="p"
-  sx={{
-    color: "#fff", // White for the text
-    fontWeight: "bold",
-    textShadow: "1px 1px 3px rgba(0,0,0,0.5)", // Shadow for clarity
-    marginTop: "20px",
-    textAlign: "left",
-    lineHeight: "1.5",
-    whiteSpace: "nowrap", // Prevent text wrapping
-    overflow: "hidden", // Hide overflow for typing effect
-    borderRight: "2px solid #4E9268", // Simulate cursor
-    animation: "typing 4s steps(40, end), blink-caret 0.75s step-end infinite, reset-typing 8s infinite",
-    "@keyframes typing": {
-      "0%": { width: "0%" },
-      "100%": { width: "100%" },
-    },
-    "@keyframes blink-caret": {
-      "0%, 100%": { borderColor: "transparent" },
-      "50%": { borderColor: "#4E9268" },
-    },
-    "@keyframes reset-typing": {
-      "0%": { visibility: "visible" },
-      "90%": { visibility: "visible" },
-      "100%": { visibility: "hidden" }, // Hides text briefly to simulate reset
-    },
-  }}
->
-  Harness the power of the sun with cutting-edge solutions
-</Typography>
-
-
-
-
+            variant="h5"
+            component="p"
+            sx={{
+              color: "#fff", // White for the text
+              fontWeight: "bold",
+              textShadow: "1px 1px 3px rgba(0,0,0,0.5)", // Shadow for clarity
+              marginTop: "25px",
+              textAlign: "left",
+              lineHeight: "1.5",
+              whiteSpace: "nowrap", // Prevent text wrapping
+              overflow: "hidden", // Hide overflow for typing effect
+              borderRight: "2px solid #4E9268", // Simulate cursor
+            }}
+          >
+            <TypeAnimation
+              sequence={[
+                "Harness the power of the sun with cutting-edge solutions", // Types the full sentence
+                1000, // Waits 1s
+                "", // Deletes the sentence
+                2000, // Waits 2s before restarting
+              ]}
+              wrapper="span"
+              cursor={true}
+              repeat={Infinity}
+            />
+          </Typography>
 
           {/* Stylish Button */}
           <Button
             variant="contained"
             endIcon={<ArrowForwardIcon />}
-            component={Link} 
+            component={Link}
             href="/solarpotential"
             sx={{
               marginTop: "20px",
@@ -112,7 +104,7 @@ export default function CoverPage() {
               },
             }}
           >
-            Get Started 
+            Get Started
           </Button>
         </Box>
 
@@ -239,7 +231,6 @@ export default function CoverPage() {
                 variant="body2"
                 sx={{
                   color: "#fff",
-                  
                 }}
                 component="h2"
               >

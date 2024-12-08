@@ -6,6 +6,7 @@ import EnergySavingsLeafIcon from "@mui/icons-material/EnergySavingsLeaf";
 import RecyclingIcon from "@mui/icons-material/Recycling";
 import LightbulbCircleIcon from "@mui/icons-material/LightbulbCircle";
 import ExtensionIcon from "@mui/icons-material/Extension";
+import Image from 'next/image';
 
 const cardData = [
   {
@@ -54,7 +55,7 @@ const SolarWaveSection = () => {
             marginBottom: "10px", // Space between lines
           }}
         >
-          Why Solar Wave?
+          Why <span style={{ color:"#4E9268"}}>Solar Wave?</span>
         </Typography>
         <Typography
           variant="h6"
@@ -136,16 +137,27 @@ const SolarWaveSection = () => {
 
         {/* Right Section with Image */}
         <Box
-          sx={{
-            width: "55%",
-            height: "auto",
-            backgroundImage: "url('/section2.jpeg')", // Replace with actual image path
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            borderRadius: "10px",
-            boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
-          }}
-        />
+  sx={{
+    width: "55%",
+    height: "auto",
+    borderRadius: "10px",
+    boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
+    position: "relative", // Ensure the image is positioned correctly
+    overflow: "hidden", // Hide any overflow
+  }}
+>
+  <Image
+    src="/section2.jpeg" // Replace with actual image path
+    alt="Section Background"
+    layout="fill" // This ensures the image covers the container
+    objectFit="cover" // Makes sure the image covers the area without stretching
+    objectPosition="center" // Centers the image
+    style={{
+      borderRadius: "10px",
+    }}
+    priority={true} // Optional: prioritize the image loading if it's above the fold
+  />
+</Box>
       </Box>
     </Box>
   );
