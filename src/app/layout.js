@@ -12,10 +12,10 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-    <body style={{ margin: 0, minHeight: "100vh", display: "flex", flexDirection: "column" }} >
+    <body style={{ margin: 0, minHeight: "auto", display: "flex", flexDirection: "column" }} >
       <Navbar />
-      {children}
-      <Footer />
+      <div style={{ marginBottom:"20px"}}>{children}</div>
+      <Footer style={{ marginTop: "20px" }} />
     </body>
   </html>
   );

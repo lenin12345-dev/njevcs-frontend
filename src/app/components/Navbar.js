@@ -11,11 +11,9 @@ import Link from 'next/link';
 export default function ButtonAppBar() {
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" sx={{ background: 'linear-gradient(to right, #FAD961 0%, #F76B1C 100%)' }}>
+      <AppBar position="static" sx={{ background: '#F76B1C' }}>
         <Toolbar>
-          <IconButton size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
-            <MenuIcon />
-          </IconButton>
+     
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             NJ EVCS Awnings
           </Typography>
