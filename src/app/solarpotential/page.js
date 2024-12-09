@@ -1004,7 +1004,7 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
                     fontWeight: "normal",
                   }}
                 >
-                  <strong>Address:</strong> {hoveredPlace.address} {","}
+                  <strong>Address:</strong> {hoveredPlace.address}{","}
                   {hoveredPlace?.zipCode?.city},NJ{" "}
                   {hoveredPlace?.zipCode?.zipCode}
                 </Typography>
