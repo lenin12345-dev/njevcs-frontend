@@ -29,9 +29,9 @@ import Image from "next/image";
 import j1772 from "../../../public/j1772.png";
 import tesla from "../../../public/tesla.png";
 import chademo from "../../../public/chademo.png";
-import nema1450 from "../../../public/nema1450.jpg";
-import nema515 from "../../../public/nema515.jpg";
-import nema520 from "../../../public/nema520.jpg";
+import nema1450 from "../../../public/nema1450.png";
+import nema515 from "../../../public/nema515.png";
+import nema520 from "../../../public/nema520.png";
 import combo from "../../../public/combo.png";
 import publicImage from "../../../public/public.png";
 import privateImage from "../../../public/private.svg";
@@ -101,11 +101,11 @@ const EVChargingStationsMap = () => {
     { key: "nema520", label: "NEMA 5-20", icon: nema520 },
     { key: "j1772COMBO", label: "J1772 Combo", icon: combo },
   ];
-  ["dcFastPoints","level1Points","level2Points"]
+ 
   const supportedChargingSpeeds = [
     { key: "dcFastPoints", label: "DC fast charging"},
-    { key: "level1Points", label: "Level 1 Points:"},
-    { key: "level2Points", label: "Level 2 Points:"},
+    { key: "level1Points", label: "Level 1 Points"},
+    { key: "level2Points", label: "Level 2 Points"},
 
   ]
 
@@ -928,12 +928,12 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
               // Define a mapping of store names to their respective logo URLs
               const storeIcons = {
                 Costco:
-                  "https://e7.pngegg.com/pngimages/378/178/png-clipart-costco-wholesale-united-kingdom-ltd-app-store-retail-others-miscellaneous-text.png",
-                BJs: "https://pbs.twimg.com/profile_images/1696971074200592384/UZstsMwK_400x400.jpg",
+                  "https://gottadeal.s3.amazonaws.com/logos/vignette/costco.png",
+                BJs: "https://bjs.scene7.com/is/image/bjs/201215_FSA_Icon2?fmt=png-alpha",
                 Walmart:
-                  "https://wallpapers.com/images/hd/walmart-round-logo-7r8yqrjrr1e7nav1.jpg",
+                  "http://localhost:3000/Walmart.png",
                 Target:
-                  "https://banner2.cleanpng.com/20180202/rfe/av2kg164h.webp",
+                  "https://upload.wikimedia.org/wikipedia/commons/9/9a/Target_logo.svg",
                 "Home Depot":
                   "https://i.pinimg.com/originals/3d/cf/2f/3dcf2fe5252d4e5233c2a334498661f8.png",
               };
@@ -1004,8 +1004,8 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
                     fontWeight: "normal",
                   }}
                 >
-                  <strong>Address:</strong> {hoveredPlace.address}{","}
-                  {hoveredPlace?.zipCode?.city},NJ{" "}
+                  <strong>Address:</strong> {hoveredPlace.address}{","} {hoveredPlace?.zipCode?.city}, NJ{" "}
+               
                   {hoveredPlace?.zipCode?.zipCode}
                 </Typography>
 
@@ -1021,7 +1021,7 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
                       fontWeight: "normal",
                     }}
                     >
-                      <span style={{fontWeight:'bold'}}>{label}</span>: { hoveredPlace[key]}
+                      <span style={{fontWeight:'bold'}}>{label}</span> : { hoveredPlace[key]}
                     </Typography>
                   )
                 }) }

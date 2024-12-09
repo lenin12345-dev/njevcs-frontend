@@ -43,7 +43,7 @@ const cardData = [
 
 const SolarWaveSection = () => {
   return (
-    <Box sx={{ padding: "50px 5%", display: "flex", flexDirection: "column" }}>
+    <Box sx={{ padding: "30px 5%", display: "flex", flexDirection: "column" }}>
       {/* Heading */}
       <Box sx={{ textAlign: "center", marginBottom: "30px" }}>
         <Typography

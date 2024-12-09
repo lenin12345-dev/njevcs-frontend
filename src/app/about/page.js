@@ -1,5 +1,4 @@
-
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Grid, Card, CardContent } from "@mui/material";
 
 export default function About() {
   return (
@@ -9,10 +8,9 @@ export default function About() {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        padding: "50px 5%",
-
+        paddingTop: 4,
+        paddingBottom: 0,
         backgroundColor: "#f5f5f5",
-        
       }}
     >
       {/* Gradient Heading */}
@@ -45,73 +43,128 @@ export default function About() {
           Welcome to NJ EVCS Awnings, where we’re committed to driving sustainable energy solutions for urban spaces. Our mission is to transform mall parking areas into productive, green spaces by installing photovoltaic (PV) canopies that harness the power of solar energy while meeting the growing demand for electric vehicle (EV) infrastructure.
         </Typography>
 
-        <Typography variant="h5" component="h2"         sx={{
-          fontWeight: "bold",
-          textAlign: "start",
-          background: "linear-gradient(90deg, #0048FF 0%, #D6008D 100%)",
-          WebkitBackgroundClip: "text",
-          WebkitTextFillColor: "transparent",
-        }}>
-          Our Vision
-        </Typography>
-        <Typography variant="body1" sx={{ color: "text.secondary" }}>
-          As the world shifts toward clean energy, we aim to be at the forefront of this transformation by creating smart, solar-powered solutions that cater to both today’s and tomorrow’s needs. We believe parking spaces can do more than provide convenience—they can power our communities and support a cleaner, greener future.
-        </Typography>
+        {/* Our Vision Section */}
+        <Box sx={{ textAlign: "center" }}>
+          <img alt="" src="https://www.google.com/get/sunroof/images/about/1-why.png" style={{ maxWidth: "170px" }} />
+          <Typography
+                variant="h4"
+              component="h2"
+            sx={{
+              fontWeight: "bold",
+              textAlign: "center",
+              background: "linear-gradient(90deg, #0048FF 0%, #D6008D 100%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              marginTop: "20px",
+            }}
+          >
+            Our Vision
+          </Typography>
+          <Typography variant="body1" sx={{ color: "text.secondary",marginTop: 3 }}>
+            As the world shifts toward clean energy, we aim to be at the forefront of this transformation by creating smart, solar-powered solutions that cater to both today’s and tomorrow’s needs. We believe parking spaces can do more than provide convenience—they can power our communities and support a cleaner, greener future.
+          </Typography>
+        </Box>
 
-        <Typography variant="h5" component="h2" sx={{
-          fontWeight: "bold",
-          textAlign: "start",
-          background: "linear-gradient(90deg, #0048FF 0%, #D6008D 100%)",
-          WebkitBackgroundClip: "text",
-          WebkitTextFillColor: "transparent",
-        }}>
-          What We Do
-        </Typography>
-        <Typography variant="body1" sx={{ color: "text.secondary" }}>
-          Using a combination of advanced data analytics and local insights, we assess the parking areas of malls and other large commercial spaces to maximize their potential for solar energy generation. Here’s how we bring our vision to life:
-        </Typography>
+        {/* What We Do Section */}
+        <Box sx={{ textAlign: "center" }}>
+          <img alt="" src="https://www.kindpng.com/picc/m/302-3026906_we-are-icon-hd-png-download.png" style={{ maxWidth: "160px" }} />
+          <Typography
+                 variant="h4"
+              component="h2"
+            sx={{
+              fontWeight: "bold",
+              textAlign: "center",
+              background: "linear-gradient(90deg, #0048FF 0%, #D6008D 100%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              marginTop: "20px",
+            }}
+          >
+            What We Do
+          </Typography>
+          <Typography variant="body1" sx={{ color: "text.secondary",marginTop: 2  }}>
+            Using a combination of advanced data analytics and local insights, we assess the parking areas of malls and other large commercial spaces to maximize their potential for solar energy generation. Here’s how we bring our vision to life:
+          </Typography>
 
-        <ul>
-          <li>
-            <Typography variant="body1" sx={{ color: "text.secondary" }}>
-              <strong>Parking Area Assessment:</strong> Our team conducts a thorough analysis of parking lots, determining the optimal layout and potential capacity for PV canopies to harness maximum solar energy.
-            </Typography>
-          </li>
-          <li>
-            <Typography variant="body1" sx={{ color: "text.secondary" }}>
-              <strong>EV Demand Analysis:</strong> By analyzing the number of electric vehicles in specific regions, we strategically design the number and placement of EV charging stations to support current and anticipated demand.
-            </Typography>
-          </li>
-          <li>
-            <Typography variant="body1" sx={{ color: "text.secondary" }}>
-              <strong>Economic and Regional Analysis:</strong> We assess the economic profile of each region to offer solutions that align with local sustainability goals, community engagement, and economic viability.
-            </Typography>
-          </li>
-          <li>
-            <Typography variant="body1" sx={{ color: "text.secondary" }}>
-              <strong>Custom PV Canopy Solutions:</strong> Our canopies provide shade, reduce carbon footprint, and power EV charging stations—all while helping property owners reduce energy costs and carbon emissions.
-            </Typography>
-          </li>
-        </ul>
+          <Grid container spacing={3} sx={{ marginTop: 3 }}>
+            <Grid item xs={12} md={6}>
+              <Card sx={{ boxShadow: 3,height:150 }}>
+                <CardContent>
+                  <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                    Parking Area Assessment
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                    Our team conducts a thorough analysis of parking lots, determining the optimal layout and potential capacity for PV canopies to harness maximum solar energy.
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+            <Grid item xs={12} md={6}>
+            <Card sx={{ boxShadow: 3,height:150 }}>
+                <CardContent>
+                  <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                    EV Demand Analysis
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                    By analyzing the number of electric vehicles in specific regions, we strategically design the number and placement of EV charging stations to support current and anticipated demand.
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+            <Grid item xs={12} md={6}>
+            <Card sx={{ boxShadow: 3,height:150 }}>
+                <CardContent>
+                  <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                    Economic and Regional Analysis
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                    We assess the economic profile of each region to offer solutions that align with local sustainability goals, community engagement, and economic viability.
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+            <Grid item xs={12} md={6}>
+            <Card sx={{ boxShadow: 3,height:150 }}>
+                <CardContent>
+                  <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                    Custom PV Canopy Solutions
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                    Our canopies provide shade, reduce carbon footprint, and power EV charging stations—all while helping property owners reduce energy costs and carbon emissions.
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          </Grid>
+        </Box>
 
-        <Typography variant="h5" component="h2" sx={{
-          fontWeight: "bold",
-          textAlign: "start",
-          background: "linear-gradient(90deg, #0048FF 0%, #D6008D 100%)",
-          WebkitBackgroundClip: "text",
-          WebkitTextFillColor: "transparent",
-        }}>
-          Why Choose Us?
-        </Typography>
-        <Typography variant="body1" sx={{ color: "text.secondary" }}>
-          Data-Driven Decisions: We utilize the latest data on electric vehicle trends and economic insights to deliver optimized, high-impact solutions for each project.
-        </Typography>
-        <Typography variant="body1" sx={{ color: "text.secondary" }}>
-          Sustainability and Savings: With our PV canopy solutions, malls not only reduce their environmental footprint but also achieve significant long-term energy savings.
-        </Typography>
-        <Typography variant="body1" sx={{ color: "text.secondary" }}>
-          Future-Ready Infrastructure: By providing scalable and adaptable EV charging infrastructure, we help future-proof malls and other large parking areas for the continued growth of electric mobility.
-        </Typography>
+        {/* Why Choose Us Section */}
+        <Box sx={{ textAlign: "center" }}>
+          <img alt="" src="https://www.johnolivant.com/wp-content/uploads/2022/06/Next-Level-New-Logo-e1656427733314.png" style={{ maxWidth: "215px" }} />
+          <Typography
+                  variant="h4"
+              component="h2"
+            sx={{
+              fontWeight: "bold",
+              textAlign: "center",
+              background: "linear-gradient(90deg, #0048FF 0%, #D6008D 100%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              marginTop: "20px",
+            }}
+          >
+            Why Choose Us?
+          </Typography>
+          <Typography variant="body1" sx={{ color: "text.secondary", marginTop: 2 }}>
+            Data-Driven Decisions: We utilize the latest data on electric vehicle trends and economic insights to deliver optimized, high-impact solutions for each project.
+          </Typography>
+          <Typography variant="body1" sx={{ color: "text.secondary", marginTop: 2 }}>
+            Sustainability and Savings: With our PV canopy solutions, malls not only reduce their environmental footprint but also achieve significant long-term energy savings.
+          </Typography>
+          <Typography variant="body1" sx={{ color: "text.secondary", marginTop: 2 }}>
+            Future-Ready Infrastructure: By providing scalable and adaptable EV charging infrastructure, we help future-proof malls and other large parking areas for the continued growth of electric mobility.
+          </Typography>
+        </Box>
 
         <Typography
           variant="body1"
