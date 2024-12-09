@@ -66,7 +66,6 @@ export default function CoverPage() {
               lineHeight: "1.5",
               whiteSpace: "nowrap", // Prevent text wrapping
               overflow: "hidden", // Hide overflow for typing effect
-              borderRight: "2px solid #4E9268", // Simulate cursor
             }}
           >
             <TypeAnimation

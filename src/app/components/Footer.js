@@ -15,7 +15,6 @@ const Footer = () => {
         color: "#fff",
         display: "flex",
         justifyContent: "center",
-        marginTop: "40px",
       }}
     >
       <Container maxWidth="lg">

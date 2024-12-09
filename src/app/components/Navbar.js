@@ -4,8 +4,6 @@ import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
 import Link from "next/link";
 
 export default function ButtonAppBar() {
@@ -13,7 +11,7 @@ export default function ButtonAppBar() {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" sx={{ background: "#F76B1C" }}>
         <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <Typography component= {Link} href = '/' variant="h6"  sx={{ flexGrow: 1 }}>
             NJ EVCS Awnings
           </Typography>
           <Box display={'flex'} alignItems={'center'} gap={'2px'}>

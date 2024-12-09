@@ -1,4 +1,3 @@
-"use client";
 
 import { Box, Typography } from "@mui/material";
 
@@ -10,8 +9,10 @@ export default function About() {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        padding: "40px",
+        padding: "50px 5%",
+
         backgroundColor: "#f5f5f5",
+        
       }}
     >
       {/* Gradient Heading */}

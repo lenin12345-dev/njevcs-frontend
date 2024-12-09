@@ -14,8 +14,8 @@ export default function RootLayout({ children }) {
     <html lang="en">
     <body style={{ margin: 0, minHeight: "auto", display: "flex", flexDirection: "column" }} >
       <Navbar />
-      <div style={{ marginBottom:"20px"}}>{children}</div>
-      <Footer style={{ marginTop: "20px" }} />
+      <div >{children}</div>
+      <Footer  />
     </body>
   </html>
   );
