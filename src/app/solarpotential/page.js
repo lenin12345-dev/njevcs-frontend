@@ -88,9 +88,9 @@ const EVChargingStationsMap = () => {
     High: "#008000", // Green for high income
   };
   const evcsColor = {
-    Low: "orange", // Red for low income
-    Medium: "grey", // Orange for medium income
-    High: "blue", // Green for high income
+    Low: "orange", 
+    Medium: "grey", 
+    High: "blue", 
   };
   const supportedChargingTypes = [
     { key: "j1772", label: "J1772", icon: j1772 },
@@ -329,13 +329,13 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
 
     switch (incomeLevel) {
       case "Low":
-        fillColor = "#FF9999"; // Light red for low income
+        fillColor = "#ff0000"; // Light red for low income
         break;
       case "Medium":
-        fillColor = "#FFFF99"; // Light yellow for medium income
+        fillColor = "#ffa500"; // Light yellow for medium income
         break;
       case "High":
-        fillColor = "#99FF99"; // Light green for high income
+        fillColor = "#008000"; // Light green for high income
         break;
       default:
         console.warn(`Unknown income level: ${incomeLevel}`);
@@ -1149,8 +1149,10 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
                 sx={{
                   maxWidth: "150px",
                   backgroundColor: "white",
-                  boxShadow: 2,
+                  boxShadow: 1,
                   borderRadius: 1,
+                  padding:0.4
+
                 }}
               >
                 <Typography
@@ -1184,7 +1186,7 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
                     fontSize: "0.75rem",
                   }}
                 >
-                  Average Income: {hoveredCounty.income} $
+                  Average Income: {hoveredCounty.income}$
                 </Typography>
               </Box>
             </InfoWindow>
@@ -1205,8 +1207,9 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
                 sx={{
                   maxWidth: "150px",
                   backgroundColor: "white",
-                  boxShadow: 2,
+                  boxShadow: 1,
                   borderRadius: 1,
+                  padding:0.3
                 }}
               >
                 <Typography
@@ -1229,7 +1232,7 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
                     fontSize: "0.75rem",
                   }}
                 >
-                  Electric Vehicle Level: {hoveredEvCounty.evsLevel}
+                  EV Charging Demand: {hoveredEvCounty.evsLevel}
                 </Typography>
                 <Typography
                   variant="body2"

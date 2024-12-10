@@ -56,9 +56,7 @@ const RenewableEnergySection = () => {
                 maxWidth: "650px",
               }}
             >
-              Join the revolution of clean energy and sustainable development with
-              cutting-edge renewable solutions. Explore how we bring innovation to
-              every home and business.
+             Explore our interactive mapping tool to identify optimal solar generation sites in cities. Gain insights into solar energy production potential and make informed decisions for installations.
             </Typography>
           </Box>
         </Grid>
@@ -137,8 +135,7 @@ const RenewableEnergySection = () => {
                 maxWidth: "700px",
               }}
             >
-              Discover how innovation in renewable energy is paving the way for a
-              sustainable future. Our solutions ensure a cleaner, brighter tomorrow.
+            Discover how solar PV awnings can harness seasonal solar flux to power retail parking areas, driving both energy efficiency and environmental impact.
             </Typography>
           </Box>
         </Grid>
