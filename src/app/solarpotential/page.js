@@ -88,9 +88,9 @@ const EVChargingStationsMap = () => {
     High: "#008000", // Green for high income
   };
   const evcsColor = {
-    Low: "orange", 
-    Medium: "grey", 
-    High: "blue", 
+    Low: "orange",
+    Medium: "grey",
+    High: "blue",
   };
   const supportedChargingTypes = [
     { key: "j1772", label: "J1772", icon: j1772 },
@@ -101,13 +101,12 @@ const EVChargingStationsMap = () => {
     { key: "nema520", label: "NEMA 5-20", icon: nema520 },
     { key: "j1772COMBO", label: "J1772 Combo", icon: combo },
   ];
- 
-  const supportedChargingSpeeds = [
-    { key: "dcFastPoints", label: "DC Fast Charging:"},
-    { key: "level1Points", label: "Level 1 Points:"},
-    { key: "level2Points", label: "Level 2 Points:"},
 
-  ]
+  const supportedChargingSpeeds = [
+    { key: "dcFastPoints", label: "DC Fast Charging:" },
+    { key: "level1Points", label: "Level 1 Points:" },
+    { key: "level2Points", label: "Level 2 Points:" },
+  ];
 
   // Initialize Autocomplete
   useEffect(() => {
@@ -933,8 +932,7 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
                 Costco:
                   "https://gottadeal.s3.amazonaws.com/logos/vignette/costco.png",
                 BJs: "https://bjs.scene7.com/is/image/bjs/201215_FSA_Icon2?fmt=png-alpha",
-                Walmart:
-                  "http://localhost:3000/Walmart.png",
+                Walmart: "http://localhost:3000/Walmart.png",
                 Target:
                   "https://upload.wikimedia.org/wikipedia/commons/9/9a/Target_logo.svg",
                 "Home Depot":
@@ -1007,29 +1005,31 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
                     fontWeight: "normal",
                   }}
                 >
-                  <strong>Address:</strong> {hoveredPlace.address}{","} {hoveredPlace?.zipCode?.city}, NJ{" "}
-               
+                  <strong>Address:</strong> {hoveredPlace.address}
+                  {","} {hoveredPlace?.zipCode?.city}, NJ{" "}
                   {hoveredPlace?.zipCode?.zipCode}
                 </Typography>
 
-                {hoveredPlace.totalPoints && supportedChargingSpeeds.map(({key,label})=>{
-                  return(
-                    hoveredPlace[key] && 
-                    <Typography
-                    key = {key}
-                    variant="body2"
-                    sx={{
-                      marginBottom: 0.2,
-                      fontSize: "0.75rem",
-                      fontWeight: "normal",
-                    }}
-                    >
-                      <span style={{fontWeight:'bold'}}>{label}</span>{ hoveredPlace[key]}
-                    </Typography>
-                  )
-                }) }
-             
-              
+                {hoveredPlace.totalPoints &&
+                  supportedChargingSpeeds.map(({ key, label }) => {
+                    return (
+                      hoveredPlace[key] && (
+                        <Typography
+                          key={key}
+                          variant="body2"
+                          sx={{
+                            marginBottom: 0.2,
+                            fontSize: "0.75rem",
+                            fontWeight: "normal",
+                          }}
+                        >
+                          <span style={{ fontWeight: "bold" }}>{label}</span>{" "}
+                          {hoveredPlace[key]}
+                        </Typography>
+                      )
+                    );
+                  })}
+
                 {selectedCategory == "charging" && (
                   <Typography
                     variant="body2"
@@ -1040,31 +1040,33 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
                       display: "flex",
                       alignItems: "center",
                       marginBottom: 0.2,
-
                     }}
                   >
-                  
                     {hoveredPlace.isPublic ? (
                       <>
                         <Image
-                          src={publicImage}// Replace with the actual path to your public icon
+                          src={publicImage} // Replace with the actual path to your public icon
                           alt="Public Charging Station"
                           width={16} // Adjust the width and height based on your design
                           height={16}
-                          style={{ marginRight: "4px",marginBottom:0.2 }} // Adds some space between the icon and text
+                          style={{
+                            marginRight: "8px", // Increased space for better separation
+                          }}
                         />
-                        Public 
+                        Public
                       </>
                     ) : (
                       <>
                         <Image
-                          src={privateImage}// Replace with the actual path to your private icon
+                          src={privateImage} // Replace with the actual path to your private icon
                           alt="Private Charging Station"
                           width={16} // Adjust the width and height based on your design
                           height={16}
-                          style={{ marginRight: "4px",marginBottom:0.2 }} // Adds some space between the icon and text
+                          style={{
+                            marginRight: "8px", // Increased space for better separation
+                          }}
                         />
-                        Private 
+                        Private
                       </>
                     )}
                   </Typography>
@@ -1154,8 +1156,7 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
                   backgroundColor: "white",
                   boxShadow: 1,
                   borderRadius: 1,
-                  padding:0.4
-
+                  padding: 0.4,
                 }}
               >
                 <Typography
@@ -1212,7 +1213,7 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
                   backgroundColor: "white",
                   boxShadow: 1,
                   borderRadius: 1,
-                  padding:0.3
+                  padding: 0.3,
                 }}
               >
                 <Typography
