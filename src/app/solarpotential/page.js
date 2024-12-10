@@ -103,9 +103,9 @@ const EVChargingStationsMap = () => {
   ];
  
   const supportedChargingSpeeds = [
-    { key: "dcFastPoints", label: "DC fast charging"},
-    { key: "level1Points", label: "Level 1 Points"},
-    { key: "level2Points", label: "Level 2 Points"},
+    { key: "dcFastPoints", label: "DC Fast Charging:"},
+    { key: "level1Points", label: "Level 1 Points:"},
+    { key: "level2Points", label: "Level 2 Points:"},
 
   ]
 
@@ -189,6 +189,8 @@ const EVChargingStationsMap = () => {
   };
   const fetchEvCount = async (cityName) => {
     try {
+      cityName = cityName.replace(/ Township$/i, "").trim();
+
       const response = await fetch(
         `http://localhost:8080/evs/city/${cityName}`
       );
@@ -306,6 +308,7 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
   };
   const fetchEconomyDetails = async (cityName) => {
     try {
+      cityName = cityName.replace(/ Township$/i, "").trim();
       const response = await fetch(
         `http://localhost:8080/economy/city/${cityName}`
       );
@@ -1021,7 +1024,7 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
                       fontWeight: "normal",
                     }}
                     >
-                      <span style={{fontWeight:'bold'}}>{label}</span> : { hoveredPlace[key]}
+                      <span style={{fontWeight:'bold'}}>{label}</span>{ hoveredPlace[key]}
                     </Typography>
                   )
                 }) }
