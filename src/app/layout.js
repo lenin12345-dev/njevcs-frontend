@@ -5,8 +5,8 @@ import Footer from './components/Footer'
 
 
 export const metadata = {
-  title: "Solar Potential",
-  description: "Calculating Solar potential",
+  title: "NJ EVCS Awnings",
+  description: "Solar potential Analysis",
 };
 
 export default function RootLayout({ children }) {
