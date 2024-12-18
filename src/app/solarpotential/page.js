@@ -35,6 +35,7 @@ import nema520 from "../../../public/nema520.png";
 import combo from "../../../public/combo.png";
 import publicImage from "../../../public/public.png";
 import privateImage from "../../../public/private.svg";
+import config from '../../config/config';
 
 const containerStyle = {
   width: "100%",
@@ -191,7 +192,7 @@ const EVChargingStationsMap = () => {
       cityName = cityName.replace(/ Township$/i, "").trim();
 
       const response = await fetch(
-        `http://localhost:8080/evs/city/${cityName}`
+        `${config.API_URL}/evs/city/${cityName}`
       );
       const data = await response.json();
 
@@ -309,7 +310,7 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
     try {
       cityName = cityName.replace(/ Township$/i, "").trim();
       const response = await fetch(
-        `http://localhost:8080/economy/city/${cityName}`
+        `${config.API_URL}/economy/city/${cityName}`
       );
       const data = await response.json();
 
@@ -361,7 +362,7 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
 
       // Fetch income data from your local API
       const incomeResponse = await fetch(
-        "http://localhost:8080/economy/counties"
+        `${config.API_URL}/economy/counties`
       );
       const incomeDataResponse = await incomeResponse.json();
 
@@ -382,9 +383,9 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
     setLoading(true);
 
     if (category === "charging") {
-      apiUrl = `http://localhost:8080/evcs/city/${cityName}`;
+      apiUrl = `${config.API_URL}/evcs/city/${cityName}`;
     } else if (category === "stores") {
-      apiUrl = `http://localhost:8080/stores/city/${cityName}`;
+      apiUrl = `${config.API_URL}/stores/city/${cityName}`;
     }
 
     fetch(apiUrl)
@@ -449,7 +450,7 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
       const countyBoundariesData = await countyBoundariesResponse.json();
 
       // Fetch EVCS data from your local API
-      const evcsResponse = await fetch("http://localhost:8080/evs/counties");
+      const evcsResponse = await fetch(`${config.API_URL}/evs/counties`);
       const evcsDataResponse = await evcsResponse.json();
 
       // Update state with the fetched data
