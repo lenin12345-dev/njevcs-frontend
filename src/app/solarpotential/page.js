@@ -238,7 +238,7 @@ const EVChargingStationsMap = () => {
       // Step 1: Fetch the place ID
       const placeIdUrl = `https://api.geoapify.com/v1/geocode/search?text=${encodeURIComponent(
         `${cityName}, NJ`
-      )}&format=json&apiKey=b8568cb9afc64fad861a69edbddb2658`;
+      )}&format=json&apiKey=${process.env.NEXT_PUBLIC_BOUNDARY_API_KEY}`;
 
       const placeIdResponse = await fetch(placeIdUrl);
       const placeIdData = await placeIdResponse.json();
@@ -256,7 +256,7 @@ const EVChargingStationsMap = () => {
 
       // Step 2: Fetch the boundary data using the place ID
       const boundaryUrl = `
-https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=b8568cb9afc64fad861a69edbddb2658`;
+https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=${process.env.NEXT_PUBLIC_BOUNDARY_API_KEY}`;
 
       const boundaryResponse = await fetch(boundaryUrl);
       const boundaryData = await boundaryResponse.json();
