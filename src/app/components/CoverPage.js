@@ -52,7 +52,7 @@ export default function CoverPage() {
               lineHeight: "1.2",
             }}
           >
-            Transform Your Future <br /> with Solar Wave's Clean Energy
+            Transform Your Future <br /> with Solar Wave&apos;s Clean Energy
           </Typography>
           <Typography
             variant="h5"

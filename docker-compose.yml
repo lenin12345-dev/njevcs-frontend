@@ -1,0 +1,18 @@
+version: "3.8"
+
+services:
+  pvawnings:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - nextjs-app-code:/app
+      - /app/node_modules
+    command: npm run dev -- -p 80
+
+volumes:
+  nextjs-app-code:
