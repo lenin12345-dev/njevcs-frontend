@@ -13,7 +13,7 @@ services:
     volumes:
       - pvawnings_code:/app
       - /app/node_modules
-    command: npm run dev -- -p 80
+    command: npm start -- -p 80
 
 volumes:
   pvawnings_code:
