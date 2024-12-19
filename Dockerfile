@@ -8,7 +8,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies
-RUN npm install
+RUN npm ci
 
 # Copy the entire project
 COPY . .
@@ -40,4 +40,4 @@ COPY --from=builder /app/.env ./.env
 EXPOSE 80
 
 # Start the app
-CMD ["npm", "run", "dev", "--", "-p", "80"]
+CMD ["npm", "start", "--", "-p", "80"]

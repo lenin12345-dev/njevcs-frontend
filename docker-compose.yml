@@ -9,10 +9,11 @@ services:
       - "80:80"
     environment:
       - NODE_ENV=development
+      - NEXT_PUBLIC_BACKEND_API_URL=http://localhost
     volumes:
       - pvawnings_code:/app
       - /app/node_modules
-    command: npm run dev -- -p 80
+    command: npm start -- -p 80
 
 volumes:
   pvawnings_code:
