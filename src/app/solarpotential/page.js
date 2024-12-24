@@ -75,12 +75,12 @@ const EVChargingStationsMap = () => {
   const autocompleteRef = useRef(null); // Ref for the autocomplete instance
   const mapRef = useRef(null); // Ref for the Google Map instance
 
-  const theme = useTheme(); // Access the theme
+  const theme = useTheme(); 
   const appBarHeight = (theme.mixins.toolbar.minHeight || 56) + 8;
 
   // Load Google Maps API
   const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: key, // Replace with your actual API key
+    googleMapsApiKey: key, 
     libraries: ["places"],
   });
   const incomeColors = {
@@ -918,9 +918,9 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
               paths={cityBoundary} // The path for the city's boundary
               options={{
                 ...polygonOptions, // Spread dynamically updated polygon options
-                strokeColor: "#FF0000", // Red color for the boundary line
-                strokeOpacity: 1, // Fully opaque stroke
-                strokeWeight: 2, // Line thickness
+                strokeColor: "#FF0000",
+                strokeOpacity: 1, 
+                strokeWeight: 2, 
               }}
             />
           )}

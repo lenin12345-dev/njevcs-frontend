@@ -18,7 +18,7 @@ const RenewableEnergySection = () => {
               alignItems: "flex-start",
             }}
           >
-            {/* Section Title */}
+    
             <Typography
               variant="h4"
               component="h2"
@@ -26,26 +26,26 @@ const RenewableEnergySection = () => {
                 fontWeight: "bold",
                 color: "#333",
                 marginBottom: 4,
+                fontSize: { xs: "1.8rem", sm: "2.2rem", md: "2.5rem" },
               }}
             >
               How We <span style={{color:"#4E9268"}}>Help You</span>
             </Typography>
 
-            {/* Image */}
+           
             <Box
               component="img"
-              src="/h1.jpeg" // Replace with actual image path
+              src="/h1.jpeg" 
               alt="Renewable Innovation"
               sx={{
                 width: "100%",
                 borderRadius: "10px",
-                height: "400px", // Maintain consistent height
+                height: "400px", 
                 objectFit: "cover",
                 boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
               }}
             />
 
-            {/* Description */}
             <Typography
               variant="body2"
               sx={{
@@ -84,7 +84,7 @@ const RenewableEnergySection = () => {
             }}
           />
 
-          {/* Subtitle */}
+         
           <Typography
             variant="h6"
             sx={{
@@ -110,21 +110,20 @@ const RenewableEnergySection = () => {
               alignItems: "flex-end",
             }}
           >
-            {/* Image */}
+       
             <Box
               component="img"
-              src="/h2.jpeg" // Replace with actual image path
+              src="/h2.jpeg" 
               alt="Clean Energy"
               sx={{
                 width: "100%",
                 borderRadius: "10px",
-                height: "400px", // Maintain consistent height
+                height: "400px", 
                 objectFit: "cover",
                 boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
               }}
             />
 
-            {/* Description */}
             <Typography
               variant="body2"
               sx={{

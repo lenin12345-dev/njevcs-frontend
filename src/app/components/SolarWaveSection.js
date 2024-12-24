@@ -1,12 +1,12 @@
 import React from "react";
-import { Box, Typography, Card, CardContent, Icon } from "@mui/material";
+import { Box, Typography, Card } from "@mui/material";
 import AcUnitIcon from "@mui/icons-material/AcUnit";
 import OfflineBoltIcon from "@mui/icons-material/OfflineBolt";
 import EnergySavingsLeafIcon from "@mui/icons-material/EnergySavingsLeaf";
 import RecyclingIcon from "@mui/icons-material/Recycling";
 import LightbulbCircleIcon from "@mui/icons-material/LightbulbCircle";
 import ExtensionIcon from "@mui/icons-material/Extension";
-import Image from 'next/image';
+import Image from "next/image";
 
 const cardData = [
   {
@@ -15,27 +15,27 @@ const cardData = [
     description: "Optimizing energy use for maximum output.",
   },
   {
-    icon: <OfflineBoltIcon fontSize="large"  />,
+    icon: <OfflineBoltIcon fontSize="large" />,
     label: "Power",
     description: "Harnessing robust energy solutions.",
   },
   {
-    icon: <EnergySavingsLeafIcon fontSize="large"  />,
+    icon: <EnergySavingsLeafIcon fontSize="large" />,
     label: "Eco-Friendly",
     description: "Promoting green and sustainable energy.",
   },
   {
-    icon: <RecyclingIcon fontSize="large"  />,
+    icon: <RecyclingIcon fontSize="large" />,
     label: "Sustainability",
     description: "Ensuring resources for future generations.",
   },
   {
-    icon: <LightbulbCircleIcon fontSize="large"  />,
+    icon: <LightbulbCircleIcon fontSize="large" />,
     label: "Innovation",
     description: "Pioneering breakthroughs in clean energy.",
   },
   {
-    icon: <ExtensionIcon fontSize="large"  />,
+    icon: <ExtensionIcon fontSize="large" />,
     label: "Renewable",
     description: "Tapping into limitless natural resources.",
   },
@@ -43,7 +43,13 @@ const cardData = [
 
 const SolarWaveSection = () => {
   return (
-    <Box sx={{ padding: "30px 5%", display: "flex", flexDirection: "column" }}>
+    <Box
+      sx={{
+        padding: { xs: "100px 5%", sm: "30px 5%",md: "70px 5%",lg:"30px 5%" },
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
       {/* Heading */}
       <Box sx={{ textAlign: "center", marginBottom: "30px" }}>
         <Typography
@@ -52,16 +58,18 @@ const SolarWaveSection = () => {
           sx={{
             fontWeight: "bold",
             color: "#333",
-            marginBottom: "10px", // Space between lines
+            marginBottom: "10px",
+            fontSize: { xs: "1.8rem", sm: "2.2rem", md: "2.5rem" },
           }}
         >
-          Why <span style={{ color:"#4E9268"}}>Solar Wave?</span>
+          Why <span style={{ color: "#4E9268" }}>Solar Wave?</span>
         </Typography>
         <Typography
           variant="h6"
           sx={{
             color: "#666",
-            lineHeight: "1.6", // Improve readability
+            lineHeight: "1.6",
+            fontSize: { xs: "1rem", sm: "1.2rem" },
           }}
         >
           We bring clean energy to your doorstep <br />
@@ -70,24 +78,35 @@ const SolarWaveSection = () => {
       </Box>
 
       {/* Main content with left and right sections */}
-      <Box sx={{ display: "flex", justifyContent: "space-around" }}>
-        {/* Left Section with 4 Cards */}
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: { xs: "column", md: "row" },
+          justifyContent: "space-between",
+          gap: "20px",
+        }}
+      >
+        {/* Left Section with Cards */}
         <Box
           sx={{
             display: "grid",
-            gridTemplateColumns: "repeat(3, 1fr)",
+            gridTemplateColumns: {
+              xs: "1fr",
+              sm: "repeat(2, 1fr)",
+              md: "repeat(3, 1fr)",
+            },
             gap: "20px",
-            width: "40%",
+            flex: 1,
           }}
         >
           {cardData.map((card, index) => (
             <Card
               key={index}
               sx={{
-                height: "220px",
+                height: { xs: "200px", sm: "220px" },
                 borderRadius: "10px",
                 boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
-                backgroundColor: "#E8F6EE", // Light blue with transparency
+                backgroundColor: "#E8F6EE",
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "center",
@@ -95,11 +114,10 @@ const SolarWaveSection = () => {
                 padding: "15px",
                 transition: "background-color 0.3s ease",
                 "&:hover": {
-                  backgroundColor: "#8ED1A8", // Solid light blue on hover
+                  backgroundColor: "#8ED1A8",
                 },
               }}
             >
-              {/* Icon at the top */}
               <Box
                 sx={{
                   fontSize: "55px",
@@ -109,24 +127,24 @@ const SolarWaveSection = () => {
               >
                 {card.icon}
               </Box>
-              {/* Label */}
               <Typography
                 variant="body1"
                 sx={{
                   fontWeight: "bold",
                   color: "#333",
                   marginBottom: "10px",
+                  fontSize: { xs: "0.9rem", sm: "1rem" },
                 }}
               >
                 {card.label}
               </Typography>
-              {/* Description */}
               <Typography
                 variant="body2"
                 sx={{
                   color: "#666",
                   textAlign: "center",
                   lineHeight: "1.5",
+                  fontSize: { xs: "0.8rem", sm: "0.9rem" },
                 }}
               >
                 {card.description}
@@ -137,27 +155,28 @@ const SolarWaveSection = () => {
 
         {/* Right Section with Image */}
         <Box
-  sx={{
-    width: "55%",
-    height: "auto",
-    borderRadius: "10px",
-    boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
-    position: "relative", // Ensure the image is positioned correctly
-    overflow: "hidden", // Hide any overflow
-  }}
->
-  <Image
-    src="/section2.jpeg" // Replace with actual image path
-    alt="Section Background"
-    layout="fill" // This ensures the image covers the container
-    objectFit="cover" // Makes sure the image covers the area without stretching
-    objectPosition="center" // Centers the image
-    style={{
-      borderRadius: "10px",
-    }}
-    priority={true} // Optional: prioritize the image loading if it's above the fold
-  />
-</Box>
+          sx={{
+            flex: 1,
+            position: "relative",
+            height: { xs: "200px", sm: "300px", md: "auto" },
+            width:"100%",
+            borderRadius: "10px",
+            overflow: "hidden",
+            boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
+          }}
+        >
+          <Image
+            src="/section2.jpeg" 
+            alt="Section Background"
+            layout="fill"
+            objectFit="cover"
+            objectPosition="center"
+            style={{
+              borderRadius: "10px",
+            }}
+            priority={true}
+          />
+        </Box>
       </Box>
     </Box>
   );

@@ -19,13 +19,13 @@ export default function CoverPage() {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        height: "80vh", // Reduced height for the cover image
-        backgroundImage: "url('/cover.jpeg')", // Replace with the actual path to your image
+        height: { xs: "100vh", sm: "80vh" }, 
+        backgroundImage: "url('/cover.jpeg')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
-        padding: "40px",
-        marginTop: "0",
+        padding: { xs: "20px", sm: "40px" },
+        marginTop: 0,
         position: "relative",
         marginBottom: 20,
       }}
@@ -35,65 +35,64 @@ export default function CoverPage() {
         <Box
           sx={{
             position: "absolute",
-            top: "10%", // Adjust this value to move the text closer to the navbar
-            left: "5%", // Add some spacing from the left
-            maxWidth: "700px", // Limit the width for better layout
+            top: { xs: "5%", sm: "10%" },
+            left: { xs: "5%", sm: "5%" },
+            maxWidth: { xs: "90%", sm: "700px" }, 
           }}
         >
-          {/* Main Heading */}
           <Typography
-            variant="h3"
+            variant="h4"
             component="h2"
             sx={{
-              color: "#FFFFFF", // White for headings
+              color: "#FFFFFF",
               fontWeight: "bold",
-              textShadow: "2px 2px 5px rgba(0,0,0,0.7)", // Shadow for readability
+              textShadow: "2px 2px 5px rgba(0,0,0,0.7)",
               textAlign: "left",
               lineHeight: "1.2",
+              fontSize: { xs: "1.8rem", sm: "2.5rem", md: "3rem" },
             }}
           >
             Transform Your Future <br /> with Solar Wave&apos;s Clean Energy
           </Typography>
           <Typography
-            variant="h5"
+            variant="h6"
             component="p"
             sx={{
-              color: "#fff", // White for the text
+              color: "#fff",
               fontWeight: "bold",
-              textShadow: "1px 1px 3px rgba(0,0,0,0.5)", // Shadow for clarity
-              marginTop: "25px",
+              textShadow: "1px 1px 3px rgba(0,0,0,0.5)",
+              marginTop: "15px",
               textAlign: "left",
               lineHeight: "1.5",
-              whiteSpace: "nowrap", // Prevent text wrapping
-              overflow: "hidden", // Hide overflow for typing effect
+              fontSize: { xs: "0.9rem", sm: "1.5rem" },
+              minHeight: "50px", // Set a minimum height to prevent shifts
             }}
           >
             <TypeAnimation
               sequence={[
-                "Harness the power of the sun with cutting-edge solutions", // Types the full sentence
-                1000, // Waits 1s
-                "", // Deletes the sentence
-                2000, // Waits 2s before restarting
+                "Harness the power of the sun with cutting-edge solutions",
+                1000,
+                "",
+                2000,
               ]}
               wrapper="span"
               cursor={true}
               repeat={Infinity}
             />
           </Typography>
-
-          {/* Stylish Button */}
           <Button
             variant="contained"
             endIcon={<ArrowForwardIcon />}
             component={Link}
             href="/solarpotential"
             sx={{
-              marginTop: "20px",
-              padding: "10px 20px",
-              background: "#4E9268", // Gradient for stylish look
+              marginTop: {sx:"10px",sm:"20px"},
+              
+              padding: { xs: "8px 16px", sm: "10px 20px" },
+              background: "#4E9268",
               color: "#fff",
               fontWeight: "bold",
-              fontSize: "1rem",
+              fontSize: { xs: "0.9rem", sm: "1rem" },
               borderRadius: "25px",
               textTransform: "none",
               boxShadow: "0 4px 10px rgba(0,0,0,0.3)",
@@ -107,82 +106,65 @@ export default function CoverPage() {
           </Button>
         </Box>
 
-        {/* Cards Section */}
+   
         <Box
           sx={{
             position: "absolute",
-            bottom: "0", // Place cards at the bottom of the cover image
-            left: "5%",
-            right: "5%",
+            bottom: "0",
+            left: { xs: "5%", sm: "5%" },
+            right: { xs: "5%", sm: "5%" },
             display: "flex",
+            flexWrap: "wrap", 
             justifyContent: "center",
-            gap: "20px", // Gap between cards
+            gap: "20px",
             zIndex: 1,
-            transform: "translateY(50%)", // Apply the transform to the parent Box
+            transform: {
+              xs: "translateY(38%)", // Slight adjustment for mobile
+              sm: "translateY(30%)", // Reduced overlap for small screens
+              md: "translateY(50%)", // Original for larger screens
+            },
           }}
         >
-          {/* Card 1 (bigger card) */}
+          {/* Card 1 */}
           <Card
             sx={{
-              position: "relative", // Needed for positioning
-              display: "flex", // Align the image and text horizontally
-              height: "200px", // Increased height to make room for both image and text
-              width: "500px",
+              display: "flex",
+              flexDirection: { xs: "column", sm: "row" }, 
+              height:  "200px",
+              width: { xs: "100%", sm: "500px" },
               borderRadius: "10px",
-              boxShadow: "0 6px 15px rgba(0, 0, 0, 0.3)", // Slightly larger shadow for visual appeal
+              boxShadow: "0 6px 15px rgba(0, 0, 0, 0.3)",
               backgroundColor: "#4E9268",
               zIndex: 2,
             }}
           >
-            {/* Image on the left */}
             <Box
               sx={{
-                width: "60%", // 40% for the image part
-                height: "93%",
-                backgroundImage: "url('/top1.jpg')", // Replace with actual image path
+                width: { xs: "100%", sm: "60%" },
+                height: {xs:"40%",sm:"auto"},
+                backgroundImage: "url('/top1.jpg')",
                 backgroundSize: "cover",
                 backgroundPosition: "center",
-                borderTopLeftRadius: "10px", // Rounded corners on top-left
-                borderBottomLeftRadius: "10px", // Rounded corners on bottom-left
-                margin: "7px",
-                borderRadius: "10px",
+                margin: { xs: 0, sm: "7px" },
+                borderRadius: { xs: "10px 10px 0 0", sm: "10px" },
               }}
             ></Box>
-
-            {/* Text/Description on the right */}
             <CardContent
               sx={{
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "center",
-                padding: "30px",
-                width: "60%", // Occupy the remaining space
+                padding: {xs:"10px",sm:"30px"},
+                width: {xs:"auto",sm:"60%"},
                 color: "#fff",
+                height: {xs:"60%",sm:"auto"},
               }}
             >
-              <Typography
-                variant="h7" // Larger font for the heading
-                sx={{
-                  fontWeight: "bold",
-                  color: "#333", // Darker color for the heading
-                  marginBottom: "10px", // Space below the heading
-                  color: "#fff",
-                  fontWeight: "bold",
-                }}
-              >
-                Solar Canopy potential
+              <Typography variant="h7" sx={{ fontWeight: "bold", color: "#fff" }}>
+                Solar Canopy Potential
               </Typography>
-
-              <Typography
-                variant="body2"
-                sx={{
-                  fontSize: "0.8rem", // Slightly larger subtext
-                  lineHeight: "1.5",
-                  color: "#fff",
-                }}
-              >
-                Harnessing the power of the sun while providing shelter and
-                energy efficiency to local businesses.
+              <Typography variant="body2" sx={{ fontSize: "0.8rem", lineHeight: "1.5", color: "#fff" }}>
+                Harnessing the power of the sun while providing shelter and energy efficiency to local businesses.
               </Typography>
             </CardContent>
           </Card>
@@ -190,13 +172,11 @@ export default function CoverPage() {
           {/* Card 2 */}
           <Card
             sx={{
-              position: "relative", // Needed for positioning
-              height: "200px", // Increased height for the card
-              width: "250px",
+              height: "200px",
+              width: { xs: "100%", sm: "250px" },
               borderRadius: "10px",
               boxShadow: "0 4px 10px rgba(0, 0, 0, 0.3)",
               backgroundColor: "#fff",
-              zIndex: 1,
               overflow: "hidden",
             }}
           >
@@ -210,13 +190,11 @@ export default function CoverPage() {
           {/* Card 3 */}
           <Card
             sx={{
-              position: "relative", // Needed for positioning
-              height: "200px", // Increased height for the card
-              width: "250px",
+              height: "200px",
+              width: { xs: "100%", sm: "250px" },
               borderRadius: "10px",
               boxShadow: "0 4px 10px rgba(0, 0, 0, 0.3)",
               backgroundColor: "#4E9268",
-              zIndex: 0,
               overflow: "hidden",
             }}
           >
@@ -226,15 +204,8 @@ export default function CoverPage() {
               title="green iguana"
             />
             <CardContent>
-              <Typography
-                variant="body2"
-                sx={{
-                  color: "#fff",
-                }}
-                component="h2"
-              >
-                Our solar panel deliver maximum efiiciency ensuring you get the
-                most out of it.
+              <Typography variant="body2" sx={{ color: "#fff" }}>
+                Our solar panels deliver maximum efficiency, ensuring you get the most out of it.
               </Typography>
             </CardContent>
           </Card>

@@ -1,17 +1,17 @@
 import React from "react";
 import { Box, Typography, Link, Container, Grid, IconButton } from "@mui/material";
 
-import FacebookIcon from '@mui/icons-material/Facebook';
-import XIcon from '@mui/icons-material/X';
-import WhatsAppIcon from '@mui/icons-material/WhatsApp';
-import InstagramIcon from '@mui/icons-material/Instagram';
+import FacebookIcon from "@mui/icons-material/Facebook";
+import XIcon from "@mui/icons-material/X";
+import WhatsAppIcon from "@mui/icons-material/WhatsApp";
+import InstagramIcon from "@mui/icons-material/Instagram";
 
 const Footer = () => {
   return (
     <Box
       sx={{
         background: "#F76B1C",
-        padding: "40px 0",
+        padding: { xs: "20px", sm: "30px", md: "40px 0" },
         color: "#fff",
         display: "flex",
         justifyContent: "center",
@@ -19,66 +19,108 @@ const Footer = () => {
     >
       <Container maxWidth="lg">
         <Grid container spacing={4}>
-          {/* Column 1: Website Name, Share Section, and Social Media Icons */}
-          <Grid item xs={12} md={3}>
-            <Typography variant="h5" component="div" sx={{ marginBottom: 2 }}>
+          <Grid item xs={12} sm={6} md={3}>
+            <Typography
+              variant="h5"
+              component="div"
+              sx={{ marginBottom: 2, textAlign: { xs: "center", md: "left" } }}
+            >
               NJ EVCS Awnings
             </Typography>
-            <Typography variant="body2" sx={{ marginBottom: 1 }}>
+            <Typography
+              variant="body2"
+              sx={{ marginBottom: 1, textAlign: { xs: "center", md: "left" } }}
+            >
               Share our application with your friends!
             </Typography>
-            <Box sx={{ display: "flex", gap: 2 }}>
-              <IconButton color="inherit" href="https://facebook.com">
-                <FacebookIcon />
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: { xs: "center", md: "flex-start" },
+                gap: 2,
+              }}
+            >
+              <IconButton color="inherit" href="https://facebook.com" size="small">
+                <FacebookIcon fontSize="small" />
               </IconButton>
-              <IconButton color="inherit" href="https://twitter.com">
-                <XIcon />
+              <IconButton color="inherit" href="https://twitter.com" size="small">
+                <XIcon fontSize="small" />
               </IconButton>
-              <IconButton color="inherit" href="https://whatsapp.com">
-                <WhatsAppIcon />
+              <IconButton color="inherit" href="https://whatsapp.com" size="small">
+                <WhatsAppIcon fontSize="small" />
               </IconButton>
-              <IconButton color="inherit" href="https://instagram.com">
-                <InstagramIcon />
+              <IconButton color="inherit" href="https://instagram.com" size="small">
+                <InstagramIcon fontSize="small" />
               </IconButton>
             </Box>
           </Grid>
 
-          {/* Column 2: About Us and Address */}
-          <Grid item xs={12} md={3}>
-            <Typography variant="h6" sx={{ marginBottom: 1 }}>
+          <Grid item xs={12} sm={6} md={3}>
+            <Typography
+              variant="h6"
+              sx={{ marginBottom: 1, textAlign: { xs: "center", md: "left" } }}
+            >
               About Us
             </Typography>
-            <Typography variant="body2">
-            1 Normal Ave, Montclair, NJ 07043
+            <Typography
+              variant="body2"
+              sx={{ textAlign: { xs: "center", md: "left" } }}
+            >
+              1 Normal Ave, Montclair, NJ 07043
             </Typography>
           </Grid>
 
-          {/* Column 3: Privacy Policy and Cookie Policy */}
-          <Grid item xs={12} md={3}>
-            <Typography variant="h6" sx={{ marginBottom: 1 }}>
+          <Grid item xs={12} sm={6} md={3}>
+            <Typography
+              variant="h6"
+              sx={{ marginBottom: 1, textAlign: { xs: "center", md: "left" } }}
+            >
               Policies
             </Typography>
-            <Box>
-              <Link href="/privacy-policy" color="inherit" sx={{ textDecoration: "none", display: "block", marginBottom: 1 }}>
+            <Box sx={{ textAlign: { xs: "center", md: "left" } }}>
+              <Link
+                href="/privacy-policy"
+                color="inherit"
+                sx={{
+                  textDecoration: "none",
+                  display: "block",
+                  marginBottom: 1,
+                }}
+              >
                 Privacy Policy
               </Link>
-              <Link href="/cookie-policy" color="inherit" sx={{ textDecoration: "none", display: "block", marginBottom: 1 }}>
+              <Link
+                href="/cookie-policy"
+                color="inherit"
+                sx={{
+                  textDecoration: "none",
+                  display: "block",
+                  marginBottom: 1,
+                }}
+              >
                 Cookie Policy
               </Link>
             </Box>
           </Grid>
 
-          {/* Column 4: Terms of Service */}
-          <Grid item xs={12} md={3}>
-            <Typography variant="h6" sx={{ marginBottom: 1 }}>
+          <Grid item xs={12} sm={6} md={3}>
+            <Typography
+              variant="h6"
+              sx={{ marginBottom: 1, textAlign: { xs: "center", md: "left" } }}
+            >
               Terms of Service
             </Typography>
-           
           </Grid>
         </Grid>
 
-        {/* Copyright Section */}
-        <Typography variant="body2" sx={{ textAlign: "center", marginTop: 4 }}>
+        <Typography
+          variant="body2"
+          sx={{
+            textAlign: "center",
+            marginTop: 4,
+            fontSize: { xs: "12px", sm: "14px" },
+          }}
+        >
           Copyright © 2024 NJ EVCS Awnings. All rights reserved.
         </Typography>
       </Container>
