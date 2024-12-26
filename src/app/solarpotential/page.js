@@ -933,7 +933,7 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
                 Costco:
                   "https://gottadeal.s3.amazonaws.com/logos/vignette/costco.png",
                 BJs: "https://bjs.scene7.com/is/image/bjs/201215_FSA_Icon2?fmt=png-alpha",
-                Walmart: "http://localhost:3000/Walmart.png",
+                Walmart: "/Walmart.png",
                 Target:
                   "https://upload.wikimedia.org/wikipedia/commons/9/9a/Target_logo.svg",
                 "Home Depot":

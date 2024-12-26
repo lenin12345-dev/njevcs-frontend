@@ -27,7 +27,7 @@ const FormContainer = styled("form")(({ theme }) => ({
   gap: theme.spacing(3),
 }));
 
-const page = () => {
+const Page = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -190,4 +190,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
