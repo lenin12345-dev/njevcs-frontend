@@ -109,6 +109,8 @@ const EVChargingStationsMap = () => {
     { key: "level2Points", label: "Level 2 Points:" },
   ];
 
+  console.log('cccc',config.API_URL)
+
   // Initialize Autocomplete
   useEffect(() => {
     if (

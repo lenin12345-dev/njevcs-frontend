@@ -7,4 +7,5 @@ const config = {
     ? `http://3.95.193.2:8080`
     : "http://localhost:8080",
 };
+export default config; // Export the config object
 
