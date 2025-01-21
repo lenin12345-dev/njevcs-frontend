@@ -72,9 +72,9 @@ const EVChargingStationsMap = () => {
     libraries: ["places"],
   });
   const incomeColors = {
-    Low: "#ff0000", // Red for low income
-    Medium: "#ffa500", // Orange for medium income
-    High: "#008000", // Green for high income
+    Low: "#ff0000", 
+    Medium: "#ffa500", 
+    High: "#008000", 
   };
   const evcsColor = {
     Low: "orange",
@@ -161,7 +161,7 @@ const EVChargingStationsMap = () => {
         setCityCoordinates(location); // Update the center of the map
         setWarning(false);
 
-        // Use the city bounds for charging station search
+     
         const bounds = place.geometry.viewport; // Get the viewport (bounds) of the selected city
         setShowFilter(true);
         setSelectedCategory("charging");
@@ -222,7 +222,7 @@ const EVChargingStationsMap = () => {
   };
   const fetchCityBoundary = async (cityName) => {
     try {
-      // Step 1: Fetch the place ID
+      // Fetch the place ID
       const placeIdUrl = `https://api.geoapify.com/v1/geocode/search?text=${encodeURIComponent(
         `${cityName}, NJ`
       )}&format=json&apiKey=${process.env.NEXT_PUBLIC_BOUNDARY_API_KEY}`;
@@ -315,17 +315,17 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
     }
   };
   const updatePolygonFillColor = (incomeLevel) => {
-    let fillColor = "#FFFFFF"; // Default to white (no fill)
+    let fillColor = "#FFFFFF"; 
 
     switch (incomeLevel) {
       case "Low":
-        fillColor = "#ff0000"; // Light red for low income
+        fillColor = "#ff0000"; 
         break;
       case "Medium":
-        fillColor = "#ffa500"; // Light yellow for medium income
+        fillColor = "#ffa500";
         break;
       case "High":
-        fillColor = "#008000"; // Light green for high income
+        fillColor = "#008000"; 
         break;
       default:
         console.warn(`Unknown income level: ${incomeLevel}`);
@@ -333,8 +333,8 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
 
     setPolygonOptions((prevOptions) => ({
       ...prevOptions,
-      fillColor, // Update the fill color dynamically
-      fillOpacity: 0.5, // Adjust fill opacity
+      fillColor, 
+      fillOpacity: 0.5, 
     }));
   };
   const fetchCountyData = async () => {
@@ -403,7 +403,7 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
       : "Unknown City";
 
     if (category === "economicZones" && cityName !== "Unknown City") {
-      // Trigger fetching of county data for New Jersey
+   
       fetchCountyData();
       setHoveredEvCounty(null);
       setHoveredCounty(null);
@@ -420,7 +420,7 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
 
       setDemand(true);
     } else {
-      // Handle other categories
+     
       fetchPlaces(cityCoordinates, null, cityName, category);
     }
   };
@@ -455,7 +455,7 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
 
     // If input is cleared, reset place and location
     if (value === "") {
-      setPlaces(null); // Clear selected place
+      setPlaces(null); 
       setSelectedCategory("charging");
       setCityBoundary(null);
       setSidebarVisible(false);
@@ -487,17 +487,17 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
   // Combine income level data with county boundaries
   const getIncomeLevel = (countyName) => {
     const countyIncome = incomeData.find((item) => item.county === countyName);
-    return countyIncome ? countyIncome.incomeLevel : "Medium"; // Default to "Medium" if not found
+    return countyIncome ? countyIncome.incomeLevel : "Medium"; 
   };
 
-  // Render polygons with color-coding
+ 
   const renderCountyBoundaries = () => {
     return countyBoundaries.map((county, index) => {
       const handleMouseOver = (county, polygon) => {
-        // Set the county data when hovering over a county
+     
         const countyName = county.name;
         const incomeLevel = getIncomeLevel(countyName);
-        const income = getAvgIncome(countyName); // Fetch EVCS count
+        const income = getAvgIncome(countyName); 
         const coordinates = county.geo_shape.geometry.coordinates[0].map(
           ([lng, lat]) => ({
             lat,
@@ -521,7 +521,7 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
       };
 
       const handleMouseOut = () => {
-        setHoveredCounty(null); // Clear the hovered county when mouse leaves
+        setHoveredCounty(null); 
         setHoveredEvCounty(null);
       };
       const countyName = county.name;
@@ -554,7 +554,7 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
     const countyEvcs = evcsData.find((item) => item.county === countyName);
 
     if (!countyEvcs) {
-      return "Medium"; // Default when EVCS data is not found
+      return "Medium"; 
     }
 
     return countyEvcs.evsLevel || "Medium";
@@ -562,18 +562,18 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
 
   const getEvcsCount = (countyName) => {
     const countyEvcs = evcsData.find((item) => item.county === countyName);
-    return countyEvcs ? countyEvcs.numberOfEvs : 0; // Return count or 0
+    return countyEvcs ? countyEvcs.numberOfEvs : 0; 
   };
   const getAvgIncome = (countyName) => {
     const countyIncome = incomeData.find((item) => item.county === countyName);
-    return countyIncome ? countyIncome.income : 0; // Return count or 0
+    return countyIncome ? countyIncome.income : 0; 
   };
   const renderCountyEvBoundaries = () => {
     return countyBoundaries.map((county, index) => {
       const handleMouseOver = () => {
         const countyName = county.name;
-        const evsLevel = getEvcsLevel(countyName); // Fetch EVCS level
-        const evsCountyCount = getEvcsCount(countyName); // Fetch EVCS count
+        const evsLevel = getEvcsLevel(countyName); 
+        const evsCountyCount = getEvcsCount(countyName); 
 
         const coordinates = county.geo_shape.geometry.coordinates[0].map(
           ([lng, lat]) => ({
@@ -703,9 +703,9 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
         >
           {cityBoundary && (
             <Polygon
-              paths={cityBoundary} // The path for the city's boundary
+              paths={cityBoundary} 
               options={{
-                ...polygonOptions, // Spread dynamically updated polygon options
+                ...polygonOptions, 
                 strokeColor: "#FF0000",
                 strokeOpacity: 1,
                 strokeWeight: 2,
