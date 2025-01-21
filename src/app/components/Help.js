@@ -35,7 +35,7 @@ const RenewableEnergySection = () => {
            
             <Box
               component="img"
-              src="/h1.jpeg" 
+              src="/h1.webp" 
               alt="Renewable Innovation"
               sx={{
                 width: "100%",
@@ -113,7 +113,7 @@ const RenewableEnergySection = () => {
        
             <Box
               component="img"
-              src="/h2.jpeg" 
+              src="/h2.webp" 
               alt="Clean Energy"
               sx={{
                 width: "100%",

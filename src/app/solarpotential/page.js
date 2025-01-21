@@ -2,9 +2,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import {
   GoogleMap,
-  LoadScript,
-  Marker,
-  InfoWindow,
   useJsApiLoader,
   Polygon,
 } from "@react-google-maps/api";
@@ -15,17 +12,7 @@ import {
   Typography,
   CircularProgress,
   Backdrop,
-  ButtonGroup,
-  Button,
-  Grid,
-  Drawer,
-  IconButton,
-  Divider,
-  Avatar,
 } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import { useTheme } from "@mui/material/styles";
-import Image from "next/image";
 import j1772 from "../../../public/j1772.png";
 import tesla from "../../../public/tesla.png";
 import chademo from "../../../public/chademo.png";
@@ -35,7 +22,11 @@ import nema520 from "../../../public/nema520.png";
 import combo from "../../../public/combo.png";
 import publicImage from "../../../public/public.png";
 import privateImage from "../../../public/private.svg";
-import config from '../../config/config';
+import config from "../../config/config";
+import Sidebar from "../components/Sidebar";
+import FilterBox from "../components/FilterBox";
+import CustomMarker from "../components/CustomMarker";
+import {PlaceInfoWindow,CountyInfoWindow,EvCountyInfoWindow} from '../components/InfoWindow'
 
 const containerStyle = {
   width: "100%",
@@ -75,12 +66,9 @@ const EVChargingStationsMap = () => {
   const autocompleteRef = useRef(null); // Ref for the autocomplete instance
   const mapRef = useRef(null); // Ref for the Google Map instance
 
-  const theme = useTheme(); 
-  const appBarHeight = (theme.mixins.toolbar.minHeight || 56) + 8;
-
   // Load Google Maps API
   const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: key, 
+    googleMapsApiKey: key,
     libraries: ["places"],
   });
   const incomeColors = {
@@ -109,7 +97,6 @@ const EVChargingStationsMap = () => {
     { key: "level2Points", label: "Level 2 Points:" },
   ];
 
-  console.log('cccc',config.API_URL)
 
   // Initialize Autocomplete
   useEffect(() => {
@@ -193,9 +180,7 @@ const EVChargingStationsMap = () => {
     try {
       cityName = cityName.replace(/ Township$/i, "").trim();
 
-      const response = await fetch(
-        `${config.API_URL}/evs/city/${cityName}`
-      );
+      const response = await fetch(`${config.API_URL}/evs/city/${cityName}`);
       const data = await response.json();
 
       if (data && data.data) {
@@ -363,9 +348,7 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
       const countyBoundariesData = await countyBoundariesResponse.json();
 
       // Fetch income data from your local API
-      const incomeResponse = await fetch(
-        `${config.API_URL}/economy/counties`
-      );
+      const incomeResponse = await fetch(`${config.API_URL}/economy/counties`);
       const incomeDataResponse = await incomeResponse.json();
 
       setCountyBoundaries(countyBoundariesData.results);
@@ -648,102 +631,6 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
 
   const closeSidebar = () => setSidebarVisible(false);
 
-  const Sidebar = ({ cityInfo, visible, onClose, evsCount }) => (
-    <Drawer
-      anchor="right"
-      variant="persistent"
-      open={visible}
-      onClose={onClose}
-      PaperProps={{
-        sx: {
-          width: 350,
-          height: "auto", // Auto height based on content
-          maxHeight: "90vh", // Optional: Cap height to prevent overflow
-          top: `${appBarHeight}px`, // Align with navbar,
-          padding: 2,
-          backgroundColor: "#f9f9f9",
-          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
-          borderRadius: "8px 0 0 8px", // Rounded edges for better style
-        },
-      }}
-    >
-      {/* Header Section */}
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          mb: 2,
-        }}
-      >
-        <Typography variant="h6" fontWeight="bold" color="primary">
-          {cityInfo?.cityName || "City Details"}
-        </Typography>
-        <IconButton onClick={onClose}>
-          <CloseIcon />
-        </IconButton>
-      </Box>
-      <Divider />
-
-      {/* Content Section */}
-      <Box sx={{ mt: 2 }}>
-        <Typography variant="body1" sx={{ mb: 1, fontSize: 16 }}>
-          <strong>Income Level:</strong> {cityInfo?.incomeLevel}
-        </Typography>
-        <Typography variant="body1" sx={{ mb: 1, fontSize: 16 }}>
-          <strong>Average Income:</strong> ${cityInfo?.income.toLocaleString()}
-        </Typography>
-        <Typography variant="body1" sx={{ mb: 1, fontSize: 16 }}>
-          <strong>Number Of Electric Vehicles:</strong> {evsCount}
-        </Typography>
-      </Box>
-
-      {/* Visual Section */}
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          mt: 3,
-          p: 2,
-          border: "1px solid #e0e0e0",
-          borderRadius: 2,
-          backgroundColor: "#f0f4f8",
-        }}
-      >
-        <Avatar
-          sx={{
-            width: 80,
-            height: 80,
-            bgcolor:
-              cityInfo?.incomeLevel === "High"
-                ? "green"
-                : cityInfo?.incomeLevel === "Medium"
-                ? "orange"
-                : "red",
-          }}
-        >
-          {cityInfo?.incomeLevel.charAt(0)}
-        </Avatar>
-        <Typography
-          variant="body2"
-          sx={{ ml: 2, color: "#555", textAlign: "center" }}
-        >
-          The income level of {cityInfo?.cityName} is categorized as{" "}
-          <strong>{cityInfo?.incomeLevel}</strong>. The average income is
-          approximately ${cityInfo?.income.toLocaleString()}.
-        </Typography>
-      </Box>
-
-      {/* Footer Section */}
-      <Box sx={{ mt: 3, textAlign: "center" }}>
-        <Typography variant="caption" sx={{ color: "#888" }}>
-          We will be adding more Solar Potential info for {cityInfo?.cityName}.
-        </Typography>
-      </Box>
-    </Drawer>
-  );
-
   const onLoad = (map) => {
     mapRef.current = map;
     setIsMapLoaded(true);
@@ -773,113 +660,12 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
             borderRadius: "8px",
           }}
         />
-        {showFilter && (
-          <Box
-            mt={2}
-            sx={{
-              border: "1px solid #ccc", // Border for card-like appearance
-              borderRadius: "8px", // Rounded corners
-              padding: "16px", // Padding inside the box
-              boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)", // Subtle shadow for depth
-              maxWidth: 500,
-              mx: "auto", // Center horizontally
-              backgroundColor: "#fff", // Optional: Background color
-            }}
-          >
-            <Grid container spacing={2}>
-              {/* First Row */}
-              <Grid item xs={4}>
-                <Button
-                  fullWidth
-                  onClick={() => handleCategoryChange("charging")}
-                  variant={
-                    selectedCategory === "charging" ? "contained" : "outlined"
-                  }
-                  size="small"
-                  sx={{
-                    textTransform: "none",
-                    fontSize: "0.875rem",
-                    padding: "6px 12px",
-                  }}
-                >
-                  Charging Stations
-                </Button>
-              </Grid>
-              <Grid item xs={4}>
-                <Button
-                  fullWidth
-                  onClick={() => handleCategoryChange("stores")}
-                  variant={
-                    selectedCategory === "stores" ? "contained" : "outlined"
-                  }
-                  size="small"
-                  sx={{
-                    textTransform: "none",
-                    fontSize: "0.875rem",
-                    padding: "6px 12px",
-                  }}
-                >
-                  Stores
-                </Button>
-              </Grid>
-              <Grid item xs={4}>
-                <Button
-                  fullWidth
-                  onClick={() => handleCategoryChange("economicZones")}
-                  variant={
-                    selectedCategory === "economicZones"
-                      ? "contained"
-                      : "outlined"
-                  }
-                  size="small"
-                  sx={{
-                    textTransform: "none",
-                    fontSize: "0.875rem",
-                    padding: "6px 12px",
-                  }}
-                >
-                  Economic Zones
-                </Button>
-              </Grid>
-
-              {/* Second Row */}
-              <Grid item xs={6}>
-                <Button
-                  fullWidth
-                  onClick={() => handleCategoryChange("demand")}
-                  variant={
-                    selectedCategory === "demand" ? "contained" : "outlined"
-                  }
-                  size="small"
-                  sx={{
-                    textTransform: "none",
-                    fontSize: "0.875rem",
-                    padding: "6px 12px",
-                  }}
-                >
-                  Demand
-                </Button>
-              </Grid>
-              <Grid item xs={6}>
-                <Button
-                  fullWidth
-                  onClick={() => resetFilters()}
-                  variant={
-                    selectedCategory === "other" ? "contained" : "outlined"
-                  }
-                  size="small"
-                  sx={{
-                    textTransform: "none",
-                    fontSize: "0.875rem",
-                    padding: "6px 12px",
-                  }}
-                >
-                  Reset Filter
-                </Button>
-              </Grid>
-            </Grid>
-          </Box>
-        )}
+        <FilterBox
+          showFilter={showFilter}
+          selectedCategory={selectedCategory}
+          handleCategoryChange={handleCategoryChange}
+          resetFilters={resetFilters}
+        />
       </Box>
 
       <Snackbar
@@ -921,340 +707,26 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
               options={{
                 ...polygonOptions, // Spread dynamically updated polygon options
                 strokeColor: "#FF0000",
-                strokeOpacity: 1, 
-                strokeWeight: 2, 
+                strokeOpacity: 1,
+                strokeWeight: 2,
               }}
             />
           )}
 
-          {places &&
-            places.length > 0 &&
-            places.map((place, index) => {
-              // Define a mapping of store names to their respective logo URLs
-              const storeIcons = {
-                Costco:
-                  "https://gottadeal.s3.amazonaws.com/logos/vignette/costco.png",
-                BJs: "https://bjs.scene7.com/is/image/bjs/201215_FSA_Icon2?fmt=png-alpha",
-                Walmart: "/Walmart.png",
-                Target:
-                  "https://upload.wikimedia.org/wikipedia/commons/9/9a/Target_logo.svg",
-                "Home Depot":
-                  "https://i.pinimg.com/originals/3d/cf/2f/3dcf2fe5252d4e5233c2a334498661f8.png",
-              };
-
-              // Determine icon based on category or store name
-              const isChargingStation = selectedCategory === "charging";
-              const iconUrl = isChargingStation
-                ? "https://energysolutions.homeserve.ca/wp-content/uploads/2022/02/BS_PD_2618_ev_icon_400px.png" // Charging station icon
-                : storeIcons[place.name] || ""; // Store icon or fallback
-
-              // Set size dynamically
-              const iconSize = isChargingStation
-                ? new window.google.maps.Size(30, 30) // Charging stations: smaller size
-                : new window.google.maps.Size(40, 45); // Stores: larger size
-
-              return (
-                <Marker
-                  key={index}
-                  position={{ lat: place.latitude, lng: place.longitude }}
-                  title={place.name}
-                  icon={{
-                    url: iconUrl,
-                    scaledSize: iconSize, // Adjust size as needed
-                  }}
-                  onMouseOver={() => setHoveredPlace(place)} // Show InfoWindow on hover
-                  onMouseOut={() => setHoveredPlace(null)} // Hide InfoWindow when not hovering
-                />
-              );
-            })}
-
-          {hoveredPlace && (
-            <InfoWindow
-              position={{
-                lat: hoveredPlace.latitude,
-                lng: hoveredPlace.longitude,
-              }}
-              options={{
-                pixelOffset: new window.google.maps.Size(0, -30), // Adjust InfoWindow position
-                closeBoxURL: "", // This hides the close button
-                disableAutoPan: true, // Optional: Disable auto panning when the InfoWindow is opened
-              }}
-            >
-              <Box
-                sx={{
-                  maxWidth: "150px",
-                  backgroundColor: "white",
-                  boxShadow: 2,
-                  borderRadius: 1,
-                }}
-              >
-                <Typography
-                  variant="body2"
-                  sx={{
-                    marginBottom: 0.2,
-                    color: "primary.main",
-                    fontWeight: "bold",
-                    fontSize: "0.75rem",
-                  }}
-                >
-                  {hoveredPlace.name}
-                </Typography>
-
-                <Typography
-                  variant="body2"
-                  sx={{
-                    marginBottom: 0.2,
-                    fontSize: "0.75rem",
-                    fontWeight: "normal",
-                  }}
-                >
-                  <strong>Address:</strong> {hoveredPlace.address}
-                  {","} {hoveredPlace?.zipCode?.city}, NJ{" "}
-                  {hoveredPlace?.zipCode?.zipCode}
-                </Typography>
-
-                {hoveredPlace.totalPoints &&
-                  supportedChargingSpeeds.map(({ key, label }) => {
-                    return (
-                      hoveredPlace[key] && (
-                        <Typography
-                          key={key}
-                          variant="body2"
-                          sx={{
-                            marginBottom: 0.2,
-                            fontSize: "0.75rem",
-                            fontWeight: "normal",
-                          }}
-                        >
-                          <span style={{ fontWeight: "bold" }}>{label}</span>{" "}
-                          {hoveredPlace[key]}
-                        </Typography>
-                      )
-                    );
-                  })}
-
-                {selectedCategory == "charging" && (
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      color: "text.secondary",
-                      fontWeight: "bold",
-                      fontSize: "0.75rem",
-                      display: "flex",
-                      alignItems: "center",
-                      marginBottom: 0.2,
-                    }}
-                  >
-                    {hoveredPlace.isPublic ? (
-                      <>
-                        <Image
-                          src={publicImage} // Replace with the actual path to your public icon
-                          alt="Public Charging Station"
-                          width={16} // Adjust the width and height based on your design
-                          height={16}
-                          style={{
-                            marginRight: "8px", // Increased space for better separation
-                          }}
-                        />
-                        Public
-                      </>
-                    ) : (
-                      <>
-                        <Image
-                          src={privateImage} // Replace with the actual path to your private icon
-                          alt="Private Charging Station"
-                          width={16} // Adjust the width and height based on your design
-                          height={16}
-                          style={{
-                            marginRight: "8px", // Increased space for better separation
-                          }}
-                        />
-                        Private
-                      </>
-                    )}
-                  </Typography>
-                )}
-
-                {hoveredPlace.parkingArea && (
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      marginBottom: 0.2,
-                      fontSize: "0.75rem",
-                      fontWeight: "normal",
-                    }}
-                  >
-                    <strong>Parking Area:</strong> {hoveredPlace.parkingArea}{" "}
-                    <span>m²</span>
-                  </Typography>
-                )}
-                {hoveredPlace.solarPotential && (
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      color: "success.main",
-                      marginBottom: 0.2,
-                      fontSize: "0.75rem",
-                      fontWeight: "normal",
-                    }}
-                  >
-                    <strong>Solar Potential:</strong>{" "}
-                    {hoveredPlace.solarPotential} <span>kWh/day</span>
-                  </Typography>
-                )}
-                {selectedCategory === "charging" &&
-                  supportedChargingTypes.map(({ key, label, icon }) => {
-                    return (
-                      hoveredPlace[key] && ( // Only render if hoveredPlace[key] is true
-                        <Box
-                          key={key}
-                          sx={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "8px", // Add some spacing between the image and label
-                            marginBottom: 0.2, // Optional: Add spacing between rows
-                          }}
-                        >
-                          <Image
-                            src={icon} // Path to the image
-                            alt={label} // Alt text for the image
-                            width={16} // Set width of the image
-                            height={16} // Set height of the image
-                            style={{
-                              objectFit: "contain", // Ensures the image fits well inside the box
-                            }}
-                          />
-                          <Typography
-                            variant="body2"
-                            sx={{
-                              color: "success.main",
-                              fontWeight: "normal",
-                              fontSize: "0.75rem",
-                            }}
-                          >
-                            {label}
-                          </Typography>
-                        </Box>
-                      )
-                    );
-                  })}
-              </Box>
-            </InfoWindow>
+          {places?.length > 0 && (
+            <CustomMarker places={places} selectedCategory={selectedCategory} setHoveredPlace={setHoveredPlace} />
           )}
-          {hoveredCounty && (
-            <InfoWindow
-              position={{
-                lat: hoveredCounty.latitude,
-                lng: hoveredCounty.longitude,
-              }}
-              options={{
-                pixelOffset: new window.google.maps.Size(0, -30), // Adjust InfoWindow position
-                closeBoxURL: "", // This hides the close button
-                disableAutoPan: true, // Optional: Disable auto panning when the InfoWindow is opened
-              }}
-            >
-              <Box
-                sx={{
-                  maxWidth: "150px",
-                  backgroundColor: "white",
-                  boxShadow: 1,
-                  borderRadius: 1,
-                  padding: 0.4,
-                }}
-              >
-                <Typography
-                  variant="body2"
-                  sx={{
-                    marginBottom: 0.2,
-                    color: "primary.main",
-                    fontWeight: "bold",
-                    fontSize: "0.75rem",
-                  }}
-                >
-                  {hoveredCounty.name} County
-                </Typography>
-                <Typography
-                  variant="body2"
-                  sx={{
-                    marginBottom: 0.2,
-                    color: "primary",
-                    fontWeight: "normal",
-                    fontSize: "0.75rem",
-                  }}
-                >
-                  Income Level: {hoveredCounty.incomeLevel}
-                </Typography>
-                <Typography
-                  variant="body2"
-                  sx={{
-                    marginBottom: 0.2,
-                    color: "primary",
-                    fontWeight: "normal",
-                    fontSize: "0.75rem",
-                  }}
-                >
-                  Average Income: {hoveredCounty.income}$
-                </Typography>
-              </Box>
-            </InfoWindow>
-          )}
-          {hoveredEvCounty && (
-            <InfoWindow
-              position={{
-                lat: hoveredEvCounty.latitude,
-                lng: hoveredEvCounty.longitude,
-              }}
-              options={{
-                pixelOffset: new window.google.maps.Size(0, -30), // Adjust InfoWindow position
-                closeBoxURL: "", // This hides the close button
-                disableAutoPan: true, // Optional: Disable auto panning when the InfoWindow is opened
-              }}
-            >
-              <Box
-                sx={{
-                  maxWidth: "150px",
-                  backgroundColor: "white",
-                  boxShadow: 1,
-                  borderRadius: 1,
-                  padding: 0.3,
-                }}
-              >
-                <Typography
-                  variant="body2"
-                  sx={{
-                    marginBottom: 0.2,
-                    color: "primary.main",
-                    fontWeight: "bold",
-                    fontSize: "0.75rem",
-                  }}
-                >
-                  {hoveredEvCounty.name} County
-                </Typography>
-                <Typography
-                  variant="body2"
-                  sx={{
-                    marginBottom: 0.2,
-                    color: "primary",
-                    fontWeight: "normal",
-                    fontSize: "0.75rem",
-                  }}
-                >
-                  EV Charging Demand: {hoveredEvCounty.evsLevel}
-                </Typography>
-                <Typography
-                  variant="body2"
-                  sx={{
-                    marginBottom: 0.2,
-                    color: "primary",
-                    fontWeight: "normal",
-                    fontSize: "0.75rem",
-                  }}
-                >
-                  Number of EVs: {hoveredEvCounty.evsCountyCount}
-                </Typography>
-              </Box>
-            </InfoWindow>
-          )}
+
+     {  hoveredPlace &&  <PlaceInfoWindow
+            place={hoveredPlace}
+            supportedChargingSpeeds={supportedChargingSpeeds}
+            supportedChargingTypes={supportedChargingTypes}
+            selectedCategory={selectedCategory}
+            publicImage={publicImage}
+            privateImage={privateImage}
+          />}
+          <CountyInfoWindow county={hoveredCounty} />
+          <EvCountyInfoWindow evCounty={hoveredEvCounty} />
           {countyBoundaries?.length &&
             incomeData?.length &&
             renderCountyBoundaries()}

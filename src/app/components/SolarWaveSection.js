@@ -166,7 +166,7 @@ const SolarWaveSection = () => {
           }}
         >
           <Image
-            src="/section2.jpeg" 
+            src="/section2.webp" 
             alt="Section Background"
             layout="fill"
             objectFit="cover"

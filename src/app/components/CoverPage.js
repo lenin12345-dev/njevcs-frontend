@@ -20,7 +20,7 @@ export default function CoverPage() {
         alignItems: "center",
         justifyContent: "center",
         height: { xs: "100vh", sm: "80vh" }, 
-        backgroundImage: "url('/cover.jpeg')",
+        backgroundImage: "url('/cover.webp')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
