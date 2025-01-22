@@ -27,6 +27,7 @@ import Sidebar from "../components/Sidebar";
 import FilterBox from "../components/FilterBox";
 import CustomMarker from "../components/CustomMarker";
 import {PlaceInfoWindow,CountyInfoWindow,EvCountyInfoWindow} from '../components/InfoWindow'
+import useAutocomplete from '../hooks/useAutocomplete'
 
 const containerStyle = {
   width: "100%",
@@ -98,43 +99,6 @@ const EVChargingStationsMap = () => {
   ];
 
 
-  // Initialize Autocomplete
-  useEffect(() => {
-    if (
-      isLoaded &&
-      typeof window !== "undefined" &&
-      window.google &&
-      inputRef.current &&
-      !autocompleteRef.current
-    ) {
-      const defaultBounds = {
-        north: center.lat + 0.1,
-        south: center.lat - 0.1,
-        east: center.lng + 0.1,
-        west: center.lng - 0.1,
-      };
-
-      const options = {
-        bounds: defaultBounds,
-        componentRestrictions: { country: "us" },
-        fields: ["address_components", "geometry"],
-        strictBounds: false,
-      };
-
-      // Create Autocomplete instance
-      autocompleteRef.current = new window.google.maps.places.Autocomplete(
-        inputRef.current,
-        options
-      );
-
-      // Listen for place selection
-      autocompleteRef.current.addListener("place_changed", () => {
-        const place = autocompleteRef.current.getPlace();
-        handlePlaceSelected(place);
-      });
-    }
-  }, [isLoaded, inputRef]);
-
   const handlePlaceSelected = async (place) => {
     if (cityBoundary) {
       cityBoundary.setMap(null); // Remove the previous boundary
@@ -176,6 +140,15 @@ const EVChargingStationsMap = () => {
       }
     }
   };
+  const autoVal = useAutocomplete({
+    isLoaded,
+    center,
+    inputRef,
+    autocompleteRef,
+    handlePlaceSelected,
+  });
+
+
   const fetchEvCount = async (cityName) => {
     try {
       cityName = cityName.replace(/ Township$/i, "").trim();
@@ -291,7 +264,7 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
       return;
     }
 
-    setCityBoundary(path); // Optionally store the boundary on the map
+    setCityBoundary(path); 
   };
   const fetchEconomyDetails = async (cityName) => {
     try {
