@@ -1,10 +1,6 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
-import {
-  GoogleMap,
-  useJsApiLoader,
-  Polygon,
-} from "@react-google-maps/api";
+import { GoogleMap, useJsApiLoader, Polygon } from "@react-google-maps/api";
 import {
   Box,
   Snackbar,
@@ -26,8 +22,12 @@ import config from "../../config/config";
 import Sidebar from "../components/Sidebar";
 import FilterBox from "../components/FilterBox";
 import CustomMarker from "../components/CustomMarker";
-import {PlaceInfoWindow,CountyInfoWindow,EvCountyInfoWindow} from '../components/InfoWindow'
-import useAutocomplete from '../hooks/useAutocomplete'
+import {
+  PlaceInfoWindow,
+  CountyInfoWindow,
+  EvCountyInfoWindow,
+} from "../components/InfoWindow";
+import useAutocomplete from "../hooks/useAutocomplete";
 
 const containerStyle = {
   width: "100%",
@@ -73,9 +73,9 @@ const EVChargingStationsMap = () => {
     libraries: ["places"],
   });
   const incomeColors = {
-    Low: "#ff0000", 
-    Medium: "#ffa500", 
-    High: "#008000", 
+    Low: "#ff0000",
+    Medium: "#ffa500",
+    High: "#008000",
   };
   const evcsColor = {
     Low: "orange",
@@ -97,8 +97,6 @@ const EVChargingStationsMap = () => {
     { key: "level1Points", label: "Level 1 Points:" },
     { key: "level2Points", label: "Level 2 Points:" },
   ];
-
-
 
   const fetchEvCount = async (cityName) => {
     try {
@@ -215,7 +213,7 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
       return;
     }
 
-    setCityBoundary(path); 
+    setCityBoundary(path);
   };
   const fetchEconomyDetails = async (cityName) => {
     try {
@@ -225,7 +223,7 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
       );
       const data = await response.json();
 
-      if (data && data.data) {
+      if (data?.data) {
         const { income, incomeLevel } = data.data;
         setCityInfo({ cityName, income, incomeLevel });
         updatePolygonFillColor(incomeLevel);
@@ -269,9 +267,7 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
       });
   };
 
-
-
-  const autoVal = useAutocomplete({
+  useAutocomplete({
     isLoaded,
     center,
     inputRef,
@@ -284,20 +280,20 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
     fetchCityBoundary,
     fetchEconomyDetails,
     fetchPlaces,
-    selectedCategory
+    selectedCategory,
   });
   const updatePolygonFillColor = (incomeLevel) => {
-    let fillColor = "#FFFFFF"; 
+    let fillColor = "#FFFFFF";
 
     switch (incomeLevel) {
       case "Low":
-        fillColor = "#ff0000"; 
+        fillColor = "#ff0000";
         break;
       case "Medium":
         fillColor = "#ffa500";
         break;
       case "High":
-        fillColor = "#008000"; 
+        fillColor = "#008000";
         break;
       default:
         console.warn(`Unknown income level: ${incomeLevel}`);
@@ -305,8 +301,8 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
 
     setPolygonOptions((prevOptions) => ({
       ...prevOptions,
-      fillColor, 
-      fillOpacity: 0.5, 
+      fillColor,
+      fillOpacity: 0.5,
     }));
   };
   const fetchCountyData = async () => {
@@ -333,8 +329,6 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
     }
   };
 
- 
-
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
     const cityName = autocompleteRef.current
@@ -346,7 +340,6 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
       : "Unknown City";
 
     if (category === "economicZones" && cityName !== "Unknown City") {
-   
       fetchCountyData();
       setHoveredEvCounty(null);
       setHoveredCounty(null);
@@ -363,7 +356,6 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
 
       setDemand(true);
     } else {
-     
       fetchPlaces(cityCoordinates, null, cityName, category);
     }
   };
@@ -398,7 +390,7 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
 
     // If input is cleared, reset place and location
     if (value === "") {
-      setPlaces(null); 
+      setPlaces(null);
       setSelectedCategory("charging");
       setCityBoundary(null);
       setSidebarVisible(false);
@@ -430,17 +422,15 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
   // Combine income level data with county boundaries
   const getIncomeLevel = (countyName) => {
     const countyIncome = incomeData.find((item) => item.county === countyName);
-    return countyIncome ? countyIncome.incomeLevel : "Medium"; 
+    return countyIncome ? countyIncome.incomeLevel : "Medium";
   };
 
- 
   const renderCountyBoundaries = () => {
     return countyBoundaries.map((county, index) => {
       const handleMouseOver = (county, polygon) => {
-     
         const countyName = county.name;
         const incomeLevel = getIncomeLevel(countyName);
-        const income = getAvgIncome(countyName); 
+        const income = getAvgIncome(countyName);
         const coordinates = county.geo_shape.geometry.coordinates[0].map(
           ([lng, lat]) => ({
             lat,
@@ -464,7 +454,7 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
       };
 
       const handleMouseOut = () => {
-        setHoveredCounty(null); 
+        setHoveredCounty(null);
         setHoveredEvCounty(null);
       };
       const countyName = county.name;
@@ -497,7 +487,7 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
     const countyEvcs = evcsData.find((item) => item.county === countyName);
 
     if (!countyEvcs) {
-      return "Medium"; 
+      return "Medium";
     }
 
     return countyEvcs.evsLevel || "Medium";
@@ -505,18 +495,18 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
 
   const getEvcsCount = (countyName) => {
     const countyEvcs = evcsData.find((item) => item.county === countyName);
-    return countyEvcs ? countyEvcs.numberOfEvs : 0; 
+    return countyEvcs ? countyEvcs.numberOfEvs : 0;
   };
   const getAvgIncome = (countyName) => {
     const countyIncome = incomeData.find((item) => item.county === countyName);
-    return countyIncome ? countyIncome.income : 0; 
+    return countyIncome ? countyIncome.income : 0;
   };
   const renderCountyEvBoundaries = () => {
     return countyBoundaries.map((county, index) => {
       const handleMouseOver = () => {
         const countyName = county.name;
-        const evsLevel = getEvcsLevel(countyName); 
-        const evsCountyCount = getEvcsCount(countyName); 
+        const evsLevel = getEvcsLevel(countyName);
+        const evsCountyCount = getEvcsCount(countyName);
 
         const coordinates = county.geo_shape.geometry.coordinates[0].map(
           ([lng, lat]) => ({
@@ -646,9 +636,9 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
         >
           {cityBoundary && (
             <Polygon
-              paths={cityBoundary} 
+              paths={cityBoundary}
               options={{
-                ...polygonOptions, 
+                ...polygonOptions,
                 strokeColor: "#FF0000",
                 strokeOpacity: 1,
                 strokeWeight: 2,
@@ -657,17 +647,23 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
           )}
 
           {places?.length > 0 && (
-            <CustomMarker places={places} selectedCategory={selectedCategory} setHoveredPlace={setHoveredPlace} />
+            <CustomMarker
+              places={places}
+              selectedCategory={selectedCategory}
+              setHoveredPlace={setHoveredPlace}
+            />
           )}
 
-     {  hoveredPlace &&  <PlaceInfoWindow
-            place={hoveredPlace}
-            supportedChargingSpeeds={supportedChargingSpeeds}
-            supportedChargingTypes={supportedChargingTypes}
-            selectedCategory={selectedCategory}
-            publicImage={publicImage}
-            privateImage={privateImage}
-          />}
+          {hoveredPlace && (
+            <PlaceInfoWindow
+              place={hoveredPlace}
+              supportedChargingSpeeds={supportedChargingSpeeds}
+              supportedChargingTypes={supportedChargingTypes}
+              selectedCategory={selectedCategory}
+              publicImage={publicImage}
+              privateImage={privateImage}
+            />
+          )}
           <CountyInfoWindow county={hoveredCounty} />
           <EvCountyInfoWindow evCounty={hoveredEvCounty} />
           {countyBoundaries?.length &&

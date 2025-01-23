@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect,useMemo,useCallback } from "react";
 
 const useAutocomplete = ({
   isLoaded,
@@ -15,7 +15,22 @@ const useAutocomplete = ({
   fetchPlaces,
   selectedCategory
 }) => {
-  const handlePlaceSelected = async (place) => {
+  const defaultBounds = useMemo(() => ({
+    north: center.lat + 0.1,
+    south: center.lat - 0.1,
+    east: center.lng + 0.1,
+    west: center.lng - 0.1,
+  }), [center]);
+  
+  const options = useMemo(() => ({
+    bounds: defaultBounds,
+    componentRestrictions: { country: "us" },
+    fields: ["address_components", "geometry"],
+    strictBounds: false,
+  }), [defaultBounds]);
+
+
+  const handlePlaceSelected = useCallback(async (place) => {
     if (cityBoundary) {
       cityBoundary.setMap(null); // Remove the previous boundary
     }
@@ -46,16 +61,19 @@ const useAutocomplete = ({
         setShowFilter(true);
         setSelectedCategory("charging");
 
-        // Create the polygon path based on the viewport
-        await fetchCityBoundary(cityName);
-        await fetchEconomyDetails(cityName);
-
-        fetchPlaces(location, bounds, cityName, selectedCategory); // Fetch initial places based on category
+        try {
+          await fetchCityBoundary(cityName);
+          await fetchEconomyDetails(cityName);
+          fetchPlaces(location, bounds, cityName, selectedCategory);
+        } catch (error) {
+          console.error("Error fetching city data:", error);
+          setWarning(true); // Notify the user about the error
+        }
       } else {
         setWarning(true);
       }
     }
-  };
+  });
   useEffect(() => {
     if (
       isLoaded &&
@@ -64,19 +82,7 @@ const useAutocomplete = ({
       inputRef.current &&
       !autocompleteRef.current
     ) {
-      const defaultBounds = {
-        north: center.lat + 0.1,
-        south: center.lat - 0.1,
-        east: center.lng + 0.1,
-        west: center.lng - 0.1,
-      };
 
-      const options = {
-        bounds: defaultBounds,
-        componentRestrictions: { country: "us" },
-        fields: ["address_components", "geometry"],
-        strictBounds: false,
-      };
 
       // Create Autocomplete instance
       autocompleteRef.current = new window.google.maps.places.Autocomplete(
