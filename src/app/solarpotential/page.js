@@ -99,55 +99,6 @@ const EVChargingStationsMap = () => {
   ];
 
 
-  const handlePlaceSelected = async (place) => {
-    if (cityBoundary) {
-      cityBoundary.setMap(null); // Remove the previous boundary
-    }
-    if (place && place.geometry) {
-      const location = {
-        lat: place.geometry.location.lat(),
-        lng: place.geometry.location.lng(),
-      };
-
-      // Extract the city name
-      const cityComponent = place.address_components.find((component) =>
-        component.types.includes("locality")
-      );
-      let cityName = cityComponent ? cityComponent.long_name : "Unknown City";
-
-      const isInNewJersey = place.address_components.some(
-        (component) =>
-          component.types.includes("administrative_area_level_1") &&
-          component.long_name === "New Jersey"
-      );
-
-      if (isInNewJersey) {
-        setCityCoordinates(location); // Update the center of the map
-        setWarning(false);
-
-     
-        const bounds = place.geometry.viewport; // Get the viewport (bounds) of the selected city
-        setShowFilter(true);
-        setSelectedCategory("charging");
-
-        // Create the polygon path based on the viewport
-        await fetchCityBoundary(cityName);
-        await fetchEconomyDetails(cityName);
-
-        fetchPlaces(location, bounds, cityName, selectedCategory); // Fetch initial places based on category
-      } else {
-        setWarning(true);
-      }
-    }
-  };
-  const autoVal = useAutocomplete({
-    isLoaded,
-    center,
-    inputRef,
-    autocompleteRef,
-    handlePlaceSelected,
-  });
-
 
   const fetchEvCount = async (cityName) => {
     try {
@@ -287,6 +238,54 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
       console.error("Error fetching economy details:", error);
     }
   };
+  const fetchPlaces = (location, bounds, cityName, category) => {
+    cityName = cityName.replace(/ Township$/i, "").trim();
+    let apiUrl;
+
+    setLoading(true);
+
+    if (category === "charging") {
+      apiUrl = `${config.API_URL}/evcs/city/${cityName}`;
+    } else if (category === "stores") {
+      apiUrl = `${config.API_URL}/stores/city/${cityName}`;
+    }
+
+    fetch(apiUrl)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Failed to fetch ${category} for ${cityName}`);
+        }
+        return response.json();
+      })
+      .then(({ data }) => {
+        setPlaces(data);
+        setLoading(false);
+        setCountyBoundaries(null);
+        setIncomeData([]);
+        setZoomLevel("12");
+      })
+      .catch((error) => {
+        console.error(`Error fetching ${category} for ${cityName}:`, error);
+      });
+  };
+
+
+
+  const autoVal = useAutocomplete({
+    isLoaded,
+    center,
+    inputRef,
+    autocompleteRef,
+    cityBoundary,
+    setCityCoordinates,
+    setWarning,
+    setShowFilter,
+    setSelectedCategory,
+    fetchCityBoundary,
+    fetchEconomyDetails,
+    fetchPlaces,
+    selectedCategory
+  });
   const updatePolygonFillColor = (incomeLevel) => {
     let fillColor = "#FFFFFF"; 
 
@@ -334,36 +333,7 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
     }
   };
 
-  const fetchPlaces = (location, bounds, cityName, category) => {
-    cityName = cityName.replace(/ Township$/i, "").trim();
-    let apiUrl;
-
-    setLoading(true);
-
-    if (category === "charging") {
-      apiUrl = `${config.API_URL}/evcs/city/${cityName}`;
-    } else if (category === "stores") {
-      apiUrl = `${config.API_URL}/stores/city/${cityName}`;
-    }
-
-    fetch(apiUrl)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`Failed to fetch ${category} for ${cityName}`);
-        }
-        return response.json();
-      })
-      .then(({ data }) => {
-        setPlaces(data);
-        setLoading(false);
-        setCountyBoundaries(null);
-        setIncomeData([]);
-        setZoomLevel("12");
-      })
-      .catch((error) => {
-        console.error(`Error fetching ${category} for ${cityName}:`, error);
-      });
-  };
+ 
 
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);

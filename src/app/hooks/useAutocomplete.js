@@ -1,8 +1,61 @@
 import { useEffect } from "react";
 
-const useAutocomplete = ({ isLoaded, center,inputRef,autocompleteRef, handlePlaceSelected }) => {
+const useAutocomplete = ({
+  isLoaded,
+  center,
+  inputRef,
+  autocompleteRef,
+  cityBoundary,
+  setCityCoordinates,
+  setWarning,
+  setShowFilter,
+  setSelectedCategory,
+  fetchCityBoundary,
+  fetchEconomyDetails,
+  fetchPlaces,
+  selectedCategory
+}) => {
+  const handlePlaceSelected = async (place) => {
+    if (cityBoundary) {
+      cityBoundary.setMap(null); // Remove the previous boundary
+    }
+    if (place && place.geometry) {
+      const location = {
+        lat: place.geometry.location.lat(),
+        lng: place.geometry.location.lng(),
+      };
 
+      // Extract the city name
+      const cityComponent = place.address_components.find((component) =>
+        component.types.includes("locality")
+      );
+      let cityName = cityComponent ? cityComponent.long_name : "Unknown City";
 
+      const isInNewJersey = place.address_components.some(
+        (component) =>
+          component.types.includes("administrative_area_level_1") &&
+          component.long_name === "New Jersey"
+      );
+
+      if (isInNewJersey) {
+        setCityCoordinates(location); // Update the center of the map
+        setWarning(false);
+
+     
+        const bounds = place.geometry.viewport; // Get the viewport (bounds) of the selected city
+        setShowFilter(true);
+        setSelectedCategory("charging");
+
+        // Create the polygon path based on the viewport
+        await fetchCityBoundary(cityName);
+        await fetchEconomyDetails(cityName);
+
+        fetchPlaces(location, bounds, cityName, selectedCategory); // Fetch initial places based on category
+      } else {
+        setWarning(true);
+      }
+    }
+  };
   useEffect(() => {
     if (
       isLoaded &&
@@ -38,6 +91,8 @@ const useAutocomplete = ({ isLoaded, center,inputRef,autocompleteRef, handlePlac
       });
     }
   }, [isLoaded, inputRef, handlePlaceSelected]);
+  
+
 
   return inputRef;
 };
