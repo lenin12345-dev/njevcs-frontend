@@ -1,11 +1,10 @@
 "use client";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import { GoogleMap, useJsApiLoader, Polygon } from "@react-google-maps/api";
 import {
   Box,
   Snackbar,
   Alert,
-  Typography,
   CircularProgress,
   Backdrop,
 } from "@mui/material";
@@ -68,6 +67,9 @@ const EVChargingStationsMap = () => {
   const inputRef = useRef(null); // Ref for the input field
   const autocompleteRef = useRef(null); // Ref for the autocomplete instance
   const mapRef = useRef(null); // Ref for the Google Map instance
+
+  console.log('console',countyBoundaries);
+  
 
   // Load Google Maps API
   const { isLoaded } = useJsApiLoader({
@@ -549,9 +551,9 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
               privateImage={privateImage}
             />
           )}
-          <CountyInfoWindow county={hoveredCounty} />
-          <EvCountyInfoWindow evCounty={hoveredEvCounty} />
-          {countyBoundaries.length && incomeData.length && (
+          {hoveredCounty && <CountyInfoWindow county={hoveredCounty} />}
+         {hoveredEvCounty && <EvCountyInfoWindow evCounty={hoveredEvCounty} />}
+          {countyBoundaries?.length && incomeData?.length && (
             <CountyBoundaries
               countyBoundaries={countyBoundaries}
               getIncomeLevel={getIncomeLevel}
