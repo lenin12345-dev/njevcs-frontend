@@ -28,6 +28,8 @@ import {
   EvCountyInfoWindow,
 } from "../components/InfoWindow";
 import useAutocomplete from "../hooks/useAutocomplete";
+import CountyBoundaries from "../components/CountyBoundaries";
+import CountyEvBoundaries from "../components/CountyEvBoundaries";
 
 const containerStyle = {
   width: "100%",
@@ -425,64 +427,6 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
     return countyIncome ? countyIncome.incomeLevel : "Medium";
   };
 
-  const renderCountyBoundaries = () => {
-    return countyBoundaries.map((county, index) => {
-      const handleMouseOver = (county, polygon) => {
-        const countyName = county.name;
-        const incomeLevel = getIncomeLevel(countyName);
-        const income = getAvgIncome(countyName);
-        const coordinates = county.geo_shape.geometry.coordinates[0].map(
-          ([lng, lat]) => ({
-            lat,
-            lng,
-          })
-        );
-
-        const bounds = new google.maps.LatLngBounds();
-        coordinates.forEach(({ lat, lng }) =>
-          bounds.extend(new google.maps.LatLng(lat, lng))
-        );
-
-        const center = bounds.getCenter();
-        setHoveredCounty({
-          name: countyName,
-          incomeLevel,
-          income,
-          latitude: center.lat(),
-          longitude: center.lng(),
-        });
-      };
-
-      const handleMouseOut = () => {
-        setHoveredCounty(null);
-        setHoveredEvCounty(null);
-      };
-      const countyName = county.name;
-      const incomeLevel = getIncomeLevel(countyName);
-      const coordinates = county.geo_shape.geometry.coordinates[0].map(
-        ([lng, lat]) => ({
-          lat,
-          lng,
-        })
-      );
-
-      return (
-        <Polygon
-          key={index}
-          paths={coordinates}
-          options={{
-            strokeColor: "#FF0000",
-            strokeOpacity: 0.8,
-            strokeWeight: 2,
-            fillColor: incomeColors[incomeLevel],
-            fillOpacity: 0.4,
-          }}
-          onMouseOver={() => handleMouseOver(county)}
-          onMouseOut={handleMouseOut}
-        />
-      );
-    });
-  };
   const getEvcsLevel = (countyName) => {
     const countyEvcs = evcsData.find((item) => item.county === countyName);
 
@@ -501,66 +445,7 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
     const countyIncome = incomeData.find((item) => item.county === countyName);
     return countyIncome ? countyIncome.income : 0;
   };
-  const renderCountyEvBoundaries = () => {
-    return countyBoundaries.map((county, index) => {
-      const handleMouseOver = () => {
-        const countyName = county.name;
-        const evsLevel = getEvcsLevel(countyName);
-        const evsCountyCount = getEvcsCount(countyName);
 
-        const coordinates = county.geo_shape.geometry.coordinates[0].map(
-          ([lng, lat]) => ({
-            lat,
-            lng,
-          })
-        );
-
-        const bounds = new google.maps.LatLngBounds();
-        coordinates.forEach(({ lat, lng }) =>
-          bounds.extend(new google.maps.LatLng(lat, lng))
-        );
-
-        const center = bounds.getCenter();
-        setHoveredEvCounty({
-          name: countyName,
-          evsLevel,
-          evsCountyCount,
-          latitude: center.lat(),
-          longitude: center.lng(),
-        });
-      };
-
-      const handleMouseOut = () => {
-        setHoveredEvCounty(null); // Clear hover data
-        setHoveredCounty(null);
-      };
-
-      const countyName = county.name;
-      const evsLevel = getEvcsLevel(countyName); // Get EVCS level
-      const coordinates = county.geo_shape.geometry.coordinates[0].map(
-        ([lng, lat]) => ({
-          lat,
-          lng,
-        })
-      );
-
-      return (
-        <Polygon
-          key={index}
-          paths={coordinates}
-          options={{
-            strokeColor: "#0000FF",
-            strokeOpacity: 0.8,
-            strokeWeight: 2,
-            fillColor: evcsColor[evsLevel],
-            fillOpacity: 0.6,
-          }}
-          onMouseOver={handleMouseOver}
-          onMouseOut={handleMouseOut}
-        />
-      );
-    });
-  };
 
   const closeSidebar = () => setSidebarVisible(false);
 
@@ -666,12 +551,27 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
           )}
           <CountyInfoWindow county={hoveredCounty} />
           <EvCountyInfoWindow evCounty={hoveredEvCounty} />
-          {countyBoundaries?.length &&
-            incomeData?.length &&
-            renderCountyBoundaries()}
-          {countyBoundaries?.length &&
-            evcsData?.length &&
-            renderCountyEvBoundaries()}
+          {countyBoundaries.length && incomeData.length && (
+            <CountyBoundaries
+              countyBoundaries={countyBoundaries}
+              getIncomeLevel={getIncomeLevel}
+              getAvgIncome={getAvgIncome}
+              incomeColors={incomeColors}
+              setHoveredCounty={setHoveredCounty}
+              setHoveredEvCounty={setHoveredEvCounty}
+            />
+          )}
+
+          {countyBoundaries?.length && evcsData?.length && (
+            <CountyEvBoundaries
+              countyBoundaries={countyBoundaries}
+              getEvcsLevel={getEvcsLevel}
+              getEvcsCount={getEvcsCount}
+              evcsColor={evcsColor}
+              setHoveredEvCounty={setHoveredEvCounty}
+              setHoveredCounty={setHoveredCounty}
+            />
+          )}
           <Sidebar
             cityInfo={cityInfo}
             visible={sidebarVisible}
