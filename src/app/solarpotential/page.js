@@ -17,7 +17,6 @@ import nema520 from "../../../public/nema520.png";
 import combo from "../../../public/combo.png";
 import publicImage from "../../../public/public.png";
 import privateImage from "../../../public/private.svg";
-import config from "../../config/config";
 import Sidebar from "../components/Sidebar";
 import FilterBox from "../components/FilterBox";
 import CustomMarker from "../components/CustomMarker";
@@ -68,8 +67,6 @@ const EVChargingStationsMap = () => {
   const autocompleteRef = useRef(null); // Ref for the autocomplete instance
   const mapRef = useRef(null); // Ref for the Google Map instance
 
-  console.log('console',countyBoundaries);
-  
 
   // Load Google Maps API
   const { isLoaded } = useJsApiLoader({
@@ -106,7 +103,7 @@ const EVChargingStationsMap = () => {
     try {
       cityName = cityName.replace(/ Township$/i, "").trim();
 
-      const response = await fetch(`${config.API_URL}/evs/city/${cityName}`);
+      const response = await fetch(`api/evs/${cityName}`);
       const data = await response.json();
 
       if (data && data.data) {
@@ -119,75 +116,20 @@ const EVChargingStationsMap = () => {
       console.error("Error fetching economy details:", error);
     }
   };
-  const parseCoordinates = (geometry) => {
-    if (
-      !geometry ||
-      (geometry.type !== "MultiPolygon" && geometry.type == "Polygon")
-    ) {
-      return geometry.coordinates.flat(1);
-    }
-    // Flatten nested MultiPolygon coordinates into a single array
-    const flattenedCoordinates = geometry.coordinates.flat(Infinity);
 
-    if (flattenedCoordinates.length % 2 !== 0) {
-      console.error(
-        "Invalid coordinate data, missing pairs of longitude and latitude."
-      );
-      return [];
-    }
-
-    // Group flattened array into lat-lng pairs
-    const latLngPairs = [];
-    for (let i = 0; i < flattenedCoordinates.length; i += 2) {
-      const lng = flattenedCoordinates[i];
-      const lat = flattenedCoordinates[i + 1];
-      latLngPairs.push([lng, lat]);
-    }
-
-    return latLngPairs;
-  };
   const fetchCityBoundary = async (cityName) => {
     try {
-      // Fetch the place ID
-      const placeIdUrl = `https://api.geoapify.com/v1/geocode/search?text=${encodeURIComponent(
-        `${cityName}, NJ`
-      )}&format=json&apiKey=${process.env.NEXT_PUBLIC_BOUNDARY_API_KEY}`;
+      const response = await fetch(
+        `/api/city-boundary?cityName=${encodeURIComponent(cityName)}`
+      );
+      const data = await response.json();
 
-      const placeIdResponse = await fetch(placeIdUrl);
-      const placeIdData = await placeIdResponse.json();
-
-      if (
-        !placeIdData ||
-        !placeIdData.results ||
-        placeIdData.results.length === 0
-      ) {
-        console.error("Failed to fetch place ID.");
-        return;
+      if (data && data.coordinates) {
+        // Create and render the boundary on the map
+        createDottedBoundary(data.coordinates);
+      } else {
+        console.error("Failed to fetch city boundary.");
       }
-
-      const placeId = placeIdData.results[0].place_id;
-
-      // Step 2: Fetch the boundary data using the place ID
-      const boundaryUrl = `
-https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=${process.env.NEXT_PUBLIC_BOUNDARY_API_KEY}`;
-
-      const boundaryResponse = await fetch(boundaryUrl);
-      const boundaryData = await boundaryResponse.json();
-
-      if (
-        !boundaryData ||
-        !boundaryData.features ||
-        boundaryData.features.length === 0
-      ) {
-        console.error("No boundary data found.");
-        return;
-      }
-
-      // Parse boundary coordinates
-      const coordinates = parseCoordinates(boundaryData.features[0].geometry);
-
-      // Create and render the boundary on the map
-      createDottedBoundary(coordinates);
     } catch (error) {
       console.error("Error fetching city boundary:", error);
     }
@@ -222,9 +164,7 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
   const fetchEconomyDetails = async (cityName) => {
     try {
       cityName = cityName.replace(/ Township$/i, "").trim();
-      const response = await fetch(
-        `${config.API_URL}/economy/city/${cityName}`
-      );
+      const response = await fetch(`api/economy/${cityName}`);
       const data = await response.json();
 
       if (data?.data) {
@@ -247,9 +187,9 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
     setLoading(true);
 
     if (category === "charging") {
-      apiUrl = `${config.API_URL}/evcs/city/${cityName}`;
+      apiUrl = `api/evcs/${cityName}`;
     } else if (category === "stores") {
-      apiUrl = `${config.API_URL}/stores/city/${cityName}`;
+      apiUrl = `api/stores/${cityName}`;
     }
 
     fetch(apiUrl)
@@ -262,7 +202,7 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
       .then(({ data }) => {
         setPlaces(data);
         setLoading(false);
-        setCountyBoundaries(null);
+        setCountyBoundaries([]);
         setIncomeData([]);
         setZoomLevel("12");
       })
@@ -313,17 +253,19 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
     setLoading(true);
 
     try {
-      // Fetch county boundaries from the API
-      const countyBoundariesResponse = await fetch(
-        "https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/us-county-boundaries/records?limit=20&refine=stusab%3A%22NJ%22"
-      );
-      const countyBoundariesData = await countyBoundariesResponse.json();
+      if (countyBoundaries && countyBoundaries.length == 0) {
+        // Fetch county boundaries from the API
+        const countyBoundariesResponse = await fetch(
+          "https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/us-county-boundaries/records?limit=20&refine=stusab%3A%22NJ%22"
+        );
+        const countyBoundariesData = await countyBoundariesResponse.json();
+        setCountyBoundaries(countyBoundariesData.results);
+      }
 
       // Fetch income data from your local API
-      const incomeResponse = await fetch(`${config.API_URL}/economy/counties`);
+      const incomeResponse = await fetch(`api/economy/counties`);
       const incomeDataResponse = await incomeResponse.json();
 
-      setCountyBoundaries(countyBoundariesData.results);
       setIncomeData(incomeDataResponse.data);
       stateView();
     } catch (error) {
@@ -349,14 +291,14 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
       setHoveredCounty(null);
       setEvcsData([]);
       setSidebarVisible(false);
-      setCountyBoundaries([]);
+      // setCountyBoundaries([]);
     } else if (category === "demand" && cityName !== "Unknown City") {
       fetchCountyEvData();
       setHoveredCounty(null);
       setHoveredEvCounty(null);
       setIncomeData([]);
       setSidebarVisible(false);
-      setCountyBoundaries([]);
+      // setCountyBoundaries([]);
 
       setDemand(true);
     } else {
@@ -367,18 +309,20 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
     setLoading(true);
 
     try {
-      // Fetch county boundaries from the API
-      const countyBoundariesResponse = await fetch(
-        "https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/us-county-boundaries/records?limit=20&refine=stusab%3A%22NJ%22"
-      );
-      const countyBoundariesData = await countyBoundariesResponse.json();
+      if (countyBoundaries && countyBoundaries.length == 0) {
+        // Fetch county boundaries from the API
+        const countyBoundariesResponse = await fetch(
+          "https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/us-county-boundaries/records?limit=20&refine=stusab%3A%22NJ%22"
+        );
+        const countyBoundariesData = await countyBoundariesResponse.json();
+        setCountyBoundaries(countyBoundariesData.results);
+      }
 
       // Fetch EVCS data from your local API
-      const evcsResponse = await fetch(`${config.API_URL}/evs/counties`);
+      const evcsResponse = await fetch(`api/evs/counties`);
       const evcsDataResponse = await evcsResponse.json();
 
       // Update state with the fetched data
-      setCountyBoundaries(countyBoundariesData.results);
 
       setEvcsData(evcsDataResponse.data);
 
@@ -407,13 +351,14 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
     clearInput();
     setZoomLevel("8");
   };
+  
   const resetFilters = () => {
     setShowFilter(false);
     setPlaces([]);
     // setCityCoordinates(center); // Reset the map to default center
     setCityBoundary(null);
     setSelectedCategory("charging");
-    setCountyBoundaries(null);
+    setCountyBoundaries([]);
     setIncomeData([]);
     clearInput();
     setSidebarVisible(false);
@@ -447,7 +392,6 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
     const countyIncome = incomeData.find((item) => item.county === countyName);
     return countyIncome ? countyIncome.income : 0;
   };
-
 
   const closeSidebar = () => setSidebarVisible(false);
 
@@ -552,7 +496,7 @@ https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=
             />
           )}
           {hoveredCounty && <CountyInfoWindow county={hoveredCounty} />}
-         {hoveredEvCounty && <EvCountyInfoWindow evCounty={hoveredEvCounty} />}
+          {hoveredEvCounty && <EvCountyInfoWindow evCounty={hoveredEvCounty} />}
           {countyBoundaries?.length && incomeData?.length && (
             <CountyBoundaries
               countyBoundaries={countyBoundaries}
