@@ -277,6 +277,8 @@ const EVChargingStationsMap = () => {
 
       setIncomeData(incomeDataResponse.data);
       stateView();
+      showMessage("Hover over a county to see the income details.")
+
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -336,6 +338,8 @@ const EVChargingStationsMap = () => {
       setEvcsData(evcsDataResponse.data);
 
       stateView();
+      showMessage("Hover over a county to see the demand details.")
+
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -438,6 +442,7 @@ const EVChargingStationsMap = () => {
           selectedCategory={selectedCategory}
           handleCategoryChange={handleCategoryChange}
           resetFilters={resetFilters}
+          places = {places}
         />
       </Box>
 

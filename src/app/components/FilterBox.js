@@ -2,7 +2,13 @@ import React from "react";
 import { Drawer, Box, Grid, Button} from "@mui/material";
 
 
-const FilterBox = ({ showFilter, selectedCategory, handleCategoryChange, resetFilters }) => (
+const FilterBox = ({ showFilter, selectedCategory, handleCategoryChange, resetFilters,places }) => {
+  
+      const emmptyPlace = places==null || places.length===0
+  
+  
+  
+  return (
     showFilter && (
       <Box
         mt={2}
@@ -27,6 +33,7 @@ const FilterBox = ({ showFilter, selectedCategory, handleCategoryChange, resetFi
                 variant={selectedCategory === category ? "contained" : "outlined"}
                 size="small"
                 sx={{ textTransform: "none", fontSize: "0.875rem", padding: "6px 12px" }}
+                disabled ={(category=="charging" || category=="stores") && emmptyPlace}
               >
                 {category === "other" ? "Reset Filter" :category === "economicZones" ? "Economic Zones":  category.charAt(0).toUpperCase() + category.slice(1)}
               </Button>
@@ -35,6 +42,6 @@ const FilterBox = ({ showFilter, selectedCategory, handleCategoryChange, resetFi
         </Grid>
       </Box>
     )
-  );
+  )};
 
   export default FilterBox;
