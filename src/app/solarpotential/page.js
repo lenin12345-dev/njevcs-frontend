@@ -165,8 +165,6 @@ const EVChargingStationsMap = () => {
       console.error("No valid path coordinates to draw.");
       return;
     }
-    console.log('path',path);
-    
 
     setCityBoundary(path);
   };
@@ -353,7 +351,7 @@ const EVChargingStationsMap = () => {
 
     // If input is cleared, reset place and location
     if (value === "") {
-      setPlaces(null);
+      setPlaces([]);
       setSelectedCategory("charging");
       setCityBoundary(null);
       setSidebarVisible(false);
@@ -444,7 +442,7 @@ const EVChargingStationsMap = () => {
           selectedCategory={selectedCategory}
           handleCategoryChange={handleCategoryChange}
           resetFilters={resetFilters}
-          places = {places}
+          cityBoundary = {cityBoundary}
         />
       </Box>
 

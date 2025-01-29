@@ -2,9 +2,11 @@ import React from "react";
 import { Drawer, Box, Grid, Button} from "@mui/material";
 
 
-const FilterBox = ({ showFilter, selectedCategory, handleCategoryChange, resetFilters,places }) => {
+const FilterBox = ({ showFilter, selectedCategory, handleCategoryChange, resetFilters,cityBoundary }) => {
+  console.log('cityBoundary',cityBoundary);
   
-      const emmptyPlace = places==null || places.length===0
+  
+      const emmptyPlace = cityBoundary==null || cityBoundary.length===0
   
   
   
