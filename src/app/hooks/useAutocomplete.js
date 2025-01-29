@@ -31,7 +31,7 @@ const useAutocomplete = ({
   }), [defaultBounds]);
 
 
-  const handlePlaceSelected = useCallback(async (place) => {
+  const handlePlaceSelected = async (place) => {
     if (cityBoundary) {
       cityBoundary.setMap(null); // Remove the previous boundary
     }
@@ -76,7 +76,7 @@ const useAutocomplete = ({
         setWarning(true);
       }
     }
-  });
+  };
   useEffect(() => {
     if (
       isLoaded &&

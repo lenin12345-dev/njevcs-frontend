@@ -165,6 +165,8 @@ const EVChargingStationsMap = () => {
       console.error("No valid path coordinates to draw.");
       return;
     }
+    console.log('path',path);
+    
 
     setCityBoundary(path);
   };
