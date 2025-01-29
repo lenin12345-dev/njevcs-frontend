@@ -17,7 +17,7 @@ export default async function handler(req, res) {
       `${cityName}, NJ`
     )}&format=json&apiKey=${process.env.NEXT_PUBLIC_BOUNDARY_API_KEY}`;
 
-    const placeIdResponse = await fetch(placeIdUrl);
+    const placeIdResponse = await fetch(placeIdUrl, { cache: 'no-store' });
     const placeIdData = await placeIdResponse.json();
 
     if (!placeIdData || !placeIdData.results || placeIdData.results.length === 0) {
@@ -32,7 +32,7 @@ export default async function handler(req, res) {
     // Step 2: Fetch the boundary data using the place ID
     const boundaryUrl = `https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=${process.env.NEXT_PUBLIC_BOUNDARY_API_KEY}`;
 
-    const boundaryResponse = await fetch(boundaryUrl);
+    const boundaryResponse = await fetch(boundaryUrl,{ cache: 'no-store' });
     const boundaryData = await boundaryResponse.json();
 
     if (
