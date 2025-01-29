@@ -34,7 +34,6 @@ export default async function handler(req, res) {
 
     const boundaryResponse = await fetch(boundaryUrl);
     const boundaryData = await boundaryResponse.json();
-    console.log('boundaryData',boundaryData);
 
     if (
       !boundaryData ||
