@@ -130,7 +130,7 @@ const EVChargingStationsMap = () => {
         `/api/city-boundary?cityName=${encodeURIComponent(cityName)}`
       );
       const data = await response.json();
-      console.log('data',data);
+      console.log('dataddddd',data);
 
       if (data && data.coordinates) {
         // Create and render the boundary on the map
