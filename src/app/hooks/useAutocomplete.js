@@ -13,7 +13,8 @@ const useAutocomplete = ({
   fetchCityBoundary,
   fetchEconomyDetails,
   fetchPlaces,
-  selectedCategory
+  selectedCategory,
+  setMessage
 }) => {
   const defaultBounds = useMemo(() => ({
     north: center.lat + 0.1,
@@ -65,6 +66,8 @@ const useAutocomplete = ({
           await fetchCityBoundary(cityName);
           await fetchEconomyDetails(cityName);
           fetchPlaces(location, bounds, cityName, selectedCategory);
+          // setMessage(`Boundary created for ${cityName}.Hover over charging stations or store markers to see details.`); // Show message
+
         } catch (error) {
           console.error("Error fetching city data:", error);
           setWarning(true); // Notify the user about the error

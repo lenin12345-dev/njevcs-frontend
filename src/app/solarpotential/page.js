@@ -66,6 +66,13 @@ const EVChargingStationsMap = () => {
   const inputRef = useRef(null); // Ref for the input field
   const autocompleteRef = useRef(null); // Ref for the autocomplete instance
   const mapRef = useRef(null); // Ref for the Google Map instance
+  const [message, setMessage] = useState("");
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+
+  const showMessage = (msg) => {
+    setMessage(msg);
+    setOpenSnackbar(true);
+  };
 
 
   // Load Google Maps API
@@ -205,6 +212,7 @@ const EVChargingStationsMap = () => {
         setCountyBoundaries([]);
         setIncomeData([]);
         setZoomLevel("12");
+        showMessage(`Boundary created for ${cityName}.Hover over charging stations or store markers to see details.`);
       })
       .catch((error) => {
         console.error(`Error fetching ${category} for ${cityName}:`, error);
@@ -225,6 +233,7 @@ const EVChargingStationsMap = () => {
     fetchEconomyDetails,
     fetchPlaces,
     selectedCategory,
+    setMessage:showMessage
   });
   const updatePolygonFillColor = (incomeLevel) => {
     let fillColor = "#FFFFFF";
@@ -440,6 +449,16 @@ const EVChargingStationsMap = () => {
       >
         <Alert severity="error" onClose={() => setWarning(false)}>
           Please select a city within New Jersey.
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={45000} // Show for 45 seconds
+        onClose={() => setOpenSnackbar(false)}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert severity="info" onClose={() => setOpenSnackbar(false)}>
+          {message}
         </Alert>
       </Snackbar>
 
