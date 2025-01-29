@@ -127,7 +127,7 @@ const EVChargingStationsMap = () => {
   const fetchCityBoundary = async (cityName) => {
     try {
       const response = await fetch(
-        `/api/city-boundary?cityName=${encodeURIComponent(cityName)}`,{ cache: "no-store" }
+        `/api/city-boundary?cityName=${encodeURIComponent(cityName)}&t=${Date.now()}`,{ cache: "no-store" }
       );
       const data = await response.json();
       console.log('dataddddd',data);
