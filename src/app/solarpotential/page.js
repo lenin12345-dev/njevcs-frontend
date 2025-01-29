@@ -149,6 +149,7 @@ const EVChargingStationsMap = () => {
     // Clear previous boundary
     if (cityBoundary) {
       cityBoundary.setMap(null);
+      setCityBoundary(null);
     }
 
     // Validate and format coordinates

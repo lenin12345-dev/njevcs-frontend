@@ -42,6 +42,8 @@ export default async function handler(req, res) {
 
     // Parse boundary coordinates
     const coordinates = parseCoordinates(boundaryData.features[0].geometry);
+    console.log('coordinates',coordinates);
+    
 
     // Return coordinates as the response
     return res.status(200).json({ coordinates });
