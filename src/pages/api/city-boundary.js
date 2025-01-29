@@ -25,12 +25,16 @@ export default async function handler(req, res) {
     }
 
     const placeId = placeIdData.results[0].place_id;
+    console.log(`City: ${cityName}, Place ID:`, placeIdData.results[0]?.place_id);
+
+
 
     // Step 2: Fetch the boundary data using the place ID
     const boundaryUrl = `https://api.geoapify.com/v2/place-details?id=${placeId}&features=details&apiKey=${process.env.NEXT_PUBLIC_BOUNDARY_API_KEY}`;
 
     const boundaryResponse = await fetch(boundaryUrl);
     const boundaryData = await boundaryResponse.json();
+    console.log('boundaryData',boundaryData);
 
     if (
       !boundaryData ||
@@ -42,7 +46,6 @@ export default async function handler(req, res) {
 
     // Parse boundary coordinates
     const coordinates = parseCoordinates(boundaryData.features[0].geometry);
-    console.log('coordinates',coordinates);
     
 
     // Return coordinates as the response
