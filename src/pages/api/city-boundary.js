@@ -49,7 +49,7 @@ export default async function handler(req, res) {
     
 
     // Return coordinates as the response
-    return res.status(200).json({ coordinates });
+    return res.status(200).json({ coordinates,placeId });
   } catch (error) {
     console.error("Error in city boundary API:", error);
     return res.status(500).json({ error: "Internal server error" });
