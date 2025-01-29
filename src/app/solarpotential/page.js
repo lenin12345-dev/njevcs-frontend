@@ -130,9 +130,11 @@ const EVChargingStationsMap = () => {
         `/api/city-boundary?cityName=${encodeURIComponent(cityName)}`
       );
       const data = await response.json();
+      console.log('data',data);
 
       if (data && data.coordinates) {
         // Create and render the boundary on the map
+        
         createDottedBoundary(data.coordinates);
       } else {
         console.error("Failed to fetch city boundary.");
@@ -166,6 +168,8 @@ const EVChargingStationsMap = () => {
       console.error("No valid path coordinates to draw.");
       return;
     }
+    console.log('path',path);
+    
 
     setCityBoundary(path);
   };
