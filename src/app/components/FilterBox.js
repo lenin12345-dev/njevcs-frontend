@@ -1,15 +1,35 @@
-import React from "react";
-import { Drawer, Box, Grid, Button} from "@mui/material";
+import React, { useState } from "react";
+import {
+  Box,
+  Grid,
+  Button,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Tabs,
+  Tab,
+} from "@mui/material";
+
+const FilterBox = ({
+  showFilter,
+  selectedCategory,
+  handleCategoryChange,
+  resetFilters,
+  cityBoundary,
+  handleCountyChange,
+  selectedCounty,
+  counties,
+  handleTabChange,
+  activeTab,
+  countyBoundary
+}) => {
+
+  const isCityBoundaryEmpty = activeTab=='city' && (cityBoundary == null || cityBoundary.length === 0);
+  const isCountyBoundaryEmpty = activeTab=='county' && (countyBoundary == null || countyBoundary.length === 0);
 
 
-const FilterBox = ({ showFilter, selectedCategory, handleCategoryChange, resetFilters,cityBoundary }) => {
-  console.log('cityBoundary',cityBoundary);
-  
-  
-      const emmptyPlace = cityBoundary==null || cityBoundary.length===0
-  
-  
-  
+
   return (
     showFilter && (
       <Box
@@ -24,26 +44,144 @@ const FilterBox = ({ showFilter, selectedCategory, handleCategoryChange, resetFi
           backgroundColor: "#fff",
         }}
       >
+        {/* Tabs for City and County */}
+        <Tabs
+          value={activeTab}
+          onChange={handleTabChange}
+          variant="fullWidth"
+          sx={{ mb: 2 }}
+        >
+          <Tab label="City" value="city" />
+          <Tab label="County" value="county" />
+        </Tabs>
+
+ 
+        {activeTab === "county" && (
+          <FormControl fullWidth size="small" sx={{ mb: 2 }}>
+            <InputLabel id="county-label">Select County</InputLabel>
+            <Select
+              labelId="county-label"
+              label="Select County"
+              MenuProps={{
+                PaperProps: {
+                  style: {
+                    maxHeight: 180, 
+                    overflowY: "auto", 
+                  },
+                },
+              }}
+              value={selectedCounty}
+              onChange={handleCountyChange}
+            >
+              {counties.map((county, index) => (
+                <MenuItem key={index} value={county}>
+                  {county}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        )}
+
+     
         <Grid container spacing={2}>
-          {["charging", "stores", "economicZones", "demand", "other"].map((category, index) => (
-            <Grid item xs={category === "other" ? 6 : 4} key={index}>
-              <Button
-                fullWidth
-                onClick={() =>
-                  category === "other" ? resetFilters() : handleCategoryChange(category)
-                }
-                variant={selectedCategory === category ? "contained" : "outlined"}
-                size="small"
-                sx={{ textTransform: "none", fontSize: "0.875rem", padding: "6px 12px" }}
-                disabled ={(category=="charging" || category=="stores") && emmptyPlace}
-              >
-                {category === "other" ? "Reset Filter" :category === "economicZones" ? "Economic Zones":  category.charAt(0).toUpperCase() + category.slice(1)}
-              </Button>
-            </Grid>
-          ))}
+     
+          {(activeTab === "city" || activeTab === "county") && (
+            <>
+              <Grid item xs={4}>
+                <Button
+                  fullWidth
+                  onClick={() => handleCategoryChange("charging")}
+                  variant={
+                    selectedCategory === "charging" ? "contained" : "outlined"
+                  }
+                  size="small"
+                  sx={{
+                    textTransform: "none",
+                    fontSize: "0.875rem",
+                    padding: "6px 12px",
+                  }}
+                  disabled={selectedCategory === "economicZones" || selectedCategory === "demand" || isCityBoundaryEmpty||isCountyBoundaryEmpty}
+                >
+                  Charging
+                </Button>
+              </Grid>
+              <Grid item xs={4}>
+                <Button
+                  fullWidth
+                  onClick={() => handleCategoryChange("stores")}
+                  variant={
+                    selectedCategory === "stores" ? "contained" : "outlined"
+                  }
+                  size="small"
+                  sx={{
+                    textTransform: "none",
+                    fontSize: "0.875rem",
+                    padding: "6px 12px",
+                  }}
+                  disabled={selectedCategory === "economicZones" || selectedCategory === "demand"|| isCityBoundaryEmpty||isCountyBoundaryEmpty}
+                >
+                  Stores
+                </Button>
+              </Grid>
+            </>
+          )}
+
+        
+          <Grid item xs={4}>
+            <Button
+              fullWidth
+              onClick={() => handleCategoryChange("economicZones")}
+              variant={
+                selectedCategory === "economicZones" ? "contained" : "outlined"
+              }
+              size="small"
+              sx={{
+                textTransform: "none",
+                fontSize: "0.875rem",
+                padding: "6px 12px",
+              }}
+            >
+              Economic Zones
+            </Button>
+          </Grid>
+          <Grid item xs={4}>
+            <Button
+              fullWidth
+              onClick={() => handleCategoryChange("demand")}
+              variant={
+                selectedCategory === "demand" ? "contained" : "outlined"
+              }
+              size="small"
+              sx={{
+                textTransform: "none",
+                fontSize: "0.875rem",
+                padding: "6px 12px",
+              }}
+            >
+              Demand
+            </Button>
+          </Grid>
+
+        
+          <Grid item xs={4}>
+            <Button
+              fullWidth
+              onClick={resetFilters}
+              variant="outlined"
+              size="small"
+              sx={{
+                textTransform: "none",
+                fontSize: "0.875rem",
+                padding: "6px 12px",
+              }}
+            >
+              Reset Filter
+            </Button>
+          </Grid>
         </Grid>
       </Box>
     )
-  )};
+  );
+};
 
-  export default FilterBox;
+export default FilterBox;

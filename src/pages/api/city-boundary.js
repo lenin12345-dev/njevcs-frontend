@@ -26,7 +26,6 @@ export default async function handler(req, res) {
     }
 
     const placeId = placeIdData.results[0].place_id;
-    console.log(`City: ${cityName}, Place ID:`, placeIdData.results[0]?.place_id);
 
 
 

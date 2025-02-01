@@ -1,9 +1,11 @@
 import config from "../../../config/config";
 
 export default async function(req,res){
-    const {cityName} = req.query;
+  res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
+
+    const {countyName} = req.query;
     try{
-         const response = await fetch(`${config.API_URL}/economy/city/${cityName}`)
+         const response = await fetch(`${config.API_URL}/economy/county/${countyName}`)
          const data = await response.json()
          
          if (!response.ok){

@@ -26,6 +26,7 @@ const useAutocomplete = ({
   const options = useMemo(() => ({
     bounds: defaultBounds,
     componentRestrictions: { country: "us" },
+    types: ["(cities)"],
     fields: ["address_components", "geometry"],
     strictBounds: false,
   }), [defaultBounds]);
