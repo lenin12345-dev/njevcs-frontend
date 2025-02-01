@@ -1,6 +1,8 @@
 import config from "../../../config/config";
 
 export default async function handler(req,res){
+    res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
+
     const {cityName} = req.query;
     
     try{

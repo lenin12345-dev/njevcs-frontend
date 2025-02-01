@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 
 const FilterBox = ({
-  showFilter,
+  // showFilter,
   selectedCategory,
   handleCategoryChange,
   resetFilters,
@@ -31,7 +31,7 @@ const FilterBox = ({
 
 
   return (
-    showFilter && (
+ 
       <Box
         mt={2}
         sx={{
@@ -51,8 +51,9 @@ const FilterBox = ({
           variant="fullWidth"
           sx={{ mb: 2 }}
         >
-          <Tab label="City" value="city" />
           <Tab label="County" value="county" />
+
+          <Tab label="City" value="city" />
         </Tabs>
 
  
@@ -181,7 +182,7 @@ const FilterBox = ({
           </Grid>
         </Grid>
       </Box>
-    )
+    
   );
 };
 

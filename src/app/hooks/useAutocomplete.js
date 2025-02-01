@@ -8,12 +8,13 @@ const useAutocomplete = ({
   cityBoundary,
   setCityCoordinates,
   setWarning,
-  setShowFilter,
+  // setShowFilter,
   setSelectedCategory,
   fetchCityBoundary,
-  fetchEconomyDetails,
-  fetchPlaces,
+  fetchCityEconomyDetails,
+  fetchCityPlaces,
   selectedCategory,
+  activeTab,
   setMessage
 }) => {
   const defaultBounds = useMemo(() => ({
@@ -60,13 +61,14 @@ const useAutocomplete = ({
 
      
         const bounds = place.geometry.viewport; // Get the viewport (bounds) of the selected city
-        setShowFilter(true);
+        // setShowFilter(true);
         setSelectedCategory("charging");
+        
 
         try {
           await fetchCityBoundary(cityName);
-          await fetchEconomyDetails(cityName);
-          fetchPlaces(location, bounds, cityName, selectedCategory);
+          await fetchCityEconomyDetails(cityName);
+          fetchCityPlaces(location, bounds, cityName, selectedCategory,'city');
           // setMessage(`Boundary created for ${cityName}.Hover over charging stations or store markers to see details.`); // Show message
 
         } catch (error) {
@@ -82,12 +84,13 @@ const useAutocomplete = ({
     cityBoundary,
     setCityCoordinates,
     setWarning,
-    setShowFilter,
+    // setShowFilter,
     setSelectedCategory,
     fetchCityBoundary,
-    fetchEconomyDetails,
-    fetchPlaces,
-    selectedCategory
+    fetchCityEconomyDetails,
+    fetchCityPlaces,
+    selectedCategory,
+    activeTab
   ]);
   useEffect(() => {
     if (
@@ -111,7 +114,7 @@ const useAutocomplete = ({
         handlePlaceSelected(place);
       });
     }
-  }, [isLoaded, inputRef, handlePlaceSelected]);
+  }, [isLoaded, inputRef]);
   
 
 
