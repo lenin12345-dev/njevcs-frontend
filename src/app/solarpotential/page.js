@@ -130,6 +130,7 @@ const EVChargingStationsMap = () => {
     setSelectedCounty(county);
     setLoading(true);
   
+    setCountyBoundaries([]);
     
     try {
       const response = await fetch(
