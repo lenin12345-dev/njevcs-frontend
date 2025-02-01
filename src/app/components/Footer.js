@@ -121,7 +121,7 @@ const Footer = () => {
             fontSize: { xs: "12px", sm: "14px" },
           }}
         >
-          Copyright © 2024 NJ EVCS Awnings. All rights reserved.
+          Copyright © {new Date().getFullYear()} NJ EVCS Awnings. All rights reserved.
         </Typography>
       </Container>
     </Box>

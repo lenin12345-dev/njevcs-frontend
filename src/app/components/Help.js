@@ -1,5 +1,7 @@
 import React from "react";
-import { Box, Typography, Grid } from "@mui/material";
+import { Box, Typography, Grid,Button } from "@mui/material";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import Link from "next/link";
 
 const RenewableEnergySection = () => {
   return (
@@ -83,6 +85,7 @@ const RenewableEnergySection = () => {
               height: "40px",
             }}
           />
+         
 
          
           <Typography
@@ -99,6 +102,30 @@ const RenewableEnergySection = () => {
           >
             Leading the way in Renewable Energy Innovation
           </Typography>
+          <Button
+            variant="contained"
+            endIcon={<ArrowForwardIcon />}
+            component={Link}
+            href="/solarpotential"
+            sx={{
+              marginTop: {sx:"10px",sm:"20px"},
+              
+              padding: { xs: "8px 16px", sm: "10px 20px" },
+              background: "#4E9268",
+              color: "#fff",
+              fontWeight: "bold",
+              fontSize: { xs: "0.9rem", sm: "1rem" },
+              borderRadius: "25px",
+              textTransform: "none",
+              boxShadow: "0 4px 10px rgba(0,0,0,0.3)",
+              "&:hover": {
+                background: "linear-gradient(90deg, #FFA500, #FFD700)",
+                boxShadow: "0 6px 15px rgba(0,0,0,0.5)",
+              },
+            }}
+          >
+            Get Started
+          </Button>
         </Grid>
 
         {/* Right Section */}

@@ -67,6 +67,7 @@ const FilterBox = ({
                   style: {
                     maxHeight: 180, 
                     overflowY: "auto", 
+                  
                   },
                 },
               }}
@@ -74,7 +75,7 @@ const FilterBox = ({
               onChange={handleCountyChange}
             >
               {counties.map((county, index) => (
-                <MenuItem key={index} value={county}>
+                <MenuItem key={index} value={county} sx={{ fontSize: "14px" }}>
                   {county}
                 </MenuItem>
               ))}

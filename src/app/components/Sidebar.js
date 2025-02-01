@@ -4,7 +4,7 @@ import CloseIcon from "@mui/icons-material/Close";
 
 import { Drawer, Box, Typography, IconButton, Divider, Avatar } from "@mui/material";
 
-const Sidebar = ({ cityInfo, visible, onClose, evsCount }) => {
+const Sidebar = ({activeTab, cityInfo, visible, onClose, evsCount }) => {
     const theme = useTheme(); 
     const appBarHeight = (theme.mixins.toolbar.minHeight || 56) + 8;
 
@@ -38,7 +38,8 @@ const Sidebar = ({ cityInfo, visible, onClose, evsCount }) => {
         }}
       >
         <Typography variant="h6" fontWeight="bold" color="primary">
-          {cityInfo?.cityName || "City Details"}
+        {cityInfo?.cityName ? `${cityInfo.cityName} ${activeTab === 'county' ? 'County' : ''}` : "City Details"}
+
         </Typography>
         <IconButton onClick={onClose}>
           <CloseIcon />

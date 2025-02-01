@@ -573,7 +573,7 @@ const EVChargingStationsMap = () => {
         <input
           ref={inputRef}
           type="text"
-          placeholder="Enter a city in NJ"
+          placeholder="Enter a city in New Jersey"
           onChange={handleInputChange}
           disabled={activeTab=='county'}
           style={{
@@ -697,7 +697,7 @@ const EVChargingStationsMap = () => {
             />
           )}
 
-          {countyBoundaries?.length && evcsData?.length && (
+          {countyBoundaries.length>0 && evcsData.length>0 && (
             <CountyEvBoundaries
               countyBoundaries={countyBoundaries}
               getEvcsLevel={getEvcsLevel}
@@ -708,6 +708,7 @@ const EVChargingStationsMap = () => {
             />
           )}
           <Sidebar
+          activeTab={activeTab}
             cityInfo={cityInfo}
             visible={sidebarVisible}
             onClose={closeSidebar}
