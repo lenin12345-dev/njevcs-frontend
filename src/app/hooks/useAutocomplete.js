@@ -14,7 +14,6 @@ const useAutocomplete = ({
   fetchCityEconomyDetails,
   fetchCityPlaces,
   selectedCategory,
-  activeTab,
   setMessage
 }) => {
   const defaultBounds = useMemo(() => ({
@@ -90,7 +89,6 @@ const useAutocomplete = ({
     fetchCityEconomyDetails,
     fetchCityPlaces,
     selectedCategory,
-    activeTab
   ]);
   useEffect(() => {
     if (

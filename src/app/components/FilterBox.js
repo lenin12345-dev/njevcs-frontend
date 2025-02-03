@@ -49,7 +49,9 @@ const FilterBox = ({
           value={activeTab}
           onChange={handleTabChange}
           variant="fullWidth"
-          sx={{ mb: 2 }}
+          sx={{ mb: 2,  "& .MuiTabs-indicator": {
+            backgroundColor: "#4E9268", 
+          }, }}
         >
           <Tab label="County" value="county" />
 
@@ -101,7 +103,10 @@ const FilterBox = ({
                     textTransform: "none",
                     fontSize: "0.875rem",
                     padding: "6px 12px",
+                  backgroundColor: selectedCategory === "charging"?"#4E9268":""
+
                   }}
+                  
                   disabled={selectedCategory === "economicZones" || selectedCategory === "demand" || isCityBoundaryEmpty||isCountyBoundaryEmpty}
                 >
                   Charging
@@ -114,11 +119,13 @@ const FilterBox = ({
                   variant={
                     selectedCategory === "stores" ? "contained" : "outlined"
                   }
+
                   size="small"
                   sx={{
                     textTransform: "none",
                     fontSize: "0.875rem",
                     padding: "6px 12px",
+                       backgroundColor: selectedCategory === "stores"?"#4E9268":""
                   }}
                   disabled={selectedCategory === "economicZones" || selectedCategory === "demand"|| isCityBoundaryEmpty||isCountyBoundaryEmpty}
                 >
@@ -141,6 +148,8 @@ const FilterBox = ({
                 textTransform: "none",
                 fontSize: "0.875rem",
                 padding: "6px 12px",
+                backgroundColor: selectedCategory === "economicZones"?"#4E9268":""
+
               }}
             >
               Economic Zones
@@ -158,6 +167,8 @@ const FilterBox = ({
                 textTransform: "none",
                 fontSize: "0.875rem",
                 padding: "6px 12px",
+                backgroundColor: selectedCategory === "demand"?"#4E9268":""
+
               }}
             >
               Demand

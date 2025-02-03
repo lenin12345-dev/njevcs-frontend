@@ -109,6 +109,9 @@ const EVChargingStationsMap = () => {
     clearInput();
     setSidebarVisible(false);
   };
+
+
+  
   
 
   const zoomToBoundary = (coordinates) => {
@@ -151,7 +154,9 @@ const EVChargingStationsMap = () => {
         setCountyBoundary(formatBoundaryData);
         countyView();
         await fetchEconomyDetails(county);
-        await fetchCountyPlaces(null, null, county, selectedCategory);
+        const category = selectedCategory == 'economicZones' || selectedCategory == "demand"?"charging":selectedCategory
+        
+        await fetchCountyPlaces(null, null, county, category);
       }
     } catch (error) {
       console.error("Error fetching county boundary data:", error);
@@ -239,7 +244,6 @@ const EVChargingStationsMap = () => {
       console.error("Error fetching economy details:", error);
     }
   };
-  console.log('activeTabglobal',activeTab);
 
 
   const fetchCityBoundary = async (cityName) => {
@@ -294,7 +298,6 @@ const EVChargingStationsMap = () => {
   const fetchEconomyDetails =  async (cityName) => {
     try {
       let apiUrl;
-  console.log('activeTab',activeTab);
 
       cityName = cityName.replace(/ Township$/i, "").trim();
       if (activeTab == "city") {
@@ -382,18 +385,21 @@ const EVChargingStationsMap = () => {
   const fetchCountyPlaces = (location, bounds, cityName, category) => {
     cityName = cityName.replace(/ Township$/i, "").trim();
     let apiUrl;
-
+      
     setLoading(true);
 
     if (category === "charging") {
    
         let countyName = cityName;
         apiUrl = `api/evcsLevel/${countyName}`;
+        setSelectedCategory('charging')
     
     } else if (category === "stores") {
    
         let countyName = cityName;
         apiUrl = `api/storesLevel/${countyName}`;
+        setSelectedCategory('stores')
+
     
     }
 
@@ -477,6 +483,7 @@ const EVChargingStationsMap = () => {
       setIncomeData(incomeDataResponse.data);
       stateView();
       showMessage("Hover over a county to see the income details.");
+
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -504,7 +511,6 @@ const EVChargingStationsMap = () => {
       setSidebarVisible(false);
       setCountyBoundary([]);
       setSelectedCounty("");
-      setSelectedCategory("charging");
       setPlaces([])
 
       // setCountyBoundaries([]);
@@ -516,7 +522,6 @@ const EVChargingStationsMap = () => {
       setSidebarVisible(false);
       setCountyBoundary([]);
       setSelectedCounty("");
-      setSelectedCategory("charging");
       setPlaces([])
 
 
@@ -637,10 +642,12 @@ const EVChargingStationsMap = () => {
     mapRef.current = map;
     setIsMapLoaded(true);
   };
+
+  
   
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
-      <Box
+    {      isLoaded &&   <Box
         sx={{
           position: "absolute",
           top: "150px",
@@ -663,7 +670,7 @@ const EVChargingStationsMap = () => {
             borderRadius: "8px",
           }}
         />
-        <FilterBox
+ <FilterBox
           // showFilter={showFilter}
           selectedCategory={selectedCategory}
           handleCategoryChange={handleCategoryChange}
@@ -676,7 +683,7 @@ const EVChargingStationsMap = () => {
           activeTab={activeTab}
           countyBoundary={countyBoundary}
         />
-      </Box>
+      </Box>}
 
       <Snackbar
         open={warning}
@@ -701,8 +708,8 @@ const EVChargingStationsMap = () => {
 
       {/* Google Map */}
 
-      {!isLoaded ||
-        (loading && (
+      {(!isLoaded ||
+        loading) && (
           <Backdrop
             sx={{
               color: "#fff",
@@ -712,7 +719,7 @@ const EVChargingStationsMap = () => {
           >
             <CircularProgress color="inherit" />
           </Backdrop>
-        ))}
+        )}
 
       {isLoaded && (
         <GoogleMap

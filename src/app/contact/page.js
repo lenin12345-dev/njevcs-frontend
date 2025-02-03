@@ -116,7 +116,7 @@ const Page = () => {
     <Container>
       <StyledCard>
         <CardContent>
-          <Typography variant="h4" component={"h1"} gutterBottom align="center">
+          <Typography style={{color:"#4E9268"}} variant="h4" component={"h1"} gutterBottom align="center">
             Contact Us
           </Typography>
           <FormContainer onSubmit={handleSubmit} noValidate>
@@ -157,15 +157,28 @@ const Page = () => {
                 onChange={handleChange}
               />
               <Button
-                sx={{
-                  marginTop: 3,
-                }}
+           
                 fullWidth
                 size="large"
                 variant="contained"
                 color="primary"
                 type="submit"
                 disabled={loading}
+                sx={{
+                  marginTop: 3,
+                  
+                 
+                  background: "#4E9268",
+                  color: "#fff",
+                  fontWeight: "bold",
+               
+                  textTransform: "none",
+                  boxShadow: "0 4px 10px rgba(0,0,0,0.3)",
+                  "&:hover": {
+                    background: "linear-gradient(90deg, #FFA500, #FFD700)",
+                    boxShadow: "0 6px 15px rgba(0,0,0,0.5)",
+                  },
+                }}
               >
                 {loading ? "Sending..." : "Submit"}
               </Button>

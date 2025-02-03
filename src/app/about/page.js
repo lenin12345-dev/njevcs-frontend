@@ -14,21 +14,20 @@ export default function About() {
       }}
     >
       {/* Gradient Heading */}
-      <Typography
-        variant="h3"
-        component="h1"
-        gutterBottom
-        sx={{
-          fontWeight: "bold",
-          textAlign: "center",
-          background: "linear-gradient(90deg, #0048FF 0%, #D6008D 100%)",
-          WebkitBackgroundClip: "text",
-          WebkitTextFillColor: "transparent",
-          fontSize: { xs: "2rem", sm: "3rem", md: "2.5rem" },
-        }}
-      >
-        About Us
-      </Typography>
+  <Typography
+              variant="h4"
+              component="h2"
+              gutterBottom
+              sx={{
+                fontWeight: "bold",
+                color: "#333",
+                textAlign: "center",
+                marginBottom: 4,
+                fontSize: { xs: "2rem", sm: "3rem", md: "2.5rem" },
+              }}
+            >
+            <span style={{color:"#4E9268"}}>About Us</span>
+            </Typography>
 
       {/* Content */}
       <Box
@@ -62,21 +61,20 @@ export default function About() {
             src="https://www.google.com/get/sunroof/images/about/1-why.png"
             style={{ maxWidth: "170px", width: "100%" }}
           />
-          <Typography
-            variant="h4"
-            component="h2"
-            sx={{
-              fontWeight: "bold",
+    <Typography
+                variant="h4"
+                component="h2"
+                sx={{
+                  fontWeight: "bold",
+                  color: "#333",
               textAlign: "center",
-              background: "linear-gradient(90deg, #0048FF 0%, #D6008D 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
+
               marginTop: "20px",
               fontSize: { xs: "1.5rem", sm: "2rem" },
-            }}
-          >
-            Our Vision
-          </Typography>
+                }}
+              >
+             <span style={{color:"#4E9268"}}>Our Vision</span>
+              </Typography>
           <Typography
             variant="body1"
             sx={{
@@ -100,21 +98,19 @@ export default function About() {
             src="https://www.kindpng.com/picc/m/302-3026906_we-are-icon-hd-png-download.png"
             style={{ maxWidth: "160px", width: "100%" }}
           />
-          <Typography
-            variant="h4"
-            component="h2"
-            sx={{
-              fontWeight: "bold",
-              textAlign: "center",
-              background: "linear-gradient(90deg, #0048FF 0%, #D6008D 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              marginTop: "20px",
-              fontSize: { xs: "1.5rem", sm: "2rem" },
-            }}
-          >
-            What We Do
-          </Typography>
+        <Typography
+                variant="h4"
+                component="h2"
+                sx={{
+                  fontWeight: "bold",
+                  color: "#333",
+                  textAlign: "center",
+                  marginTop: "20px",
+                  fontSize: { xs: "1.5rem", sm: "2rem" }
+                }}
+              >
+             <span style={{color:"#4E9268"}}>What We Do</span>
+              </Typography>
           <Typography
             variant="body1"
             sx={{
@@ -245,21 +241,20 @@ export default function About() {
             src="https://www.johnolivant.com/wp-content/uploads/2022/06/Next-Level-New-Logo-e1656427733314.png"
             style={{ maxWidth: "215px", width: "100%" }}
           />
+       
           <Typography
-            variant="h4"
-            component="h2"
-            sx={{
-              fontWeight: "bold",
-              textAlign: "center",
-              background: "linear-gradient(90deg, #0048FF 0%, #D6008D 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              marginTop: "20px",
-              fontSize: { xs: "1.5rem", sm: "2rem" },
-            }}
-          >
-            Why Choose Us?
-          </Typography>
+                variant="h4"
+                component="h2"
+                sx={{
+                  fontWeight: "bold",
+                  color: "#333",
+                  textAlign: "center",
+                  marginTop: "20px",
+                  fontSize: { xs: "1.5rem", sm: "2rem" },
+                }}
+              >
+             <span style={{color:"#4E9268"}}>Why Choose Us?</span>
+              </Typography>
           <Typography
             variant="body1"
             sx={{
