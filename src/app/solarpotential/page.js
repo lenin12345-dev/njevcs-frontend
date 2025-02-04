@@ -647,7 +647,7 @@ const EVChargingStationsMap = () => {
   
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
-    {      isLoaded && activeTab === "city" &&  <Box
+    {      isLoaded &&  <Box
         sx={{
           position: "absolute",
           top: "150px",
@@ -656,7 +656,7 @@ const EVChargingStationsMap = () => {
           width: "300px",
         }}
       >
-        <input
+{  activeTab === "city"   &&   <input
           ref={inputRef}
           type="text"
           placeholder="Enter a city in New Jersey"
@@ -669,7 +669,7 @@ const EVChargingStationsMap = () => {
             border: "1px solid #ccc",
             borderRadius: "8px",
           }}
-        />
+        />}
  <FilterBox
           // showFilter={showFilter}
           selectedCategory={selectedCategory}
