@@ -109,7 +109,7 @@ const FilterBox = ({
                   
                   disabled={selectedCategory === "economicZones" || selectedCategory === "demand" || isCityBoundaryEmpty||isCountyBoundaryEmpty}
                 >
-                  Charging
+                  Charging Stations
                 </Button>
               </Grid>
               <Grid item xs={4}>
@@ -137,7 +137,7 @@ const FilterBox = ({
 
         
           <Grid item xs={4}>
-            <Button
+          {activeTab === "county" && (      <Button
               fullWidth
               onClick={() => handleCategoryChange("economicZones")}
               variant={
@@ -153,10 +153,10 @@ const FilterBox = ({
               }}
             >
               Economic Zones
-            </Button>
+            </Button>)}
           </Grid>
           <Grid item xs={4}>
-            <Button
+          {activeTab === "county" &&   (<Button
               fullWidth
               onClick={() => handleCategoryChange("demand")}
               variant={
@@ -172,7 +172,7 @@ const FilterBox = ({
               }}
             >
               Demand
-            </Button>
+            </Button>)}
           </Grid>
 
         
