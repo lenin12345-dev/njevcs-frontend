@@ -137,7 +137,7 @@ const FilterBox = ({
 
         
           <Grid item xs={4}>
-          {activeTab === "county" && (      <Button
+         <Button
               fullWidth
               onClick={() => handleCategoryChange("economicZones")}
               variant={
@@ -148,15 +148,15 @@ const FilterBox = ({
                 textTransform: "none",
                 fontSize: "0.875rem",
                 padding: "6px 12px",
-                backgroundColor: selectedCategory === "economicZones"?"#4E9268":""
-
+                backgroundColor: selectedCategory === "economicZones"?"#4E9268":"",
+                visibility: activeTab === "county" ? "visible" : "hidden",
               }}
             >
               Economic Zones
-            </Button>)}
+            </Button>
           </Grid>
           <Grid item xs={4}>
-          {activeTab === "county" &&   (<Button
+        <Button
               fullWidth
               onClick={() => handleCategoryChange("demand")}
               variant={
@@ -167,12 +167,13 @@ const FilterBox = ({
                 textTransform: "none",
                 fontSize: "0.875rem",
                 padding: "6px 12px",
-                backgroundColor: selectedCategory === "demand"?"#4E9268":""
+                backgroundColor: selectedCategory === "demand"?"#4E9268":"",
+                visibility: activeTab === "county" ? "visible" : "hidden",
 
               }}
             >
               Demand
-            </Button>)}
+            </Button>
           </Grid>
 
         
