@@ -132,6 +132,21 @@ const FilterBox = ({
                   Stores
                 </Button>
               </Grid>
+              {activeTab === "city" && (  <Grid item xs={4}>
+            <Button
+              fullWidth
+              onClick={resetFilters}
+              variant="outlined"
+              size="small"
+              sx={{
+                textTransform: "none",
+                fontSize: "0.875rem",
+                padding: "6px 12px",
+              }}
+            >
+              Reset Filter
+            </Button>
+          </Grid>)}
             </>
           )}
 
@@ -177,7 +192,7 @@ const FilterBox = ({
           </Grid>
 
         
-          <Grid item xs={4}>
+          {activeTab === "county" && (  <Grid item xs={4}>
             <Button
               fullWidth
               onClick={resetFilters}
@@ -191,7 +206,7 @@ const FilterBox = ({
             >
               Reset Filter
             </Button>
-          </Grid>
+          </Grid>)}
         </Grid>
       </Box>
     
