@@ -656,7 +656,7 @@ const EVChargingStationsMap = () => {
           width: "300px",
         }}
       >
-{  activeTab === "city"   &&   <input
+ <input
           ref={inputRef}
           type="text"
           placeholder="Enter a city in New Jersey"
@@ -669,7 +669,7 @@ const EVChargingStationsMap = () => {
             border: "1px solid #ccc",
             borderRadius: "8px",
           }}
-        />}
+        />
  <FilterBox
           // showFilter={showFilter}
           selectedCategory={selectedCategory}
