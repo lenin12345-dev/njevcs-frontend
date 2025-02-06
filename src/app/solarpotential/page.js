@@ -28,6 +28,7 @@ import {
 import useAutocomplete from "../hooks/useAutocomplete";
 import CountyBoundaries from "../components/CountyBoundaries";
 import CountyEvBoundaries from "../components/CountyEvBoundaries";
+import {counties} from '../../constants'
 
 const containerStyle = {
   width: "100%",
@@ -71,29 +72,7 @@ const EVChargingStationsMap = () => {
   const [countyBoundary, setCountyBoundary] = useState([]);
   const [activeTab, setActiveTab] = useState("county"); // Default tab is "city"
 
-  const counties = [
-    "Atlantic",
-    "Bergen",
-    "Burlington",
-    "Camden",
-    "Cape May",
-    "Cumberland",
-    "Essex",
-    "Gloucester",
-    "Hudson",
-    "Hunterdon",
-    "Mercer",
-    "Middlesex",
-    "Monmouth",
-    "Morris",
-    "Ocean",
-    "Passaic",
-    "Salem",
-    "Somerset",
-    "Sussex",
-    "Union",
-    "Warren",
-  ];
+
   const [selectedCounty, setSelectedCounty] = useState("");
 
   const handleTabChange = (event, newValue) => {

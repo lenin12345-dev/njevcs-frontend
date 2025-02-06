@@ -192,7 +192,7 @@ const FilterBox = ({
           </Grid>
 
         
-          {activeTab === "county" && (  <Grid item xs={4}>
+          {activeTab === "county" && (  <Grid item xs={6}>
             <Button
               fullWidth
               onClick={resetFilters}
