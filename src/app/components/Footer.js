@@ -148,6 +148,9 @@ const Footer = () => {
             >
               Terms of Service
             </Typography>
+            <Box sx={{
+               textAlign: { xs: "center", md: "left" },
+            }}>
             <Link
               href="/tou"
               sx={{
@@ -158,6 +161,7 @@ const Footer = () => {
               {" "}
               Terms
             </Link>
+            </Box>
           </Grid>
         </Grid>
 
