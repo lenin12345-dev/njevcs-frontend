@@ -1,4 +1,3 @@
-'use client';
 
 import { Container, Typography, Box } from '@mui/material';
 
@@ -16,7 +15,7 @@ export default function TermsOfService() {
         <span style={{color:"#4E9268"}}>Terms of Service</span>
       </Typography>
       <Typography  variant="body1" >
-        Welcome to NJ EVCS Awnings! By accessing or using our website and services, you agree to comply with and be bound by these Terms of Service ("Terms"). Please read them carefully, as they govern your use of our platform and the services we provide.
+        Welcome to NJ EVCS Awnings! By accessing or using our website and services, you agree to comply with and be bound by these Terms of Service . Please read them carefully, as they govern your use of our platform and the services we provide.
       </Typography>
 
       <Box mt={3}>
