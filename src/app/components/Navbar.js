@@ -30,15 +30,18 @@ export default function ButtonAppBar() {
   ];
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ flexGrow: 1,   }}>
       <AppBar position="static" sx={{ background: "#F76B1C" }}>
         <Toolbar>
+          <Box sx={{
+  flexGrow: 1,
+          }}>
           <Typography
             component={Link}
             href="/"
             variant="h6"
             sx={{
-              flexGrow: 1,
+            
               textDecoration: "none",
               color: "inherit",
               ":hover": { color: "white" },
@@ -46,6 +49,7 @@ export default function ButtonAppBar() {
           >
             NJ EVCS Awnings
           </Typography>
+          </Box>
 
           {/* Desktop Menu */}
           <Box
