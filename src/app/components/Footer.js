@@ -1,5 +1,12 @@
 import React from "react";
-import { Box, Typography, Link, Container, Grid, IconButton } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Link,
+  Container,
+  Grid,
+  IconButton,
+} from "@mui/material";
 
 import FacebookIcon from "@mui/icons-material/Facebook";
 import XIcon from "@mui/icons-material/X";
@@ -21,7 +28,7 @@ const Footer = () => {
         <Grid container spacing={4}>
           <Grid item xs={12} sm={6} md={3}>
             <Typography
-              variant="h5"
+              variant="h6"
               component="div"
               sx={{ marginBottom: 2, textAlign: { xs: "center", md: "left" } }}
             >
@@ -40,16 +47,32 @@ const Footer = () => {
                 gap: 2,
               }}
             >
-              <IconButton color="inherit" href="https://facebook.com" size="small">
+              <IconButton
+                color="inherit"
+                href="https://facebook.com"
+                size="small"
+              >
                 <FacebookIcon fontSize="small" />
               </IconButton>
-              <IconButton color="inherit" href="https://twitter.com" size="small">
+              <IconButton
+                color="inherit"
+                href="https://twitter.com"
+                size="small"
+              >
                 <XIcon fontSize="small" />
               </IconButton>
-              <IconButton color="inherit" href="https://whatsapp.com" size="small">
+              <IconButton
+                color="inherit"
+                href="https://whatsapp.com"
+                size="small"
+              >
                 <WhatsAppIcon fontSize="small" />
               </IconButton>
-              <IconButton color="inherit" href="https://instagram.com" size="small">
+              <IconButton
+                color="inherit"
+                href="https://instagram.com"
+                size="small"
+              >
                 <InstagramIcon fontSize="small" />
               </IconButton>
             </Box>
@@ -66,7 +89,18 @@ const Footer = () => {
               variant="body2"
               sx={{ textAlign: { xs: "center", md: "left" } }}
             >
-              1 Normal Ave, Montclair, NJ 07043
+              <Link
+                href="https://www.google.com/maps?q=1+Normal+Ave,+Montclair,+NJ+07043"
+                target="_blank"
+                rel="noopener noreferrer"
+                sx={{
+                  textDecoration: "none",
+                  color: "inherit",
+                  "&:hover": { textDecoration: "underline" },
+                }}
+              >
+                1 Normal Ave, Montclair, NJ 07043
+              </Link>
             </Typography>
           </Grid>
 
@@ -79,7 +113,7 @@ const Footer = () => {
             </Typography>
             <Box sx={{ textAlign: { xs: "center", md: "left" } }}>
               <Link
-                href="/privacy-policy"
+                href="/privacy"
                 color="inherit"
                 sx={{
                   textDecoration: "none",
@@ -90,7 +124,7 @@ const Footer = () => {
                 Privacy Policy
               </Link>
               <Link
-                href="/cookie-policy"
+                href="/cookies"
                 color="inherit"
                 sx={{
                   textDecoration: "none",
@@ -106,10 +140,24 @@ const Footer = () => {
           <Grid item xs={12} sm={6} md={3}>
             <Typography
               variant="h6"
-              sx={{ marginBottom: 1, textAlign: { xs: "center", md: "left" } }}
+              sx={{
+                marginBottom: 1,
+                textDecoration: "none",
+                textAlign: { xs: "center", md: "left" },
+              }}
             >
               Terms of Service
             </Typography>
+            <Link
+              href="/tou"
+              sx={{
+                textDecoration: "none",
+                color: "white",
+              }}
+            >
+              {" "}
+              Terms
+            </Link>
           </Grid>
         </Grid>
 
@@ -121,7 +169,8 @@ const Footer = () => {
             fontSize: { xs: "12px", sm: "14px" },
           }}
         >
-          Copyright © {new Date().getFullYear()} NJ EVCS Awnings. All rights reserved.
+          Copyright © {new Date().getFullYear()} NJ EVCS Awnings. All rights
+          reserved.
         </Typography>
       </Container>
     </Box>
