@@ -627,7 +627,7 @@ const EVChargingStationsMap = () => {
             zIndex:isMobile?9999:"auto",
             top:isMobile?"10px":"auto",
             left: isMobile ? "0" : "auto",
-            transform: isMobile ? "translateX(-30px)" : "none", 
+            transform: isMobile ? "translateX(-25px)" : "none", 
           }}
         />}
  <FilterBox

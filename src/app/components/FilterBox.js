@@ -104,8 +104,9 @@ const FilterBox = ({
         <IconButton
           sx={{
             position: "absolute",
-            top: 10,
-            right: 10,
+            transform: { xs: "translateY(-50%)", md: "none" },
+            right: 0,
+            padding:"2px",
             display: { xs: "block", md: "none" },
           }}
           onClick={() => setIsSidebarOpen(false)}
@@ -118,7 +119,8 @@ const FilterBox = ({
           onChange={handleTabChange}
           variant="fullWidth"
           sx={{
-            mb: 2,
+            mb: isSidebarOpen?1:2,
+            mt:isSidebarOpen?1:0,
             "& .MuiTabs-indicator": {
               backgroundColor: "#4E9268",
             },
