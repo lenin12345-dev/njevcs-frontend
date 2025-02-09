@@ -7,6 +7,8 @@ import {
   Alert,
   CircularProgress,
   Backdrop,
+  useMediaQuery,
+  useTheme
 } from "@mui/material";
 import j1772 from "../../../public/j1772.png";
 import tesla from "../../../public/tesla.png";
@@ -70,10 +72,12 @@ const EVChargingStationsMap = () => {
   const [message, setMessage] = useState("");
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [countyBoundary, setCountyBoundary] = useState([]);
-  const [activeTab, setActiveTab] = useState("county"); // Default tab is "city"
+  const [activeTab, setActiveTab] = useState("county"); 
 
-
+    const theme = useTheme()
   const [selectedCounty, setSelectedCounty] = useState("");
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
@@ -87,12 +91,8 @@ const EVChargingStationsMap = () => {
     setIncomeData([]);
     clearInput();
     setSidebarVisible(false);
+    autocompleteRef.current = null
   };
-
-
-  
-  
-
   const zoomToBoundary = (coordinates) => {
     const mapInstance = mapRef.current;
     if (!mapInstance) return;
@@ -112,6 +112,7 @@ const EVChargingStationsMap = () => {
     setSelectedCounty(county);
     setLoading(true);
     setCountyBoundaries([]);
+    setIsSidebarOpen(false)
 
     try {
       const response = await fetch(
@@ -136,6 +137,7 @@ const EVChargingStationsMap = () => {
         const category = selectedCategory == 'economicZones' || selectedCategory == "demand"?"charging":selectedCategory
         
         await fetchCountyPlaces(null, null, county, category);
+
       }
     } catch (error) {
       console.error("Error fetching county boundary data:", error);
@@ -206,23 +208,7 @@ const EVChargingStationsMap = () => {
       console.error("Error fetching economy details:", error);
     }
   };
-  const fetchEvCityCount = async (cityName) => {
-    try {
-  
-        cityName = cityName.replace(/ Township$/i, "").trim();
-      const response = await fetch(`api/evs/${cityName}`);
-      const data = await response.json();
 
-      if (data && data.data) {
-        const { numberOfEvs } = data.data;
-        setEvsCount(numberOfEvs);
-      } else {
-        console.error("No economy details found for the city.");
-      }
-    } catch (error) {
-      console.error("Error fetching economy details:", error);
-    }
-  };
 
 
   const fetchCityBoundary = async (cityName) => {
@@ -302,25 +288,7 @@ const EVChargingStationsMap = () => {
       console.error("Error fetching economy details:", error);
     }
   };  
-  const fetchCityEconomyDetails =  async (cityName) => {
-    try {
-      cityName = cityName.replace(/ Township$/i, "").trim();
-      const response = await fetch(`api/economy/${cityName}`);
-      const data = await response.json();
-       
-      if (data?.data) {
-        const { income, incomeLevel } = data.data;
-        setCityInfo({ cityName, income, incomeLevel });
-        updatePolygonFillColor(incomeLevel);
-        setSidebarVisible(true);
-        await fetchEvCityCount(cityName);
-      } else {
-        console.error("No economy details found for the city.");
-      }
-    } catch (error) {
-      console.error("Error fetching economy details:", error);
-    }
-  };
+
 
   const fetchCityPlaces = (location, bounds, cityName, category) => {
     cityName = cityName.replace(/ Township$/i, "").trim();
@@ -346,6 +314,7 @@ const EVChargingStationsMap = () => {
         return response.json();
       })
       .then(({ data }) => {
+        setIsSidebarOpen(false);
         setPlaces(data);
         setLoading(false);
         setCountyBoundaries([]);
@@ -390,6 +359,8 @@ const EVChargingStationsMap = () => {
         return response.json();
       })
       .then(({ data }) => {
+        setIsSidebarOpen(false);
+
         setPlaces(data);
         setLoading(false);
         setCountyBoundaries([]);
@@ -414,9 +385,11 @@ const EVChargingStationsMap = () => {
     // setShowFilter,
     setSelectedCategory,
     fetchCityBoundary,
-    fetchCityEconomyDetails,
+    fetchEconomyDetails,
     fetchCityPlaces,
     selectedCategory,
+    activeTab,
+    setIsSidebarOpen,
     setMessage: showMessage,
   });
   const updatePolygonFillColor = (incomeLevel) => {
@@ -482,7 +455,8 @@ const EVChargingStationsMap = () => {
           )?.long_name
       : "Unknown City";
 
-    if (category === "economicZones" && cityName !== "Unknown City") {
+       
+    if (category === "economicZones") {
       fetchCountyData();
       setHoveredEvCounty(null);
       setHoveredCounty(null);
@@ -491,9 +465,10 @@ const EVChargingStationsMap = () => {
       setCountyBoundary([]);
       setSelectedCounty("");
       setPlaces([])
+      setIsSidebarOpen(false)
 
       // setCountyBoundaries([]);
-    } else if (category === "demand" && cityName !== "Unknown City") {
+    } else if (category === "demand" ) {
       fetchCountyEvData();
       setHoveredCounty(null);
       setHoveredEvCounty(null);
@@ -503,6 +478,7 @@ const EVChargingStationsMap = () => {
       setSelectedCounty("");
       setPlaces([])
 
+      setIsSidebarOpen(false)
 
       // setCountyBoundaries([]);
 
@@ -622,7 +598,7 @@ const EVChargingStationsMap = () => {
     setIsMapLoaded(true);
   };
 
-  
+   
   
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
@@ -635,20 +611,25 @@ const EVChargingStationsMap = () => {
           width: "300px",
         }}
       >
- <input
+{activeTab=="city"&& <input
           ref={inputRef}
           type="text"
           placeholder="Enter a city in New Jersey"
           onChange={handleInputChange}
-          disabled={activeTab == "county"}
+          // disabled={activeTab == "county"}
           style={{
-            width: "100%",
+            width: isMobile?"auto":"100%",
             padding: "10px",
             fontSize: "16px",
             border: "1px solid #ccc",
             borderRadius: "8px",
+            position:isMobile?"absolute":"static",
+            zIndex:isMobile?9999:"auto",
+            top:isMobile?"10px":"auto",
+            left: isMobile ? "0" : "auto",
+            transform: isMobile ? "translateX(-30px)" : "none", 
           }}
-        />
+        />}
  <FilterBox
           // showFilter={showFilter}
           selectedCategory={selectedCategory}
@@ -661,6 +642,8 @@ const EVChargingStationsMap = () => {
           handleTabChange={handleTabChange}
           activeTab={activeTab}
           countyBoundary={countyBoundary}
+          isSidebarOpen={isSidebarOpen}
+          setIsSidebarOpen={setIsSidebarOpen}
         />
       </Box>}
 
@@ -777,6 +760,9 @@ const EVChargingStationsMap = () => {
             visible={sidebarVisible}
             onClose={closeSidebar}
             evsCount={evsCount}
+            isSidebarOpen={isSidebarOpen}
+            isMobile={isMobile}
+            theme={theme}
           />
         </GoogleMap>
       )}

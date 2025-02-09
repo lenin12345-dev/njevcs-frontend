@@ -11,9 +11,11 @@ const useAutocomplete = ({
   // setShowFilter,
   setSelectedCategory,
   fetchCityBoundary,
-  fetchCityEconomyDetails,
+  fetchEconomyDetails,
   fetchCityPlaces,
   selectedCategory,
+  activeTab,
+  setIsSidebarOpen,
   setMessage
 }) => {
   const defaultBounds = useMemo(() => ({
@@ -31,7 +33,7 @@ const useAutocomplete = ({
     strictBounds: false,
   }), [defaultBounds]);
 
-
+  
   const handlePlaceSelected = useCallback(async (place) => {
     if (cityBoundary) {
       cityBoundary.setMap(null); // Remove the previous boundary
@@ -65,8 +67,9 @@ const useAutocomplete = ({
         
 
         try {
+          setIsSidebarOpen(false);
           await fetchCityBoundary(cityName);
-          await fetchCityEconomyDetails(cityName);
+          await fetchEconomyDetails(cityName);
           fetchCityPlaces(location, bounds, cityName, selectedCategory,'city');
           // setMessage(`Boundary created for ${cityName}.Hover over charging stations or store markers to see details.`); // Show message
 
@@ -86,7 +89,7 @@ const useAutocomplete = ({
     // setShowFilter,
     setSelectedCategory,
     fetchCityBoundary,
-    fetchCityEconomyDetails,
+    fetchEconomyDetails,
     fetchCityPlaces,
     selectedCategory,
   ]);
@@ -99,12 +102,12 @@ const useAutocomplete = ({
       !autocompleteRef.current
     ) {
 
-
       // Create Autocomplete instance
       autocompleteRef.current = new window.google.maps.places.Autocomplete(
         inputRef.current,
         options
       );
+      
 
       // Listen for place selection
       autocompleteRef.current.addListener("place_changed", () => {
@@ -112,7 +115,7 @@ const useAutocomplete = ({
         handlePlaceSelected(place);
       });
     }
-  }, [isLoaded, inputRef]);
+  }, [isLoaded, inputRef,activeTab,autocompleteRef]);
   
 
 
