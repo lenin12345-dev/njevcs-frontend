@@ -39,6 +39,7 @@ const RenewableEnergySection = () => {
               component="img"
               src="/h1.webp" 
               alt="Renewable Innovation"
+              loading="lazy"
               sx={{
                 width: "100%",
                 borderRadius: "10px",
@@ -142,6 +143,7 @@ const RenewableEnergySection = () => {
               component="img"
               src="/h2.webp" 
               alt="Clean Energy"
+              loading="lazy"
               sx={{
                 width: "100%",
                 borderRadius: "10px",

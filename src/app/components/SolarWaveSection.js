@@ -171,6 +171,8 @@ const SolarWaveSection = () => {
             layout="fill"
             objectFit="cover"
             objectPosition="center"
+              placeholder="blur"
+              blurDataURL="https://miro.medium.com/v2/resize:fit:720/format:webp/1*dwCdhO17ahhsgLMdSs8LXA.png"
             style={{
               borderRadius: "10px",
             }}
