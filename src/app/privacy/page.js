@@ -12,7 +12,7 @@ export default function PrivacyPolicy() {
               }} gutterBottom>
         <span style={{color:"#4E9268"}}>Privacy Policy</span>
       </Typography>
-      <Typography >
+      <Typography gutterBottom >
         At NJ EVCS Awnings, your privacy is our top priority. We are committed to
         protecting your personal information and ensuring transparency about how
         we collect, use, and share data. This Privacy Policy outlines how we handle
@@ -22,17 +22,17 @@ export default function PrivacyPolicy() {
       <Typography variant="h5" style={{ color: "#4E9268" }} gutterBottom>
         Information We Collect
       </Typography>
-      <Typography >
+      <Typography gutterBottom >
         <b>Personal Information:</b> When you use our services, we may collect information
         like your name, email address, and other contact details to provide you with a
         personalized experience.
       </Typography>
-      <Typography >
+      <Typography gutterBottom >
         <b>Location History:</b> With your permission, we may collect and store your location
         data to offer relevant services, such as finding nearby EV charging stations or
         calculating parking space utilization.
       </Typography>
-      <Typography >
+      <Typography gutterBottom >
         <b>Search History and Usage Data:</b> We collect information about your interactions
         with our platform, including search queries, page visits, and feature usage.
       </Typography>
@@ -46,7 +46,7 @@ export default function PrivacyPolicy() {
       <Typography variant="h5" style={{ color: "#4E9268" }} gutterBottom>
         Data Sharing and Disclosure
       </Typography>
-      <Typography >
+      <Typography gutterBottom >
         Your data is never shared with third parties for marketing purposes without
         your explicit consent. However, we may share information with service
         providers, for legal compliance, or in the event of business transfers.
@@ -54,36 +54,30 @@ export default function PrivacyPolicy() {
       <Typography variant="h5" style={{ color: "#4E9268" }} gutterBottom>
         Data Retention
       </Typography>
-      <Typography >
+      <Typography gutterBottom >
         We retain personal information only for as long as necessary to fulfill the
         purposes outlined in this policy.
       </Typography>
       <Typography variant="h5" style={{ color: "#4E9268" }} gutterBottom>
         Your Privacy Choices and Rights
       </Typography>
-      <Typography >
+      <Typography gutterBottom >
         You have the right to access, update, or delete your personal information. You
         can opt out of location tracking or usage data collection at any time.
       </Typography>
       <Typography variant="h5" style={{ color: "#4E9268" }} gutterBottom>
         Security of Your Information
       </Typography>
-      <Typography >
+      <Typography gutterBottom >
         We prioritize the security of your personal information, implementing
         industry-standard practices.
       </Typography>
       <Typography variant="h5" style={{ color: "#4E9268" }} gutterBottom>
         Updates to This Privacy Policy
       </Typography>
-      <Typography >
+      <Typography  >
         We may update this Privacy Policy from time to time. You will be notified
         of significant changes.
-      </Typography>
-      <Typography >
-        If you have any questions, please reach out to us at patelt18@montclair.edu.
-      </Typography>
-      <Typography variant="body2" align="center" sx={{ mt: 4 }}>
-        Copyright © {new Date().getFullYear()} NJ EVCS Awnings. All rights reserved.
       </Typography>
     </Container>
   );

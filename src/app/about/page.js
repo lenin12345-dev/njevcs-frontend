@@ -8,8 +8,8 @@ export default function About() {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        padding: { xs: 3, sm: 4 },
-        paddingBottom: 4,
+        padding: { xs: 3, sm: 2 },
+        paddingBottom: 3,
         backgroundColor: "#f5f5f5",
       }}
     >
@@ -314,7 +314,6 @@ export default function About() {
             color: "primary.main",
             fontWeight: "bold",
             textAlign: "center",
-            marginBottom: "20px",
             fontSize: { xs: "1rem", sm: "1.2rem" },
           }}
         >
