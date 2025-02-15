@@ -17,7 +17,7 @@ const RenewableEnergySection = () => {
             sx={{
               display: "flex",
               flexDirection: "column",
-              alignItems: "flex-start",
+              alignItems:{xs:"center",sm: "flex-start"},
             }}
           >
     
@@ -29,6 +29,7 @@ const RenewableEnergySection = () => {
                 color: "#333",
                 marginBottom: 4,
                 fontSize: { xs: "1.8rem", sm: "2.2rem", md: "2.5rem" },
+                textAlign:{xs:"center",sm:"auto"}
               }}
             >
               How We <span style={{color:"#4E9268"}}>Help You</span>
@@ -109,7 +110,7 @@ const RenewableEnergySection = () => {
             component={Link}
             href="/solarpotential"
             sx={{
-              marginTop: {sx:"10px",sm:"20px"},
+              marginTop: {xs:"12px",sm:"20px"},
               
               padding: { xs: "8px 16px", sm: "10px 20px" },
               background: "#4E9268",
@@ -158,7 +159,7 @@ const RenewableEnergySection = () => {
               sx={{
                 color: "#666",
                 lineHeight: "1.6",
-                textAlign: "right",
+             
                 marginTop: "10px",
                 maxWidth: "700px",
               }}

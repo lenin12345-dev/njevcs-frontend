@@ -46,12 +46,13 @@ const SolarWaveSection = () => {
     <Box
       sx={{
         padding: { xs: "100px 5%", sm: "30px 5%",md: "70px 5%",lg:"30px 5%" },
+        paddingBottom:{xs:"0px",sm:"auto"},
         display: "flex",
         flexDirection: "column",
       }}
     >
       {/* Heading */}
-      <Box sx={{ textAlign: "center", marginBottom: "30px" }}>
+      <Box sx={{ textAlign: "center", marginBottom: "30px",marginTop:{xs:"14px",sm:"auto"} }}>
         <Typography
           variant="h4"
           component="h2"
