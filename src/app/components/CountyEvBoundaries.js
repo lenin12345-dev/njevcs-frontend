@@ -56,7 +56,7 @@ const CountyEvBoundaries = ({
               strokeOpacity: 0.8,
               strokeWeight: 2,
               fillColor: evcsColor[evsLevel],
-              fillOpacity: 0.6,
+              fillOpacity: 0.4,
             }}
             onMouseOver={() => handleMouseOver(county, coordinates)}
             onMouseOut={handleMouseOut}

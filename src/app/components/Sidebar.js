@@ -95,6 +95,26 @@ const Sidebar = ({activeTab, cityInfo, visible, onClose, evsCount,isSidebarOpen,
           approximately ${cityInfo?.income.toLocaleString()}.
         </Typography>
       </Box>}
+           {/* Heatmap Legend Section */}
+           <Box sx={{ mt: isMobile ? 2 : 1, px: 2, py: 1, borderRadius: 2, backgroundColor: "#f0f4f8" }}>
+        <Typography variant="subtitle2" fontWeight="bold" sx={{ mb: 1 }}>
+        Indicator Guide
+        </Typography>
+        <Box display={"flex"} justifyContent={"space-between"} alignItems={"center"}>
+        <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+          <Box sx={{ width: 20, height: 20, backgroundColor: "#ff0000", borderRadius: "50%", mr: 1 }} />
+          <Typography variant="body2">High</Typography>
+        </Box>
+        <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+          <Box sx={{ width: 20, height: 20, backgroundColor: "#ffa500", borderRadius: "50%", mr: 1 }} />
+          <Typography variant="body2">Medium</Typography>
+        </Box>
+        <Box sx={{ display: "flex", alignItems: "center" }}>
+          <Box sx={{ width: 20, height: 20, backgroundColor: "#008000", borderRadius: "50%", mr: 1 }} />
+          <Typography variant="body2">Low</Typography>
+        </Box>
+        </Box>
+      </Box>
 
       {/* Footer Section */}
       <Box sx={{ mt:isMobile?0: 3, textAlign: "center" }}>

@@ -156,16 +156,12 @@ const EVChargingStationsMap = () => {
     googleMapsApiKey: key,
     libraries: ["places"],
   });
-  const incomeColors = {
+  const heatMapColors = {
     Low: "#ff0000",
     Medium: "#ffa500",
     High: "#008000",
   };
-  const evcsColor = {
-    Low: "orange",
-    Medium: "grey",
-    High: "blue",
-  };
+
   const supportedChargingTypes = [
     { key: "j1772", label: "J1772", icon: j1772 },
     { key: "tesla", label: "Tesla", icon: tesla },
@@ -392,26 +388,12 @@ const EVChargingStationsMap = () => {
     setIsSidebarOpen,
     setMessage: showMessage,
   });
-  const updatePolygonFillColor = (incomeLevel) => {
-    let fillColor = "#FFFFFF";
 
-    switch (incomeLevel) {
-      case "Low":
-        fillColor = "#ff0000";
-        break;
-      case "Medium":
-        fillColor = "#ffa500";
-        break;
-      case "High":
-        fillColor = "#008000";
-        break;
-      default:
-        console.warn(`Unknown income level: ${incomeLevel}`);
-    }
+  const updatePolygonFillColor = (incomeLevel) => {
 
     setPolygonOptions((prevOptions) => ({
       ...prevOptions,
-      fillColor,
+      fillColor:heatMapColors[incomeLevel] || "#FFFFFF",
       fillOpacity: 0.5,
     }));
   };
@@ -530,6 +512,7 @@ const EVChargingStationsMap = () => {
       setSelectedCategory("charging");
       setCityBoundary(null);
       setSidebarVisible(false);
+      setPolygonOptions(null)
     }
   };
   const stateView = () => {
@@ -738,7 +721,7 @@ const EVChargingStationsMap = () => {
               countyBoundaries={countyBoundaries}
               getIncomeLevel={getIncomeLevel}
               getAvgIncome={getAvgIncome}
-              incomeColors={incomeColors}
+              incomeColors={heatMapColors}
               setHoveredCounty={setHoveredCounty}
               setHoveredEvCounty={setHoveredEvCounty}
             />
@@ -749,7 +732,7 @@ const EVChargingStationsMap = () => {
               countyBoundaries={countyBoundaries}
               getEvcsLevel={getEvcsLevel}
               getEvcsCount={getEvcsCount}
-              evcsColor={evcsColor}
+              evcsColor={heatMapColors}
               setHoveredEvCounty={setHoveredEvCounty}
               setHoveredCounty={setHoveredCounty}
             />
