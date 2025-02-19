@@ -58,7 +58,7 @@ const Sidebar = ({activeTab, cityInfo, visible, onClose, evsCount,isSidebarOpen,
           <strong>Number Of Electric Vehicles:</strong> {evsCount}
         </Typography>
       </Box>
-      <Box sx={{ mt: 2, px: 2, py: 1, borderRadius: 2, backgroundColor: "#e3f2fd" }}>
+      <Box sx={{ mt: 2, px: 1.5, py: 1, borderRadius: 2, backgroundColor: "#e3f2fd" }}>
         <Typography variant="subtitle1" fontWeight="bold" color="primary" sx={{ mb: 1 }}>
           🔋 Energy Overview
         </Typography>
@@ -77,17 +77,17 @@ const Sidebar = ({activeTab, cityInfo, visible, onClose, evsCount,isSidebarOpen,
             <Typography variant="body2" fontWeight="bold">{cityInfo?.totalEVEnergyDemand.toLocaleString()}</Typography>
           </Grid>
 
-          <Grid item xs={8}>
+          <Grid item xs={10}>
             <Typography variant="body2">🔌 Public Charging Demand (kWh):</Typography>
           </Grid>
-          <Grid item xs={4} textAlign="right">
+          <Grid item xs={2} textAlign="right">
             <Typography variant="body2" fontWeight="bold">{cityInfo?.publicChargingDemand.toLocaleString()}</Typography>
           </Grid>
 
-          <Grid item xs={8}>
+          <Grid item xs={10}>
             <Typography variant="body2">⚡ Charging Station Capacity (kWh):</Typography>
           </Grid>
-          <Grid item xs={4} textAlign="right">
+          <Grid item xs={2} textAlign="right">
             <Typography variant="body2" fontWeight="bold">{cityInfo?.chargingStationCapacity.toLocaleString()}</Typography>
           </Grid>
 
