@@ -22,7 +22,7 @@ const Sidebar = ({
   theme,
 }) => {
   const appBarHeight = (theme.mixins.toolbar.minHeight || 56) + 8;
-
+   
   return (
     <Drawer
       anchor={isMobile ? "bottom" : "right"}
@@ -77,13 +77,13 @@ const Sidebar = ({
           variant="body1"
           sx={{ mb: 1, fontSize: isMobile ? 14 : 16 }}
         >
-          <strong>Average Income:</strong> ${cityInfo?.income.toLocaleString()}
+          <strong>Average Income:</strong> {cityInfo && cityInfo.income?`${"$"+(cityInfo.income.toLocaleString())}`:"N/A"}
         </Typography>
         <Typography
           variant="body1"
           sx={{ mb: 1, fontSize: isMobile ? 14 : 16 }}
         >
-          <strong>Number Of Electric Vehicles:</strong> {evsCount}
+          <strong>Number Of Electric Vehicles:</strong> {evsCount || "N/A"}
         </Typography>
       </Box>
       <Box
@@ -109,7 +109,7 @@ const Sidebar = ({
           </Grid>
           <Grid item xs={4} textAlign="right">
             <Typography variant="body2" fontWeight="bold">
-              {cityInfo?.totalSolarKwhPerDay.toLocaleString()}
+              {cityInfo?.totalSolarKwhPerDay?.toLocaleString() || "N/A"}
             </Typography>
           </Grid>
 
@@ -118,7 +118,7 @@ const Sidebar = ({
           </Grid>
           <Grid item xs={4} textAlign="right">
             <Typography variant="body2" fontWeight="bold">
-              {cityInfo?.totalEVEnergyDemand.toLocaleString()}
+              {cityInfo?.totalEVEnergyDemand?.toLocaleString() || "N/A"}
             </Typography>
           </Grid>
 
@@ -129,7 +129,7 @@ const Sidebar = ({
           </Grid>
           <Grid item xs={2} textAlign="right">
             <Typography variant="body2" fontWeight="bold">
-              {cityInfo?.publicChargingDemand.toLocaleString()}
+              {cityInfo?.publicChargingDemand?.toLocaleString()||"N/A"}
             </Typography>
           </Grid>
 
@@ -140,7 +140,7 @@ const Sidebar = ({
           </Grid>
           <Grid item xs={2} textAlign="right">
             <Typography variant="body2" fontWeight="bold">
-              {cityInfo?.chargingStationCapacity.toLocaleString()}
+              {cityInfo?.chargingStationCapacity?.toLocaleString()||"N/A"}
             </Typography>
           </Grid>
 
@@ -160,7 +160,7 @@ const Sidebar = ({
                 cityInfo?.excessEnergy >= 0 ? "success.main" : "error.main"
               }
             >
-              {Math.abs(cityInfo?.excessEnergy).toLocaleString()}
+              {cityInfo?.excessEnergy?Math.abs(cityInfo.excessEnergy).toLocaleString():"N/A"}
             </Typography>
           </Grid>
         </Grid>
