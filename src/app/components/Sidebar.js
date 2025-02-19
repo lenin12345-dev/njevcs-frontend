@@ -167,7 +167,7 @@ const Sidebar = ({
       </Box>
 
       {/* Visual Section */}
-      {/* {  !isMobile &&  <Box
+      {  !isMobile &&  <Box
         sx={{
           display: "flex",
           justifyContent: "center",
@@ -181,8 +181,8 @@ const Sidebar = ({
       >
         <Avatar
             sx={{
-              width: isSidebarOpen ? 50 : 80,
-              height: isSidebarOpen ? 50 : 80,
+              width: isSidebarOpen ? 40 : 80,
+              height: isSidebarOpen ? 40 : 80,
               bgcolor:
                 cityInfo?.incomeLevel === "High"
                   ? "green"
@@ -197,10 +197,10 @@ const Sidebar = ({
           variant="body2"
           sx={{ ml: 2, color: "#555", textAlign: "center",    fontSize: isSidebarOpen ? 12 : 14, }}
         >
-          The income level of {cityInfo?.cityName} is categorized as{" "}
+          The income level of {cityInfo?.name} is categorized as{" "}
           <strong>{cityInfo?.incomeLevel}</strong>. 
         </Typography>
-      </Box>} */}
+      </Box>}
       {/* Heatmap Legend Section */}
       <Box
         sx={{
