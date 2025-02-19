@@ -133,7 +133,7 @@ const EVChargingStationsMap = () => {
 
         setCountyBoundary(formatBoundaryData);
         countyView();
-        await fetchEconomyDetails(county);
+        await fetchEconomyAndEvDetails(county,"county");
         const category = selectedCategory == 'economicZones' || selectedCategory == "demand"?"charging":selectedCategory
         
         await fetchCountyPlaces(null, null, county, category);
@@ -178,35 +178,7 @@ const EVChargingStationsMap = () => {
     { key: "level2Points", label: "Level 2 Points:" },
   ];
 
-  const fetchEvCount = async (cityName) => {
-    try {
-      let apiUrl;
-      if (activeTab == "city") {
-        cityName = cityName.replace(/ Township$/i, "").trim();
-
-        apiUrl = `api/evs/${cityName}`;
-      } else {
-        let countyName = cityName;
-
-        apiUrl = `api/evsLevel/${countyName}`;
-      }
-
-      const response = await fetch(apiUrl);
-      const data = await response.json();
-
-      if (data?.data) {
-        const { numberOfEvs } = data.data;
-        setEvsCount(numberOfEvs);
-      } else {
-        console.error("No economy details found for the city.");
-      }
-    } catch (error) {
-      console.error("Error fetching economy details:", error);
-    }
-  };
-
-
-
+ 
   const fetchCityBoundary = async (cityName) => {
     try {
       const response = await fetch(
@@ -256,32 +228,37 @@ const EVChargingStationsMap = () => {
 
     setCityBoundary(path);
   };
-  const fetchEconomyDetails =  async (cityName) => {
+  const determineIncomeLevel = (income) => {
+    if (income < 60000) {
+      return "Low";
+    } else if (income >= 60000 && income < 100000) {
+      return "Medium";
+    } else {
+      return "High";
+    }
+  };
+  const fetchEconomyAndEvDetails =  async (name,type) => {
     try {
-      let apiUrl;
 
-      cityName = cityName.replace(/ Township$/i, "").trim();
-      if (activeTab == "city") {
-        apiUrl = `api/economy/${cityName}`;
-      } else {
-        let countyName = cityName;
-        apiUrl = `api/economyLevel/${countyName}`;
-      }
+      name = name.replace(/ Township$/i, "").trim();
+      const apiUrl = `/api/demand?name=${encodeURIComponent(name)}&type=${type}`;
       
       const response = await fetch(apiUrl);
       const data = await response.json();
        
       if (data?.data) {
-        const { income, incomeLevel } = data.data;
-        setCityInfo({ cityName, income, incomeLevel });
-        updatePolygonFillColor(incomeLevel);
+        const { totalEvs, avgIncome } = data.data;
+        
+        setCityInfo({ name,income: avgIncome,incomeLevel: determineIncomeLevel(avgIncome),...data.data  });
+        updatePolygonFillColor(determineIncomeLevel(avgIncome));
         setSidebarVisible(true);
-        await fetchEvCount(cityName);
+        setEvsCount(totalEvs);
       } else {
-        console.error("No economy details found for the city.");
+        console.error("No economy or EV details found.");
       }
     } catch (error) {
-      console.error("Error fetching economy details:", error);
+      console.error("Error fetching economy and EV details:", error);
+
     }
   };  
 
@@ -381,7 +358,7 @@ const EVChargingStationsMap = () => {
     // setShowFilter,
     setSelectedCategory,
     fetchCityBoundary,
-    fetchEconomyDetails,
+    fetchEconomyAndEvDetails,
     fetchCityPlaces,
     selectedCategory,
     activeTab,

@@ -1,7 +1,7 @@
 import React from "react";
 import CloseIcon from "@mui/icons-material/Close";
 
-import { Drawer, Box, Typography, IconButton, Divider, Avatar } from "@mui/material";
+import { Drawer, Box, Typography, IconButton, Divider, Avatar,Grid } from "@mui/material";
 
 const Sidebar = ({activeTab, cityInfo, visible, onClose, evsCount,isSidebarOpen,isMobile,theme }) => {
     const appBarHeight = (theme.mixins.toolbar.minHeight || 56) + 8;
@@ -37,7 +37,7 @@ const Sidebar = ({activeTab, cityInfo, visible, onClose, evsCount,isSidebarOpen,
         }}
       >
         <Typography       variant={isMobile ? "subtitle1" : "h6"} fontWeight="bold" color="primary">
-        {cityInfo?.cityName ? `${cityInfo.cityName} ${activeTab === 'county' ? 'County' : ''}` : "City Details"}
+        {cityInfo?.name}
 
         </Typography>
         <IconButton  size="small" onClick={onClose}>
@@ -58,9 +58,55 @@ const Sidebar = ({activeTab, cityInfo, visible, onClose, evsCount,isSidebarOpen,
           <strong>Number Of Electric Vehicles:</strong> {evsCount}
         </Typography>
       </Box>
+      <Box sx={{ mt: 2, px: 2, py: 1, borderRadius: 2, backgroundColor: "#e3f2fd" }}>
+        <Typography variant="subtitle1" fontWeight="bold" color="primary" sx={{ mb: 1 }}>
+          🔋 Energy Overview
+        </Typography>
+        <Grid container spacing={1}>
+          <Grid item xs={8}>
+            <Typography variant="body2">🌞 Solar Energy (kWh/day):</Typography>
+          </Grid>
+          <Grid item xs={4} textAlign="right">
+            <Typography variant="body2" fontWeight="bold">{cityInfo?.totalSolarKwhPerDay.toLocaleString()}</Typography>
+          </Grid>
+
+          <Grid item xs={8}>
+            <Typography variant="body2">🚗 EV Energy Demand (kWh):</Typography>
+          </Grid>
+          <Grid item xs={4} textAlign="right">
+            <Typography variant="body2" fontWeight="bold">{cityInfo?.totalEVEnergyDemand.toLocaleString()}</Typography>
+          </Grid>
+
+          <Grid item xs={8}>
+            <Typography variant="body2">🔌 Public Charging Demand (kWh):</Typography>
+          </Grid>
+          <Grid item xs={4} textAlign="right">
+            <Typography variant="body2" fontWeight="bold">{cityInfo?.publicChargingDemand.toLocaleString()}</Typography>
+          </Grid>
+
+          <Grid item xs={8}>
+            <Typography variant="body2">⚡ Charging Station Capacity (kWh):</Typography>
+          </Grid>
+          <Grid item xs={4} textAlign="right">
+            <Typography variant="body2" fontWeight="bold">{cityInfo?.chargingStationCapacity.toLocaleString()}</Typography>
+          </Grid>
+
+      
+       
+
+          <Grid item xs={8}>
+            <Typography variant="body2">💡 Excess Energy (kWh):</Typography>
+          </Grid>
+          <Grid item xs={4} textAlign="right">
+            <Typography variant="body2" fontWeight="bold" color="success">
+              {cityInfo?.excessEnergy.toLocaleString()}
+            </Typography>
+          </Grid>
+        </Grid>
+      </Box>
 
       {/* Visual Section */}
-  {  !isMobile &&  <Box
+  {/* {  !isMobile &&  <Box
         sx={{
           display: "flex",
           justifyContent: "center",
@@ -91,10 +137,9 @@ const Sidebar = ({activeTab, cityInfo, visible, onClose, evsCount,isSidebarOpen,
           sx={{ ml: 2, color: "#555", textAlign: "center",    fontSize: isSidebarOpen ? 12 : 14, }}
         >
           The income level of {cityInfo?.cityName} is categorized as{" "}
-          <strong>{cityInfo?.incomeLevel}</strong>. The average income is
-          approximately ${cityInfo?.income.toLocaleString()}.
+          <strong>{cityInfo?.incomeLevel}</strong>. 
         </Typography>
-      </Box>}
+      </Box>} */}
            {/* Heatmap Legend Section */}
            <Box sx={{ mt: isMobile ? 2 : 1, px: 2, py: 1, borderRadius: 2, backgroundColor: "#f0f4f8" }}>
         <Typography variant="subtitle2" fontWeight="bold" sx={{ mb: 1 }}>
@@ -102,7 +147,8 @@ const Sidebar = ({activeTab, cityInfo, visible, onClose, evsCount,isSidebarOpen,
         </Typography>
         <Box display={"flex"} justifyContent={"space-between"} alignItems={"center"}>
         <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
-          <Box sx={{ width: 20, height: 20, backgroundColor: "#ff0000", borderRadius: "50%", mr: 1 }} />
+        
+          <Box sx={{ width: 20, height: 20, backgroundColor: "#008000", borderRadius: "50%", mr: 1 }} />
           <Typography variant="body2">High</Typography>
         </Box>
         <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
@@ -110,7 +156,7 @@ const Sidebar = ({activeTab, cityInfo, visible, onClose, evsCount,isSidebarOpen,
           <Typography variant="body2">Medium</Typography>
         </Box>
         <Box sx={{ display: "flex", alignItems: "center" }}>
-          <Box sx={{ width: 20, height: 20, backgroundColor: "#008000", borderRadius: "50%", mr: 1 }} />
+          <Box sx={{ width: 20, height: 20, backgroundColor: "#ff0000", borderRadius: "50%", mr: 1 }} />
           <Typography variant="body2">Low</Typography>
         </Box>
         </Box>

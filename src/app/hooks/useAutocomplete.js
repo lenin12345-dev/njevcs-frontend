@@ -11,7 +11,7 @@ const useAutocomplete = ({
   // setShowFilter,
   setSelectedCategory,
   fetchCityBoundary,
-  fetchEconomyDetails,
+  fetchEconomyAndEvDetails,
   fetchCityPlaces,
   selectedCategory,
   activeTab,
@@ -69,7 +69,7 @@ const useAutocomplete = ({
         try {
           setIsSidebarOpen(false);
           await fetchCityBoundary(cityName);
-          await fetchEconomyDetails(cityName);
+          await fetchEconomyAndEvDetails(cityName,'city');
           fetchCityPlaces(location, bounds, cityName, selectedCategory,'city');
           // setMessage(`Boundary created for ${cityName}.Hover over charging stations or store markers to see details.`); // Show message
 
@@ -89,7 +89,7 @@ const useAutocomplete = ({
     // setShowFilter,
     setSelectedCategory,
     fetchCityBoundary,
-    fetchEconomyDetails,
+    fetchEconomyAndEvDetails,
     fetchCityPlaces,
     selectedCategory,
   ]);
