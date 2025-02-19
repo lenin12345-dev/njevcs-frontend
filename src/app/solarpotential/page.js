@@ -194,7 +194,7 @@ const EVChargingStationsMap = () => {
       const response = await fetch(apiUrl);
       const data = await response.json();
 
-      if (data && data.data) {
+      if (data?.data) {
         const { numberOfEvs } = data.data;
         setEvsCount(numberOfEvs);
       } else {
@@ -217,7 +217,7 @@ const EVChargingStationsMap = () => {
       );
       const data = await response.json();
 
-      if (data && data.coordinates) {
+      if (data?.coordinates) {
         // Create and render the boundary on the map
           
         createDottedBoundary(data.coordinates);
@@ -716,7 +716,7 @@ const EVChargingStationsMap = () => {
           )}
           {hoveredCounty && <CountyInfoWindow county={hoveredCounty} />}
           {hoveredEvCounty && <EvCountyInfoWindow evCounty={hoveredEvCounty} />}
-          {countyBoundaries?.length && incomeData?.length && (
+          {countyBoundaries.length>0 && incomeData.length>0 && (
             <CountyBoundaries
               countyBoundaries={countyBoundaries}
               getIncomeLevel={getIncomeLevel}
