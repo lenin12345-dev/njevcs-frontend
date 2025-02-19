@@ -162,12 +162,7 @@ const Sidebar = ({activeTab, cityInfo, visible, onClose, evsCount,isSidebarOpen,
         </Box>
       </Box>
 
-      {/* Footer Section */}
-      <Box sx={{ mt:isMobile?0: 3, textAlign: "center" }}>
-        <Typography variant="caption"       sx={{ color: "#888", fontSize: isMobile ? 10 : 12 }}>
-          We will be adding more Solar Potential info for {cityInfo?.cityName}.
-        </Typography>
-      </Box>
+
     </Drawer>
     
   )
