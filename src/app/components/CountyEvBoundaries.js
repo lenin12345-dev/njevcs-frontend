@@ -1,19 +1,18 @@
-// CountyEvBoundaries.js
 import React from "react";
 import { Polygon } from "@react-google-maps/api";
 
 const CountyEvBoundaries = ({
   countyBoundaries,
-  getEvcsLevel,
-  getEvcsCount,
-  evcsColor,
+  getCountyData,
   setHoveredEvCounty,
   setHoveredCounty,
+  getColorBasedOnDemand
 }) => {
-  const handleMouseOver = (county, coordinates) => {
-    const countyName = county.name;
-    const evsLevel = getEvcsLevel(countyName);
-    const evsCountyCount = getEvcsCount(countyName);
+  const handleMouseOver = (countyName, coordinates) => {
+  
+    const {evcsLevel,evcsCount,totalEVEnergyDemand} = getCountyData(countyName);
+ 
+
 
     const bounds = new google.maps.LatLngBounds();
     coordinates.forEach(({ lat, lng }) =>
@@ -23,8 +22,9 @@ const CountyEvBoundaries = ({
     const center = bounds.getCenter();
     setHoveredEvCounty({
       name: countyName,
-      evsLevel,
-      evsCountyCount,
+      evcsLevel,
+      evcsCount,
+      totalEVEnergyDemand,
       latitude: center.lat(),
       longitude: center.lng(),
     });
@@ -39,7 +39,6 @@ const CountyEvBoundaries = ({
     <>
       {countyBoundaries.map((county, index) => {
         const countyName = county.name;
-        const evsLevel = getEvcsLevel(countyName);
         const coordinates = county.geo_shape.geometry.coordinates[0].map(
           ([lng, lat]) => ({
             lat,
@@ -47,6 +46,10 @@ const CountyEvBoundaries = ({
           })
         );
 
+      
+
+   ; // Determining color based on energy demand
+        
         return (
           <Polygon
             key={index}
@@ -55,10 +58,10 @@ const CountyEvBoundaries = ({
               strokeColor: "#0000FF",
               strokeOpacity: 0.8,
               strokeWeight: 2,
-              fillColor: evcsColor[evsLevel],
+              fillColor: getColorBasedOnDemand(countyName), // Color based on energy demand
               fillOpacity: 0.4,
             }}
-            onMouseOver={() => handleMouseOver(county, coordinates)}
+            onMouseOver={() => handleMouseOver(countyName, coordinates)}
             onMouseOut={handleMouseOut}
           />
         );

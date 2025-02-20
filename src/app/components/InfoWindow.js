@@ -4,7 +4,6 @@ import { Box, Typography } from "@mui/material";
 import Image from "next/image";
 
 const PlaceInfoWindow = ({ place, supportedChargingSpeeds, supportedChargingTypes, selectedCategory, publicImage, privateImage }) => {
-    console.log('place',place);
     
   if (!place) return null;
 
@@ -193,7 +192,7 @@ const CountyInfoWindow = ({ county }) => {
 
 const EvCountyInfoWindow = ({ evCounty }) => {
   if (!evCounty) return null;
-
+  
   return (
     <InfoWindow
       position={{ lat: evCounty.latitude, lng: evCounty.longitude }}
@@ -230,7 +229,7 @@ const EvCountyInfoWindow = ({ evCounty }) => {
             fontSize: "0.75rem",
           }}
         >
-          EV Charging Demand: {evCounty.evsLevel}
+          Number of EVs: {evCounty.evcsCount.toLocaleString()}
         </Typography>
         <Typography
           variant="body2"
@@ -239,7 +238,7 @@ const EvCountyInfoWindow = ({ evCounty }) => {
             fontSize: "0.75rem",
           }}
         >
-          Number of EVs: {evCounty.evsCountyCount.toLocaleString()}
+         Total Energy Demand: {evCounty.totalEVEnergyDemand.toLocaleString() +" kWh/day"}
         </Typography>
       </Box>
     </InfoWindow>

@@ -1,5 +1,15 @@
 import React from "react";
 import CloseIcon from "@mui/icons-material/Close";
+import j1772 from "../../../public/j1772.png";
+import tesla from "../../../public/tesla.png";
+import chademo from "../../../public/chademo.png";
+import nema1450 from "../../../public/nema1450.png";
+import nema515 from "../../../public/nema515.png";
+import nema520 from "../../../public/nema520.png";
+import combo from "../../../public/combo.png";
+import Image from "next/image";
+import Tooltip from "@mui/material/Tooltip";
+import InfoIcon from "@mui/icons-material/Info";
 
 import {
   Drawer,
@@ -22,7 +32,7 @@ const Sidebar = ({
   theme,
 }) => {
   const appBarHeight = (theme.mixins.toolbar.minHeight || 56) + 8;
-   
+
   return (
     <Drawer
       anchor={isMobile ? "bottom" : "right"}
@@ -48,7 +58,7 @@ const Sidebar = ({
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          mb: isMobile ? "4px" : 2,
+          mb: isMobile ? "4px" : 1,
           px: isMobile ? 1 : 2,
         }}
       >
@@ -57,7 +67,9 @@ const Sidebar = ({
           fontWeight="bold"
           color="primary"
         >
-          {cityInfo?.name}
+          {activeTab === "county"
+            ? `${cityInfo?.name} County`
+            : cityInfo?.name || "Unknown City"}
         </Typography>
         <IconButton size="small" onClick={onClose}>
           <CloseIcon />
@@ -71,13 +83,10 @@ const Sidebar = ({
           variant="body1"
           sx={{ mb: 1, fontSize: isMobile ? 14 : 16 }}
         >
-          <strong>Income Level:</strong> {cityInfo?.incomeLevel}
-        </Typography>
-        <Typography
-          variant="body1"
-          sx={{ mb: 1, fontSize: isMobile ? 14 : 16 }}
-        >
-          <strong>Average Income:</strong> {cityInfo && cityInfo.income?`${"$"+(cityInfo.income.toLocaleString())}`:"N/A"}
+          <strong>Average Income:</strong>{" "}
+          {cityInfo && cityInfo.income
+            ? `${"$" + cityInfo.income.toLocaleString()}`
+            : "N/A"}
         </Typography>
         <Typography
           variant="body1"
@@ -88,71 +97,83 @@ const Sidebar = ({
       </Box>
       <Box
         sx={{
-          mt: 2,
+          mt: 1,
           px: 1.5,
           py: 1,
           borderRadius: 2,
           backgroundColor: "#e3f2fd",
         }}
       >
-        <Typography
-          variant="subtitle1"
-          fontWeight="bold"
-          color="primary"
-          sx={{ mb: 1 }}
-        >
-          🔋 Energy Overview
-        </Typography>
-        <Grid container spacing={1}>
-          <Grid item xs={8}>
-            <Typography variant="body2">🌞 Solar Energy (kWh/day):</Typography>
+        <Grid container alignItems={"center"} spacing={1}>
+          <Grid item xs={7}>
+            <Typography
+              variant="subtitle1"
+              fontWeight="bold"
+              color="primary"
+              sx={{ mb: 0.3 }}
+            >
+              🔋Energy Overview
+            </Typography>
           </Grid>
-          <Grid item xs={4} textAlign="right">
+          <Grid item xs={5} textAlign="right">
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 0.3 }}>
+              (Unit: kWh/day)
+            </Typography>
+          </Grid>
+
+          <Grid item xs={9}>
+            <Typography variant="body2" display="inline">
+              🌞 Store Solar Potential
+            </Typography>
+            <Tooltip title="The solar energy potential is based on data from 5 stores: Costco, BJs, Walmart, Target, and Home Depot.">
+              <InfoIcon
+                fontSize="small"
+                sx={{ ml: 0.5, verticalAlign: "middle", color: "primary.main" }}
+              />
+            </Tooltip>
+          </Grid>
+          <Grid item xs={3} textAlign="right">
             <Typography variant="body2" fontWeight="bold">
               {cityInfo?.totalSolarKwhPerDay?.toLocaleString() || "N/A"}
             </Typography>
           </Grid>
 
-          <Grid item xs={8}>
-            <Typography variant="body2">🚗 EV Energy Demand (kWh):</Typography>
+          <Grid item xs={9}>
+            <Typography variant="body2">🚗 EV Energy Demand</Typography>
           </Grid>
-          <Grid item xs={4} textAlign="right">
+          <Grid item xs={3} textAlign="right">
             <Typography variant="body2" fontWeight="bold">
               {cityInfo?.totalEVEnergyDemand?.toLocaleString() || "N/A"}
             </Typography>
           </Grid>
 
-          <Grid item xs={10}>
-            <Typography variant="body2">
-              🔌 Public Charging Demand (kWh):
-            </Typography>
+          <Grid item xs={9}>
+            <Typography variant="body2">🔌 Public Charging Demand</Typography>
           </Grid>
-          <Grid item xs={2} textAlign="right">
+          <Grid item xs={3} textAlign="right">
             <Typography variant="body2" fontWeight="bold">
-              {cityInfo?.publicChargingDemand?.toLocaleString()||"N/A"}
+              {cityInfo?.publicChargingDemand?.toLocaleString() || "N/A"}
             </Typography>
           </Grid>
 
-          <Grid item xs={10}>
+          <Grid item xs={9}>
             <Typography variant="body2">
-              ⚡ Charging Station Capacity (kWh):
+              ⚡ Charging Station Capacity
             </Typography>
           </Grid>
-          <Grid item xs={2} textAlign="right">
+          <Grid item xs={3} textAlign="right">
             <Typography variant="body2" fontWeight="bold">
-              {cityInfo?.chargingStationCapacity?.toLocaleString()||"N/A"}
+              {cityInfo?.chargingStationCapacity?.toLocaleString() || "N/A"}
             </Typography>
           </Grid>
 
-          <Grid item xs={8}>
+          <Grid item xs={9}>
             <Typography variant="body2">
               💡{" "}
-              {cityInfo?.excessEnergy >= 0
-                ? "Excess Energy (kWh):"
-                : "Energy Deficit (kWh):"}
+              {cityInfo?.excessEnergy >= 0 ? "Excess Energy" : "Energy Deficit"}
             </Typography>
           </Grid>
-          <Grid item xs={4} textAlign="right">
+          <Grid item xs={3} textAlign="right">
             <Typography
               variant="body2"
               fontWeight="bold"
@@ -160,26 +181,163 @@ const Sidebar = ({
                 cityInfo?.excessEnergy >= 0 ? "success.main" : "error.main"
               }
             >
-              {cityInfo?.excessEnergy?Math.abs(cityInfo.excessEnergy).toLocaleString():"N/A"}
+              {cityInfo?.excessEnergy
+                ? Math.abs(cityInfo.excessEnergy).toLocaleString()
+                : "N/A"}
             </Typography>
           </Grid>
         </Grid>
       </Box>
+      {/* Chargers Section */}
+      {(cityInfo?.publicDcFast > 0 ||
+        cityInfo?.publicLevel1 > 0 ||
+        cityInfo?.publicLevel2 > 0) && (
+        <Box
+          sx={{
+            mt: 1,
+            px: 1.5,
+            py: 1,
+            backgroundColor: "#e3f2fd", // Light blue background for differentiation
+            borderRadius: 2,
+            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+          }}
+        >
+          <Typography
+            variant="subtitle1"
+            fontWeight="bold"
+            color="primary"
+            sx={{ mb: 0.3 }}
+          >
+            ⚡ Charging Infrastructure
+          </Typography>
+
+          <Grid container spacing={1}>
+            {/* Public DC Fast Chargers */}
+            {cityInfo?.publicDcFast > 0 && (
+              <>
+                <Grid item xs={9}>
+                  <Typography
+                    variant="body2"
+                    fontWeight="medium"
+                    color="text.primary"
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
+                    {/* Display both Tesla and CHAdeMO icons */}
+                    <Image src={tesla} alt={"tesla"} width={16} height={16} />
+                    <Image
+                      src={chademo}
+                      alt={"CHAdeMO"}
+                      width={16}
+                      height={16}
+                      style={{
+                        marginRight: "4px",
+                      }}
+                    />
+                    DC Fast Chargers
+                  </Typography>
+                </Grid>
+                <Grid item xs={3} textAlign="right">
+                  <Typography variant="body2" fontWeight="bold" color="primary">
+                    {cityInfo?.publicDcFast.toLocaleString() || "N/A"}
+                  </Typography>
+                </Grid>
+              </>
+            )}
+
+            {/* Public Level 1 Chargers */}
+            {cityInfo?.publicLevel1 > 0 && (
+              <>
+                <Grid item xs={9}>
+                  <Typography
+                    variant="body2"
+                    fontWeight="medium"
+                    color="text.primary"
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Image
+                      src={nema515}
+                      alt="NEMA 5-15"
+                      width={16}
+                      height={16}
+                    />
+                    <Image
+                      src={nema520}
+                      alt="NEMA 5-20"
+                      width={16}
+                      height={16}
+                      style={{
+                        marginRight: "4px",
+                      }}
+                    />
+                    Level 1 Chargers
+                  </Typography>
+                </Grid>
+                <Grid item xs={3} textAlign="right">
+                  <Typography variant="body2" fontWeight="bold" color="primary">
+                    {cityInfo?.publicLevel1.toLocaleString() || "N/A"}
+                  </Typography>
+                </Grid>
+              </>
+            )}
+
+            {/* Public Level 2 Chargers */}
+            {cityInfo?.publicLevel2 > 0 && (
+              <>
+                <Grid item xs={9}>
+                  <Typography
+                    variant="body2"
+                    fontWeight="medium"
+                    color="text.primary"
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Image src={j1772} alt="j1772" width={16} height={16} />
+                    <Image
+                      src={combo}
+                      alt="J1772 Combo"
+                      width={16}
+                      height={16}
+                      style={{
+                        marginRight: "4px",
+                      }}
+                    />
+                    Level 2 Chargers
+                  </Typography>
+                </Grid>
+                <Grid item xs={3} textAlign="right">
+                  <Typography variant="body2" fontWeight="bold" color="primary">
+                    {cityInfo?.publicLevel2.toLocaleString() || "N/A"}
+                  </Typography>
+                </Grid>
+              </>
+            )}
+          </Grid>
+        </Box>
+      )}
 
       {/* Visual Section */}
-      {  !isMobile &&  <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          mt: isSidebarOpen ? 2 : 3,
-          p: isSidebarOpen ? 1 : 2,
-          border: "1px solid #e0e0e0",
-          borderRadius: 2,
-          backgroundColor: "#f0f4f8",
-        }}
-      >
-        <Avatar
+      {!isMobile && cityInfo?.incomeLevel && (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            mt: isSidebarOpen ? 2 : 1.5,
+            p: isSidebarOpen ? 1 : 2,
+            border: "1px solid #e0e0e0",
+            borderRadius: 2,
+            backgroundColor: "#f0f4f8",
+          }}
+        >
+          <Avatar
             sx={{
               width: isSidebarOpen ? 40 : 80,
               height: isSidebarOpen ? 40 : 80,
@@ -190,17 +348,23 @@ const Sidebar = ({
                   ? "orange"
                   : "red",
             }}
-        >
-          {cityInfo?.incomeLevel.charAt(0)}
-        </Avatar>
-        <Typography
-          variant="body2"
-          sx={{ ml: 2, color: "#555", textAlign: "center",    fontSize: isSidebarOpen ? 12 : 14, }}
-        >
-          The income level of {cityInfo?.name} is categorized as{" "}
-          <strong>{cityInfo?.incomeLevel}</strong>. 
-        </Typography>
-      </Box>}
+          >
+            {cityInfo?.incomeLevel.charAt(0)}
+          </Avatar>
+          <Typography
+            variant="body2"
+            sx={{
+              ml: 2,
+              color: "#555",
+              textAlign: "center",
+              fontSize: isSidebarOpen ? 12 : 14,
+            }}
+          >
+            The income level of {cityInfo?.name} is categorized as{" "}
+            <strong>{cityInfo?.incomeLevel}</strong>.
+          </Typography>
+        </Box>
+      )}
       {/* Heatmap Legend Section */}
       <Box
         sx={{
@@ -256,6 +420,11 @@ const Sidebar = ({
             <Typography variant="body2">Low</Typography>
           </Box>
         </Box>
+        <Typography  color="text.secondary" sx={{ mt: 2,fontSize:"12px" }}>
+          <span style={{ color: "orangered" }}>Note:</span> The solar energy
+          potential is currently based on data from 5 stores: Costco, BJs,
+          Walmart, Target, and Home Depot.
+        </Typography>
       </Box>
     </Drawer>
   );

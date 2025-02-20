@@ -7,7 +7,7 @@ export default async function handler(req, res) {
 
   try {
     // Fetch evs data for counties 
-    const response = await fetch(`${config.API_URL}/evs/counties`);
+    const response = await fetch(`${config.API_URL}/demand/counties`);
 
     if (!response.ok) {
       const errorData = await response.json();
