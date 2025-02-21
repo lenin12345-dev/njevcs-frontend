@@ -59,7 +59,7 @@ const Sidebar = ({
           justifyContent: "space-between",
           alignItems: "center",
           mb: isMobile ? "4px" : 1,
-          px: isMobile ? 1 : 2,
+          px: isMobile ? 1 : 1,
         }}
       >
         <Typography
@@ -78,7 +78,7 @@ const Sidebar = ({
       <Divider />
 
       {/* Content Section */}
-      <Box sx={{ mt: isMobile ? "5px" : 2, px: isMobile ? 1 : 2 }}>
+      <Box sx={{ mt: isMobile ? "5px" : 2, px: isMobile ? 1 : 1 }}>
         <Typography
           variant="body1"
           sx={{ mb: 1, fontSize: isMobile ? 14 : 16 }}
