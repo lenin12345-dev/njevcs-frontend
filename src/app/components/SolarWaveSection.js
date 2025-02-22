@@ -60,7 +60,7 @@ const SolarWaveSection = () => {
             fontWeight: "bold",
             color: "#333",
             marginBottom: "10px",
-            fontSize: { xs: "1.8rem", sm: "2.2rem", md: "2.5rem" },
+            fontSize: { xs: "1.8rem", sm: "2.2rem", md: "2.3rem" },
           }}
         >
           Why <span style={{ color: "#4E9268" }}>Solar Wave?</span>

@@ -28,7 +28,7 @@ const RenewableEnergySection = () => {
                 fontWeight: "bold",
                 color: "#333",
                 marginBottom: 4,
-                fontSize: { xs: "1.8rem", sm: "2.2rem", md: "2.5rem" },
+                fontSize: { xs: "1.8rem", sm: "2.2rem", md: "2.3rem" },
                 textAlign:{xs:"center",sm:"auto"}
               }}
             >
@@ -60,7 +60,7 @@ const RenewableEnergySection = () => {
                 maxWidth: "650px",
               }}
             >
-             Explore our interactive mapping tool to identify optimal solar generation sites in cities. Gain insights into solar energy production potential and make informed decisions for installations.
+             Explore our interactive mapping tool to identify optimal solar generation sites in cities and counties of New Jersey. Gain insights into solar energy production potential and make informed decisions for installations.
             </Typography>
           </Box>
         </Grid>
