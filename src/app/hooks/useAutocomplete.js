@@ -16,6 +16,7 @@ const useAutocomplete = ({
   selectedCategory,
   activeTab,
   setIsSidebarOpen,
+  setSearchText,
   setMessage
 }) => {
   const defaultBounds = useMemo(() => ({
@@ -49,6 +50,9 @@ const useAutocomplete = ({
         component.types.includes("locality")
       );
       let cityName = cityComponent ? cityComponent.long_name : "Unknown City";
+      if (cityName) {
+        setSearchText(cityName +", NJ"); // Set the searchText to the selected city's name
+      }
 
       const isInNewJersey = place.address_components.some(
         (component) =>
@@ -112,6 +116,8 @@ const useAutocomplete = ({
       // Listen for place selection
       autocompleteRef.current.addListener("place_changed", () => {
         const place = autocompleteRef.current.getPlace();
+        
+      
         handlePlaceSelected(place);
       });
     }

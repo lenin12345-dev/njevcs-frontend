@@ -8,7 +8,7 @@ import {
   CircularProgress,
   Backdrop,
   useMediaQuery,
-  useTheme
+  useTheme,
 } from "@mui/material";
 import j1772 from "../../../public/j1772.png";
 import tesla from "../../../public/tesla.png";
@@ -30,7 +30,7 @@ import {
 import useAutocomplete from "../hooks/useAutocomplete";
 import CountyBoundaries from "../components/CountyBoundaries";
 import CountyEvBoundaries from "../components/CountyEvBoundaries";
-import {counties} from '../../constants'
+import { counties } from "../../constants";
 
 const containerStyle = {
   width: "100%",
@@ -72,12 +72,13 @@ const EVChargingStationsMap = () => {
   const [message, setMessage] = useState("");
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [countyBoundary, setCountyBoundary] = useState([]);
-  const [activeTab, setActiveTab] = useState("county"); 
+  const [activeTab, setActiveTab] = useState("county");
 
-    const theme = useTheme()
+  const theme = useTheme();
   const [selectedCounty, setSelectedCounty] = useState("");
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [searchText,setSearchText] =useState("")
 
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
@@ -91,7 +92,7 @@ const EVChargingStationsMap = () => {
     setIncomeData([]);
     clearInput();
     setSidebarVisible(false);
-    autocompleteRef.current = null
+    autocompleteRef.current = null;
   };
   const zoomToBoundary = (coordinates) => {
     const mapInstance = mapRef.current;
@@ -112,7 +113,7 @@ const EVChargingStationsMap = () => {
     setSelectedCounty(county);
     setLoading(true);
     setCountyBoundaries([]);
-    setIsSidebarOpen(false)
+    setIsSidebarOpen(false);
 
     try {
       const response = await fetch(
@@ -133,11 +134,13 @@ const EVChargingStationsMap = () => {
 
         setCountyBoundary(formatBoundaryData);
         countyView();
-        await fetchEconomyAndEvDetails(county,"county");
-        const category = selectedCategory == 'economicZones' || selectedCategory == "demand"?"charging":selectedCategory
-        
-        await fetchCountyPlaces(null, null, county, category);
+        await fetchEconomyAndEvDetails(county, "county");
+        const category =
+          selectedCategory == "economicZones" || selectedCategory == "demand"
+            ? "charging"
+            : selectedCategory;
 
+        await fetchCountyPlaces(null, null, county, category);
       }
     } catch (error) {
       console.error("Error fetching county boundary data:", error);
@@ -178,7 +181,6 @@ const EVChargingStationsMap = () => {
     { key: "level2Points", label: "Level 2 Points:" },
   ];
 
- 
   const fetchCityBoundary = async (cityName) => {
     try {
       const response = await fetch(
@@ -191,7 +193,7 @@ const EVChargingStationsMap = () => {
 
       if (data?.coordinates) {
         // Create and render the boundary on the map
-          
+
         createDottedBoundary(data.coordinates);
       } else {
         console.error("Failed to fetch city boundary.");
@@ -229,19 +231,20 @@ const EVChargingStationsMap = () => {
     setCityBoundary(path);
   };
 
-  const fetchEconomyAndEvDetails =  async (name,type) => {
+  const fetchEconomyAndEvDetails = async (name, type) => {
     try {
-
       name = name.replace(/ Township$/i, "").trim();
-      const apiUrl = `/api/demand?name=${encodeURIComponent(name)}&type=${type}`;
-      
+      const apiUrl = `/api/demand?name=${encodeURIComponent(
+        name
+      )}&type=${type}`;
+
       const response = await fetch(apiUrl);
       const data = await response.json();
-       
+
       if (data?.data) {
-        const { totalEvs, avgIncome,incomeLevel } = data.data;
-        
-        setCityInfo({ name,income: avgIncome,incomeLevel,...data.data  });
+        const { totalEvs, avgIncome, incomeLevel } = data.data;
+
+        setCityInfo({ name, income: avgIncome, incomeLevel, ...data.data });
         updatePolygonFillColor(incomeLevel);
         setSidebarVisible(true);
         setEvsCount(totalEvs);
@@ -250,10 +253,8 @@ const EVChargingStationsMap = () => {
       }
     } catch (error) {
       console.error("Error fetching economy and EV details:", error);
-
     }
-  };  
-
+  };
 
   const fetchCityPlaces = (location, bounds, cityName, category) => {
     cityName = cityName.replace(/ Township$/i, "").trim();
@@ -262,13 +263,9 @@ const EVChargingStationsMap = () => {
     setLoading(true);
 
     if (category === "charging") {
-   
-        apiUrl = `api/evcs/${cityName}`;
-      
+      apiUrl = `api/evcs/${cityName}`;
     } else if (category === "stores") {
-  
-        apiUrl = `api/stores/${cityName}`;
-      
+      apiUrl = `api/stores/${cityName}`;
     }
 
     fetch(apiUrl)
@@ -284,9 +281,9 @@ const EVChargingStationsMap = () => {
         setLoading(false);
         setCountyBoundaries([]);
         setIncomeData([]);
-      
-          setZoomLevel("12");
-        
+
+        setZoomLevel("12");
+
         showMessage(
           `Boundary created for ${cityName}.Hover over charging stations or store markers to see details.`
         );
@@ -298,22 +295,17 @@ const EVChargingStationsMap = () => {
   const fetchCountyPlaces = (location, bounds, cityName, category) => {
     cityName = cityName.replace(/ Township$/i, "").trim();
     let apiUrl;
-      
+
     setLoading(true);
 
     if (category === "charging") {
-   
-        let countyName = cityName;
-        apiUrl = `api/evcsLevel/${countyName}`;
-        setSelectedCategory('charging')
-    
+      let countyName = cityName;
+      apiUrl = `api/evcsLevel/${countyName}`;
+      setSelectedCategory("charging");
     } else if (category === "stores") {
-   
-        let countyName = cityName;
-        apiUrl = `api/storesLevel/${countyName}`;
-        setSelectedCategory('stores')
-
-    
+      let countyName = cityName;
+      apiUrl = `api/storesLevel/${countyName}`;
+      setSelectedCategory("stores");
     }
 
     fetch(apiUrl)
@@ -355,14 +347,14 @@ const EVChargingStationsMap = () => {
     selectedCategory,
     activeTab,
     setIsSidebarOpen,
+    setSearchText,
     setMessage: showMessage,
   });
 
   const updatePolygonFillColor = (incomeLevel) => {
-
     setPolygonOptions((prevOptions) => ({
       ...prevOptions,
-      fillColor:heatMapColors[incomeLevel] || "#FFFFFF",
+      fillColor: heatMapColors[incomeLevel] || "#FFFFFF",
       fillOpacity: 0.5,
     }));
   };
@@ -386,7 +378,6 @@ const EVChargingStationsMap = () => {
       setIncomeData(incomeDataResponse.data);
       stateView();
       showMessage("Hover over a county to see the income details.");
-
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -396,7 +387,7 @@ const EVChargingStationsMap = () => {
 
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
-    setPlaces([])
+    setPlaces([]);
 
     const cityName = autocompleteRef.current
       ? autocompleteRef.current
@@ -406,7 +397,6 @@ const EVChargingStationsMap = () => {
           )?.long_name
       : "Unknown City";
 
-       
     if (category === "economicZones") {
       fetchCountyData();
       setHoveredEvCounty(null);
@@ -415,11 +405,11 @@ const EVChargingStationsMap = () => {
       setSidebarVisible(false);
       setCountyBoundary([]);
       setSelectedCounty("");
-      setPlaces([])
-      setIsSidebarOpen(false)
+      setPlaces([]);
+      setIsSidebarOpen(false);
 
       // setCountyBoundaries([]);
-    } else if (category === "demand" ) {
+    } else if (category === "demand") {
       fetchCountyEvData();
       setHoveredCounty(null);
       setHoveredEvCounty(null);
@@ -427,15 +417,14 @@ const EVChargingStationsMap = () => {
       setSidebarVisible(false);
       setCountyBoundary([]);
       setSelectedCounty("");
-      setPlaces([])
+      setPlaces([]);
 
-      setIsSidebarOpen(false)
+      setIsSidebarOpen(false);
 
       // setCountyBoundaries([]);
 
       setDemand(true);
     } else {
-
       if (activeTab === "city") {
         fetchCityPlaces(cityCoordinates, null, cityName, category);
       } else {
@@ -481,7 +470,7 @@ const EVChargingStationsMap = () => {
       setSelectedCategory("charging");
       setCityBoundary(null);
       setSidebarVisible(false);
-      setPolygonOptions(null)
+      setPolygonOptions(null);
     }
   };
   const stateView = () => {
@@ -498,7 +487,7 @@ const EVChargingStationsMap = () => {
     clearInput();
     setZoomLevel("10");
   };
-  
+
   const resetFilters = () => {
     // setShowFilter(false);
     setPlaces([]);
@@ -523,39 +512,36 @@ const EVChargingStationsMap = () => {
     const countyIncome = incomeData.find((item) => item.county === countyName);
     return countyIncome ? countyIncome.incomeLevel : "Medium";
   };
- 
 
+  const getCountyData = (countyName) => {
+    const countyEvcs = evcsData.find((item) => item.county === countyName);
 
-const getCountyData = (countyName) => {
-  const countyEvcs = evcsData.find((item) => item.county === countyName);
+    if (!countyEvcs) {
+      return {
+        evcsLevel: "Medium",
+        evcsCount: 0,
+        totalEVEnergyDemand: 0,
+      };
+    }
 
-  if (!countyEvcs) {
     return {
-      evcsLevel: "Medium", 
-      evcsCount: 0, 
-      totalEVEnergyDemand: 0 
+      evcsLevel: countyEvcs.incomeLevel || "Medium",
+      evcsCount: countyEvcs.totalEvs || 0,
+      totalEVEnergyDemand: countyEvcs.totalEVEnergyDemand || 0,
     };
-  }
-
-  return {
-    evcsLevel: countyEvcs.incomeLevel || "Medium",
-    evcsCount: countyEvcs.totalEvs || 0,
-    totalEVEnergyDemand: countyEvcs.totalEVEnergyDemand || 0
   };
-};
 
-
-const getColorBasedOnDemand = (name) => {
- let  county = evcsData.find(((item)=>item.county === name));
-  const {totalEVEnergyDemand} = county;
-  if (totalEVEnergyDemand < 50000) {
-    return "red"; // Low demand
-  } else if (totalEVEnergyDemand >= 50000 && totalEVEnergyDemand < 150000) {
-    return "orange"; // Medium demand
-  } else {
-    return "green"; // High demand
-  }
-};
+  const getColorBasedOnDemand = (name) => {
+    let county = evcsData.find((item) => item.county === name);
+    const { totalEVEnergyDemand } = county;
+    if (totalEVEnergyDemand < 50000) {
+      return "red"; // Low demand
+    } else if (totalEVEnergyDemand >= 50000 && totalEVEnergyDemand < 150000) {
+      return "orange"; // Medium demand
+    } else {
+      return "green"; // High demand
+    }
+  };
   const getAvgIncome = (countyName) => {
     const countyIncome = incomeData.find((item) => item.county === countyName);
     return countyIncome ? countyIncome.income : 0;
@@ -568,54 +554,86 @@ const getColorBasedOnDemand = (name) => {
     setIsMapLoaded(true);
   };
 
-   
-  
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
-    {      isLoaded &&  <Box
-        sx={{
-          position: "absolute",
-          top: "150px",
-          left: "40px",
-          zIndex: 10,
-          width: "300px",
-        }}
-      >
-{activeTab=="city"&& <input
-          ref={inputRef}
-          type="text"
-          placeholder="Enter a city in New Jersey"
-          onChange={handleInputChange}
-          // disabled={activeTab == "county"}
-          style={{
-            width: isMobile?"auto":"100%",
-            padding: "10px",
-            fontSize: "16px",
-            border: "1px solid #ccc",
-            borderRadius: "8px",
-            position:isMobile?"absolute":"static",
-            zIndex:isMobile?9999:"auto",
-            top:isMobile?"10px":"auto",
-            left: isMobile ? "0" : "auto",
-            transform: isMobile ? "translateX(-25px)" : "none", 
+      {isLoaded && (
+        <Box
+          sx={{
+            position: "absolute",
+            top: "150px",
+            left: "40px",
+            zIndex: 10,
+            width: "300px",
           }}
-        />}
- <FilterBox
-          // showFilter={showFilter}
-          selectedCategory={selectedCategory}
-          handleCategoryChange={handleCategoryChange}
-          resetFilters={resetFilters}
-          cityBoundary={cityBoundary}
-          selectedCounty={selectedCounty}
-          handleCountyChange={handleCountyChange}
-          counties={counties}
-          handleTabChange={handleTabChange}
-          activeTab={activeTab}
-          countyBoundary={countyBoundary}
-          isSidebarOpen={isSidebarOpen}
-          setIsSidebarOpen={setIsSidebarOpen}
-        />
-      </Box>}
+        >
+          {activeTab == "city" && (
+            <div
+              style={{
+                position: "relative",
+                width: isMobile ? "auto" : "100%",
+              }}
+            >
+              <input
+                ref={inputRef}
+                type="text"
+                placeholder="Enter a city in New Jersey"
+                value={searchText} 
+                onChange={(e) => {
+                  setSearchText(e.target.value);
+                  handleInputChange(e); 
+                }}
+                style={{
+                  width: "100%",
+                  padding: "10px",
+                  fontSize: "16px",
+                  border: "1px solid #ccc",
+                  borderRadius: "8px",
+                  position: isMobile ? "absolute" : "static",
+                  zIndex: isMobile ? 9999 : "auto",
+                  top: isMobile ? "10px" : "auto",
+                  left: isMobile ? "0" : "auto",
+                  transform: isMobile ? "translateX(-25px)" : "none",
+                  paddingRight: "35px", 
+                }}
+              />
+              {searchText && (
+                <span
+                  onClick={() => {
+                    setSearchText(""); 
+                    handleInputChange({ target: { value: "" } }); 
+                  }}
+                  style={{
+                    position: "absolute",
+                    right: "10px",
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    cursor: "pointer",
+                    fontSize: "20px",
+                    color: "black",
+                  }}
+                >
+                  ×
+                </span>
+              )}
+            </div>
+          )}
+          <FilterBox
+            // showFilter={showFilter}
+            selectedCategory={selectedCategory}
+            handleCategoryChange={handleCategoryChange}
+            resetFilters={resetFilters}
+            cityBoundary={cityBoundary}
+            selectedCounty={selectedCounty}
+            handleCountyChange={handleCountyChange}
+            counties={counties}
+            handleTabChange={handleTabChange}
+            activeTab={activeTab}
+            countyBoundary={countyBoundary}
+            isSidebarOpen={isSidebarOpen}
+            setIsSidebarOpen={setIsSidebarOpen}
+          />
+        </Box>
+      )}
 
       <Snackbar
         open={warning}
@@ -640,18 +658,17 @@ const getColorBasedOnDemand = (name) => {
 
       {/* Google Map */}
 
-      {(!isLoaded ||
-        loading) && (
-          <Backdrop
-            sx={{
-              color: "#fff",
-              zIndex: (theme) => theme.zIndex.drawer + 1,
-            }}
-            open={!isLoaded || loading} // Open the backdrop while the map is loading
-          >
-            <CircularProgress color="inherit" />
-          </Backdrop>
-        )}
+      {(!isLoaded || loading) && (
+        <Backdrop
+          sx={{
+            color: "#fff",
+            zIndex: (theme) => theme.zIndex.drawer + 1,
+          }}
+          open={!isLoaded || loading} // Open the backdrop while the map is loading
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      )}
 
       {isLoaded && (
         <GoogleMap
@@ -703,7 +720,7 @@ const getColorBasedOnDemand = (name) => {
           )}
           {hoveredCounty && <CountyInfoWindow county={hoveredCounty} />}
           {hoveredEvCounty && <EvCountyInfoWindow evCounty={hoveredEvCounty} />}
-          {countyBoundaries.length>0 && incomeData.length>0 && (
+          {countyBoundaries.length > 0 && incomeData.length > 0 && (
             <CountyBoundaries
               countyBoundaries={countyBoundaries}
               getIncomeLevel={getIncomeLevel}
