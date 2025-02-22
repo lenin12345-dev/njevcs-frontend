@@ -110,7 +110,7 @@ const Statistics = () => {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: "#f76b1c29", 
+        backgroundColor: "rgb(243, 241, 250);", 
         padding: "30px 5%",
         my: 7,
         borderRadius: 2,
@@ -129,7 +129,7 @@ const Statistics = () => {
           textAlign: { xs: "center", sm: "auto" },
         }}
       >
-        New Jersey's <span style={{ color: "#4E9268" }}>Green Revolution</span>
+     New Jersey&apos;s <span style={{ color: "#4E9268" }}>Green Revolution</span>
       </Typography>
       <Box
         sx={{
