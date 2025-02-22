@@ -1,10 +1,13 @@
 "use client";
 import { useEffect, useState, useRef } from "react";
-import { Box, Typography, Card, CardContent } from "@mui/material";
+import { Box, Typography, Card, CardContent,useMediaQuery,useTheme } from "@mui/material";
 import { motion } from "framer-motion";
 
 const Counter = ({ value, label, duration = 4000, startCounting }) => {
   const [count, setCount] = useState(0);
+    const theme = useTheme();
+  
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   useEffect(() => {
     if (startCounting) {
@@ -27,7 +30,7 @@ const Counter = ({ value, label, duration = 4000, startCounting }) => {
     <motion.div whileHover={{ scale: 1.05 }} aria-label={`${label} counter`}>
       <Card
         sx={{
-          width: 200,
+          width: isMobile?300:200,
           textAlign: "left",
           boxShadow: 5,
           borderRadius: 3,
