@@ -92,6 +92,7 @@ const EVChargingStationsMap = () => {
     setIncomeData([]);
     clearInput();
     setSidebarVisible(false);
+    setSearchText("");
     autocompleteRef.current = null;
   };
   const zoomToBoundary = (coordinates) => {
@@ -569,8 +570,9 @@ const EVChargingStationsMap = () => {
           {activeTab == "city" && (
             <div
               style={{
-                position: "relative",
-                width: isMobile ? "auto" : "100%",
+                position: isMobile?"absolute":"relative",
+                width: isMobile ? "80%" : "100%",
+                marginTop:isMobile?2:"auto"
               }}
             >
               <input
@@ -604,12 +606,13 @@ const EVChargingStationsMap = () => {
                   }}
                   style={{
                     position: "absolute",
-                    right: "10px",
+                    right: isMobile?"36px":"10px",
                     top: "50%",
-                    transform: "translateY(-50%)",
+                    transform: isMobile?"translateY(81%)":"translateY(-50%)",
                     cursor: "pointer",
                     fontSize: "20px",
                     color: "black",
+                    zIndex:isMobile?9999:"auto"
                   }}
                 >
                   ×

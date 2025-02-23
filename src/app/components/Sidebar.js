@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState} from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import j1772 from "../../../public/j1772.png";
 import tesla from "../../../public/tesla.png";
@@ -19,6 +19,7 @@ import {
   Divider,
   Avatar,
   Grid,
+  Button
 } from "@mui/material";
 
 const Sidebar = ({
@@ -32,6 +33,7 @@ const Sidebar = ({
   theme,
 }) => {
   const appBarHeight = (theme.mixins.toolbar.minHeight || 56) + 8;
+  const [isExpanded, setIsExpanded] = useState(false);
 
   return (
     <Drawer
@@ -42,7 +44,7 @@ const Sidebar = ({
       PaperProps={{
         sx: {
           width: isMobile ? "100%" : 350,
-          height: isMobile ? "18vh" : "auto",
+          height: isMobile ? (isExpanded ? "50vh" : "18vh") : "auto",
           maxHeight: isMobile ? "60vh" : "90vh",
           top: isMobile ? "auto" : `${appBarHeight}px`,
           padding: isMobile ? 1 : 2,
@@ -53,6 +55,25 @@ const Sidebar = ({
       }}
     >
       {/* Header Section */}
+      {isMobile && (
+        <Button
+          onClick={() => setIsExpanded((prev) => !prev)}
+          sx={{
+            position: "absolute",
+            top: 4,
+            left: "50%",
+            transform: "translateX(-50%)",
+            backgroundColor: "#ddd",
+            borderRadius: "50%",
+            minWidth: 32,
+            height: 32,
+            fontSize: "1rem",
+            textTransform: "none",
+          }}
+        >
+          {isExpanded ? "−" : "+"}
+        </Button>
+      )}
       <Box
         sx={{
           display: "flex",
