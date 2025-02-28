@@ -8,7 +8,7 @@ export default function About() {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        padding: { xs: 3, sm: 2 },
+        padding: { xs: 3, sm: 1 },
         paddingBottom: 3,
         backgroundColor: "#f5f5f5",
       }}
@@ -17,12 +17,11 @@ export default function About() {
   <Typography
               variant="h4"
               component="h2"
-              gutterBottom
               sx={{
                 fontWeight: "bold",
                 color: "#333",
                 textAlign: "center",
-                marginBottom: 4,
+                marginTop:"4px",
                 fontSize: { xs: "2rem", sm: "3rem", md: "2.5rem" },
               }}
             >
@@ -79,7 +78,7 @@ export default function About() {
             variant="body1"
             sx={{
               color: "text.secondary",
-              marginTop: 3,
+              marginTop: 2,
               fontSize: { xs: "0.9rem", sm: "1.1rem" },
             }}
           >
@@ -249,7 +248,7 @@ export default function About() {
                   fontWeight: "bold",
                   color: "#333",
                   textAlign: "center",
-                  marginTop: "20px",
+                  marginTop: "10px",
                   fontSize: { xs: "1.5rem", sm: "2rem" },
                 }}
               >
@@ -299,7 +298,7 @@ export default function About() {
             color: "text.secondary",
             fontWeight: "bold",
             textAlign: "center",
-            marginTop: "20px",
+            marginTop: "10px",
             fontSize: { xs: "0.9rem", sm: "1rem" },
           }}
         >

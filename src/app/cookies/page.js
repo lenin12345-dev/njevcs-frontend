@@ -2,14 +2,17 @@ import { Container, Typography } from "@mui/material";
 
 const CookiePolicy = () => {
   return (
-    <Container maxWidth="md" sx={{ py: 4 }}>
+    <Container maxWidth="md" sx={{ py: 1.8 }}>
       <Typography
         variant="h4"
+        component="h2"
+        gutterBottom
         sx={{
           fontWeight: "bold",
           color: "#333",
           textAlign: "center",
-          marginBottom: 4,
+          marginTop: "4px",
+
           fontSize: { xs: "2rem", sm: "3rem", md: "2.5rem" },
         }}
       >
@@ -24,19 +27,20 @@ const CookiePolicy = () => {
         our platform.
       </Typography>
 
-      <Typography variant="h5" sx={{ color: "#4E9268", mt: 3 }}>
+      <Typography variant="h5" sx={{ color: "#4E9268", mt: 2 }}>
         What Are Cookies?
       </Typography>
       <Typography>
         Cookies are small text files stored on your device when you visit a
         website. They help us remember your preferences, improve site
         functionality, and understand how you interact with our platform.
-        Cookies may be classified as either &quot;session&quot; (temporary) cookies, which
-        expire when you close your browser, or &quot;persistent&quot; cookies, which
-        remain on your device for a set period.
+        Cookies may be classified as either &quot;session&quot; (temporary)
+        cookies, which expire when you close your browser, or
+        &quot;persistent&quot; cookies, which remain on your device for a set
+        period.
       </Typography>
 
-      <Typography variant="h5" sx={{ color: "#4E9268", mt: 3 }}>
+      <Typography variant="h5" sx={{ color: "#4E9268", mt: 2 }}>
         How We Use Cookies
       </Typography>
       <Typography>We use cookies for the following purposes:</Typography>
@@ -67,10 +71,12 @@ const CookiePolicy = () => {
         </li>
       </ul>
 
-      <Typography variant="h5" sx={{ color: "#4E9268", mt: 3 }}>
+      <Typography variant="h5" sx={{ color: "#4E9268", mt: 2 }}>
         Your Choices Regarding Cookies
       </Typography>
-      <Typography>You can control and manage cookies in several ways:</Typography>
+      <Typography>
+        You can control and manage cookies in several ways:
+      </Typography>
       <ul>
         <li>
           <Typography>
@@ -87,7 +93,7 @@ const CookiePolicy = () => {
         </li>
       </ul>
 
-      <Typography variant="h5" sx={{ color: "#4E9268", mt: 3 }}>
+      <Typography variant="h5" sx={{ color: "#4E9268", mt: 2 }}>
         Changes to This Cookie Policy
       </Typography>
       <Typography>

@@ -51,6 +51,7 @@ const Sidebar = ({
           backgroundColor: "#f9f9f9",
           boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
           borderRadius: isMobile ? "16px 16px 0 0" : "8px 0 0 8px",
+          overflowY: "auto",
         },
       }}
     >
