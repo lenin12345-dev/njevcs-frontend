@@ -556,7 +556,7 @@ const EVChargingStationsMap = () => {
   };
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
+    <div style={{ display: "flex", flexDirection: "column", height: "100vh"}}>
       {isLoaded && (
         <Box
           sx={{
