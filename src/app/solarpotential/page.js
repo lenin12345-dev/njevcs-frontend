@@ -32,6 +32,7 @@ import CountyBoundaries from "../components/CountyBoundaries";
 import CountyEvBoundaries from "../components/CountyEvBoundaries";
 import { counties } from "../../constants";
 
+
 const containerStyle = {
   width: "100%",
   height: "100%",
@@ -79,6 +80,7 @@ const EVChargingStationsMap = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [searchText,setSearchText] =useState("")
+  const [isShowArrowIcon,setIsShowArrowIcon] = useState(true);
 
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
@@ -92,6 +94,7 @@ const EVChargingStationsMap = () => {
     setIncomeData([]);
     clearInput();
     setSidebarVisible(false);
+    setIsShowArrowIcon(true)
     setSearchText("");
     autocompleteRef.current = null;
   };
@@ -115,6 +118,7 @@ const EVChargingStationsMap = () => {
     setLoading(true);
     setCountyBoundaries([]);
     setIsSidebarOpen(false);
+    setIsShowArrowIcon(true)
 
     try {
       const response = await fetch(
@@ -248,6 +252,7 @@ const EVChargingStationsMap = () => {
         setCityInfo({ name, income: avgIncome, incomeLevel, ...data.data });
         updatePolygonFillColor(incomeLevel);
         setSidebarVisible(true);
+        
         setEvsCount(totalEvs);
       } else {
         console.error("No economy or EV details found.");
@@ -404,6 +409,7 @@ const EVChargingStationsMap = () => {
       setHoveredCounty(null);
       setEvcsData([]);
       setSidebarVisible(false);
+      setIsShowArrowIcon(true)
       setCountyBoundary([]);
       setSelectedCounty("");
       setPlaces([]);
@@ -416,6 +422,7 @@ const EVChargingStationsMap = () => {
       setHoveredEvCounty(null);
       setIncomeData([]);
       setSidebarVisible(false);
+      setIsShowArrowIcon(true)
       setCountyBoundary([]);
       setSelectedCounty("");
       setPlaces([]);
@@ -472,6 +479,7 @@ const EVChargingStationsMap = () => {
       setCityBoundary(null);
       setSidebarVisible(false);
       setPolygonOptions(null);
+      setIsShowArrowIcon(true)
     }
   };
   const stateView = () => {
@@ -499,6 +507,7 @@ const EVChargingStationsMap = () => {
     setIncomeData([]);
     clearInput();
     setSidebarVisible(false);
+    setIsShowArrowIcon(true)
     setCountyBoundary([]);
     setSelectedCounty("");
     setActiveTab("county");
@@ -548,7 +557,10 @@ const EVChargingStationsMap = () => {
     return countyIncome ? countyIncome.income : 0;
   };
 
-  const closeSidebar = () => setSidebarVisible(false);
+  const closeSidebar = () => {
+    setSidebarVisible(false);
+    setIsShowArrowIcon(false);
+  }
 
   const onLoad = (map) => {
     mapRef.current = map;
@@ -752,6 +764,10 @@ const EVChargingStationsMap = () => {
             isSidebarOpen={isSidebarOpen}
             isMobile={isMobile}
             theme={theme}
+            setIsShowArrowIcon={setIsShowArrowIcon}
+            isShowArrowIcon={isShowArrowIcon}
+            selectedCategory={selectedCategory}
+            setSidebarVisible = {setSidebarVisible}
           />
         </GoogleMap>
       )}
