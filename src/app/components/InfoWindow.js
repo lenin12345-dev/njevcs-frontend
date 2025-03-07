@@ -2,8 +2,9 @@ import React from "react";
 import { InfoWindow } from "@react-google-maps/api";
 import { Box, Typography } from "@mui/material";
 import Image from "next/image";
+import {supportedChargingTypes,supportedChargingSpeeds} from "../../constants"
 
-const PlaceInfoWindow = ({ place, supportedChargingSpeeds, supportedChargingTypes, selectedCategory, publicImage, privateImage }) => {
+const PlaceInfoWindow = ({ place, selectedCategory, publicImage, privateImage }) => {
     
   if (!place) return null;
 

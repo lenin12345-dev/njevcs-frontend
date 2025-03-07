@@ -12,7 +12,7 @@ import combo from "../../../public/combo.png";
 import Image from "next/image";
 import Tooltip from "@mui/material/Tooltip";
 import InfoIcon from "@mui/icons-material/Info";
-import ExpandButton from "../components/ExpandButton"
+import ExpandButton from "../components/ExpandButton";
 
 import {
   Drawer,
@@ -37,13 +37,11 @@ const Sidebar = ({
   setIsShowArrowIcon,
   isShowArrowIcon,
   selectedCategory,
-  setSidebarVisible
+  setSidebarVisible,
 }) => {
   const appBarHeight = (theme.mixins.toolbar.minHeight || 56) + 8;
-  
 
-  
-  const [isExpanded,setIsExpanded] = useState(false)
+  const [isExpanded, setIsExpanded] = useState(false);
   return (
     <>
       <Drawer
@@ -224,7 +222,8 @@ const Sidebar = ({
                   cityInfo?.excessEnergy >= 0 ? "success.main" : "error.main"
                 }
               >
-                {cityInfo?.excessEnergy
+                {cityInfo?.excessEnergy !== undefined &&
+                cityInfo?.excessEnergy !== null
                   ? Math.abs(cityInfo.excessEnergy).toLocaleString()
                   : "N/A"}
               </Typography>
@@ -483,7 +482,10 @@ const Sidebar = ({
         </Box>
       </Drawer>
       {!isShowArrowIcon && (
-      <ExpandButton setSidebarVisible={setSidebarVisible} setIsShowArrowIcon={setIsShowArrowIcon} />
+        <ExpandButton
+          setSidebarVisible={setSidebarVisible}
+          setIsShowArrowIcon={setIsShowArrowIcon}
+        />
       )}
     </>
   );

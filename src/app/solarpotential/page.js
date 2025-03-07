@@ -10,13 +10,7 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import j1772 from "../../../public/j1772.png";
-import tesla from "../../../public/tesla.png";
-import chademo from "../../../public/chademo.png";
-import nema1450 from "../../../public/nema1450.png";
-import nema515 from "../../../public/nema515.png";
-import nema520 from "../../../public/nema520.png";
-import combo from "../../../public/combo.png";
+
 import publicImage from "../../../public/public.png";
 import privateImage from "../../../public/private.svg";
 import Sidebar from "../components/Sidebar";
@@ -30,7 +24,7 @@ import {
 import useAutocomplete from "../hooks/useAutocomplete";
 import CountyBoundaries from "../components/CountyBoundaries";
 import CountyEvBoundaries from "../components/CountyEvBoundaries";
-import { counties } from "../../constants";
+import { counties,heatMapColors } from "../../constants";
 
 
 const containerStyle = {
@@ -164,28 +158,7 @@ const EVChargingStationsMap = () => {
     googleMapsApiKey: key,
     libraries: ["places"],
   });
-  const heatMapColors = {
-    Low: "#ff0000",
-    Medium: "#ffa500",
-    High: "#008000",
-  };
-
-  const supportedChargingTypes = [
-    { key: "j1772", label: "J1772", icon: j1772 },
-    { key: "tesla", label: "Tesla", icon: tesla },
-    { key: "chademo", label: "CHAdeMO", icon: chademo },
-    { key: "nema1450", label: "NEMA 1450", icon: nema1450 },
-    { key: "nema515", label: "NEMA 5-15", icon: nema515 },
-    { key: "nema520", label: "NEMA 5-20", icon: nema520 },
-    { key: "j1772COMBO", label: "J1772 Combo", icon: combo },
-  ];
-
-  const supportedChargingSpeeds = [
-    { key: "dcFastPoints", label: "DC Fast Charging:" },
-    { key: "level1Points", label: "Level 1 Points:" },
-    { key: "level2Points", label: "Level 2 Points:" },
-  ];
-
+ 
   const fetchCityBoundary = async (cityName) => {
     try {
       const response = await fetch(
@@ -514,7 +487,7 @@ const EVChargingStationsMap = () => {
   };
   const clearInput = () => {
     if (inputRef.current) {
-      inputRef.current.value = ""; // Clear the input field
+      inputRef.current.value = ""; 
     }
   };
   // Combine income level data with county boundaries
@@ -726,8 +699,6 @@ const EVChargingStationsMap = () => {
           {hoveredPlace && (
             <PlaceInfoWindow
               place={hoveredPlace}
-              supportedChargingSpeeds={supportedChargingSpeeds}
-              supportedChargingTypes={supportedChargingTypes}
               selectedCategory={selectedCategory}
               publicImage={publicImage}
               privateImage={privateImage}
@@ -740,7 +711,6 @@ const EVChargingStationsMap = () => {
               countyBoundaries={countyBoundaries}
               getIncomeLevel={getIncomeLevel}
               getAvgIncome={getAvgIncome}
-              incomeColors={heatMapColors}
               setHoveredCounty={setHoveredCounty}
               setHoveredEvCounty={setHoveredEvCounty}
             />

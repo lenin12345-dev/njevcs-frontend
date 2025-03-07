@@ -1,12 +1,13 @@
 // CountyBoundaries.js
 import React from "react";
 import { Polygon } from "@react-google-maps/api";
+import { heatMapColors } from "../../constants";
+
 
 const CountyBoundaries = ({
   countyBoundaries,
   getIncomeLevel,
   getAvgIncome,
-  incomeColors,
   setHoveredCounty,
   setHoveredEvCounty,
 }) => {
@@ -55,7 +56,7 @@ const CountyBoundaries = ({
               strokeColor: "#FF0000",
               strokeOpacity: 0.8,
               strokeWeight: 2,
-              fillColor: incomeColors[incomeLevel],
+              fillColor: heatMapColors[incomeLevel],
               fillOpacity: 0.4,
             }}
             onMouseOver={() => handleMouseOver(county, coordinates)}
