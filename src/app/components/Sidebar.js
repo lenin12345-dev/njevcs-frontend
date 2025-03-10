@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import j1772 from "../../../public/j1772.png";
 import tesla from "../../../public/tesla.png";
 import chademo from "../../../public/chademo.png";

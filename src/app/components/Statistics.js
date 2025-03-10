@@ -1,12 +1,19 @@
 "use client";
 import { useEffect, useState, useRef } from "react";
-import { Box, Typography, Card, CardContent,useMediaQuery,useTheme } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Card,
+  CardContent,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import { motion } from "framer-motion";
 
 const Counter = ({ value, label, duration = 4000, startCounting }) => {
   const [count, setCount] = useState(0);
-    const theme = useTheme();
-  
+  const theme = useTheme();
+
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   useEffect(() => {
@@ -30,15 +37,15 @@ const Counter = ({ value, label, duration = 4000, startCounting }) => {
     <motion.div whileHover={{ scale: 1.05 }} aria-label={`${label} counter`}>
       <Card
         sx={{
-          width: isMobile?300:200,
+          width: isMobile ? 300 : 200,
           textAlign: "left",
           boxShadow: 5,
           borderRadius: 3,
-          backgroundColor: "#f4f8f4", 
+          backgroundColor: "#f4f8f4",
           padding: 1,
           transition: "transform 0.3s ease-in-out",
           "&:hover": {
-            transform: "scale(1.05)", 
+            transform: "scale(1.05)",
             boxShadow: 10,
           },
         }}
@@ -113,7 +120,7 @@ const Statistics = () => {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: "rgb(243, 241, 250);", 
+        backgroundColor: "rgb(243, 241, 250);",
         padding: "30px 5%",
         my: 7,
         borderRadius: 2,
@@ -127,12 +134,27 @@ const Statistics = () => {
         sx={{
           fontWeight: "bold",
           color: "#333",
-          marginBottom: 4,
+          marginBottom: 2,
           fontSize: { xs: "1.8rem", sm: "2.2rem", md: "2.3rem" },
           textAlign: { xs: "center", sm: "auto" },
         }}
       >
-     New Jersey&apos;s <span style={{ color: "#4E9268" }}>Green Revolution</span>
+        New Jersey&apos;s{" "}
+        <span style={{ color: "#4E9268" }}>Green Revolution</span>
+      </Typography>
+      <Typography
+        variant="h4"
+        component="h2"
+        sx={{
+          color: "#555",
+          fontWeight: "bold",
+          marginBottom: 3,
+
+          fontSize: {  xs: "1.2rem", sm: "1.4rem", md: "1.6rem" },
+          textAlign: { xs: "center", sm: "auto" },
+        }}
+      >
+        Leading the Charge Toward a Sustainable Future
       </Typography>
       <Box
         sx={{
