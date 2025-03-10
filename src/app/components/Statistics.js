@@ -146,16 +146,24 @@ const Statistics = () => {
         variant="h4"
         component="h2"
         sx={{
-          color: "#555",
+          color: "#444",
           fontWeight: "bold",
           marginBottom: 3,
-
-          fontSize: {  xs: "1.2rem", sm: "1.4rem", md: "1.6rem" },
+          fontSize: { xs: "1.2rem", sm: "1.4rem", md: "1.6rem" },
           textAlign: { xs: "center", sm: "auto" },
         }}
       >
-        Leading the Charge Toward a Sustainable Future
+        Turning <span style={{ color: "#4E9268" }}>parking spaces</span> into {" "}
+        <span style={{ color: "#2C7A4B", fontWeight: "bold" }}>
+          energy hubs
+        </span>
+        , with solar panels that{" "}
+        <span style={{ color: "#4E9268", fontWeight: "bold" }}>
+          boost efficiency {" "}
+        </span>
+        and savings.
       </Typography>
+
       <Box
         sx={{
           display: "flex",
