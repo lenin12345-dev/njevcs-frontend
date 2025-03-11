@@ -379,51 +379,8 @@ const Sidebar = ({
             </Grid>
           </Box>
         )}
-
-        {/* Visual Section */}
-        {!isMobile && cityInfo?.incomeLevel && (
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              mt: isSidebarOpen ? 2 : 1,
-              p: isSidebarOpen ? 1 : 1.5,
-              border: "1px solid #e0e0e0",
-              borderRadius: 2,
-              backgroundColor: "#f0f4f8",
-            }}
-          >
-            <Avatar
-              sx={{
-                width: 50,
-                height: 50,
-                bgcolor:
-                  cityInfo?.incomeLevel === "High"
-                    ? "green"
-                    : cityInfo?.incomeLevel === "Medium"
-                    ? "orange"
-                    : "red",
-              }}
-            >
-              {cityInfo?.incomeLevel.charAt(0)}
-            </Avatar>
-            <Typography
-              variant="body2"
-              sx={{
-                ml: 2,
-                color: "#555",
-                textAlign: "center",
-                fontSize: isSidebarOpen ? 12 : 13,
-              }}
-            >
-              The income level of {cityInfo?.name} is categorized as{" "}
-              <strong>{cityInfo?.incomeLevel}</strong>.
-            </Typography>
-          </Box>
-        )}
-        {/* Cities List */}
-        {activeTab === "county" && (
+                {/* Cities List */}
+                {activeTab === "county" && (
           <Box
             sx={{
               mt: 1,
@@ -436,12 +393,12 @@ const Sidebar = ({
             <Box sx={{ display: "flex", alignItems: "center", mb: 0.5 }}>
               <LocationCityIcon sx={{ color: "green", mr: 0.5,fontSize:"16px" }} />
               <Typography
-                variant="subtitle2"
+                variant="subtitle1"
                 fontWeight="bold"
                 color="primary"
             
               >
-                Top Energy Deficit Cities in {cityInfo?.name}
+                Top Energy Deficit Cities 
               </Typography>
             </Box>
             <List sx={{ maxHeight: "100px", overflowY: "auto", p: 0 }}>
@@ -488,6 +445,50 @@ const Sidebar = ({
             </List>
           </Box>
         )}
+
+        {/* Visual Section */}
+        {!isMobile && cityInfo?.incomeLevel && (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              mt: isSidebarOpen ? 2 : 1,
+              p: isSidebarOpen ? 1 : 1.5,
+              border: "1px solid #e0e0e0",
+              borderRadius: 2,
+              backgroundColor: "#f0f4f8",
+            }}
+          >
+            <Avatar
+              sx={{
+                width: 50,
+                height: 50,
+                bgcolor:
+                  cityInfo?.incomeLevel === "High"
+                    ? "green"
+                    : cityInfo?.incomeLevel === "Medium"
+                    ? "orange"
+                    : "red",
+              }}
+            >
+              {cityInfo?.incomeLevel.charAt(0)}
+            </Avatar>
+            <Typography
+              variant="body2"
+              sx={{
+                ml: 2,
+                color: "#555",
+                textAlign: "center",
+                fontSize: isSidebarOpen ? 12 : 13,
+              }}
+            >
+              The income level of {cityInfo?.name} is categorized as{" "}
+              <strong>{cityInfo?.incomeLevel}</strong>.
+            </Typography>
+          </Box>
+        )}
+
         {/* Heatmap Legend Section */}
         <Box
           sx={{
