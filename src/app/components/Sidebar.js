@@ -390,7 +390,8 @@ const Sidebar = ({
               backgroundColor: "#e3f2fd",
             }}
           >
-            <Box sx={{ display: "flex", alignItems: "center", mb: 0.5 }}>
+            <Box sx={{ display: "flex", alignItems: "center",justifyContent:"space-between", mb: 0.5 }}>
+              <Box display={"flex"} alignItems={"center"}>
               <LocationCityIcon sx={{ color: "green", mr: 0.5,fontSize:"16px" }} />
               <Typography
                 variant="subtitle1"
@@ -399,6 +400,14 @@ const Sidebar = ({
             
               >
                 Top Energy Deficit Cities 
+              </Typography>
+              </Box>
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                sx={{ mb: 0.3,fontSize:12 }}
+              >
+                (Unit: kWh/day)
               </Typography>
             </Box>
             <List sx={{ maxHeight: "100px", overflowY: "auto", p: 0 }}>
@@ -436,9 +445,10 @@ const Sidebar = ({
                         fontWeight: "bold",
                         fontSize: "0.75rem",
                         color: "error.main",
+                        px:1
                       }}
                     >
-                      {Math.abs(city.excessEnergy).toLocaleString()} kWh
+                      {Math.abs(city.excessEnergy).toLocaleString()}
                     </Typography>
                   </ListItem>
                 ))}
