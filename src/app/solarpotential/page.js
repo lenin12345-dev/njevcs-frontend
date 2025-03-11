@@ -75,6 +75,7 @@ const EVChargingStationsMap = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [searchText,setSearchText] =useState("")
   const [isShowArrowIcon,setIsShowArrowIcon] = useState(true);
+  const [topCityData,setTopCityData] = useState([]);
 
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
@@ -134,6 +135,7 @@ const EVChargingStationsMap = () => {
         setCountyBoundary(formatBoundaryData);
         countyView();
         await fetchEconomyAndEvDetails(county, "county");
+        await fetchTopCities(county);
         const category =
           selectedCategory == "economicZones" || selectedCategory == "demand"
             ? "charging"
@@ -147,6 +149,22 @@ const EVChargingStationsMap = () => {
       setLoading(false);
     }
   };
+  const fetchTopCities = async(county)=>{
+    county = county.replace(/ Township$/i, "").trim();
+     try {
+      const response = await fetch(`api/topcity/${county}`);
+      const data = await response.json();
+        if (data.length){
+          setTopCityData(data);
+        }
+        console.log(data)
+
+      
+     } catch (error) {
+        console.error(error)
+     }
+  }
+  console.log('ggggg',topCityData)
 
   const showMessage = (msg) => {
     setMessage(msg);
@@ -727,6 +745,7 @@ const EVChargingStationsMap = () => {
           )}
           <Sidebar
             activeTab={activeTab}
+            topCityData={topCityData}
             cityInfo={cityInfo}
             visible={sidebarVisible}
             onClose={closeSidebar}

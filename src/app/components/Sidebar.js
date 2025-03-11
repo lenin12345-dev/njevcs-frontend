@@ -11,6 +11,9 @@ import Image from "next/image";
 import Tooltip from "@mui/material/Tooltip";
 import InfoIcon from "@mui/icons-material/Info";
 import ExpandButton from "../components/ExpandButton";
+import PlaceIcon from "@mui/icons-material/Place";
+import LocationCityIcon from '@mui/icons-material/LocationCity';
+
 
 import {
   Drawer,
@@ -21,6 +24,8 @@ import {
   Avatar,
   Grid,
   Button,
+  List,
+  ListItem,
 } from "@mui/material";
 
 const Sidebar = ({
@@ -36,6 +41,7 @@ const Sidebar = ({
   isShowArrowIcon,
   selectedCategory,
   setSidebarVisible,
+  topCityData,
 }) => {
   const appBarHeight = (theme.mixins.toolbar.minHeight || 56) + 8;
 
@@ -107,7 +113,7 @@ const Sidebar = ({
         <Divider />
 
         {/* Content Section */}
-        <Box sx={{ mt: isMobile ? "5px" : 2, px: isMobile ? 1 : 0 }}>
+        <Box sx={{ mt: isMobile ? "5px" : 1, px: isMobile ? 1 : 0 }}>
           <Typography
             variant="body1"
             sx={{ mb: 1, fontSize: isMobile ? 14 : 16 }}
@@ -126,7 +132,6 @@ const Sidebar = ({
         </Box>
         <Box
           sx={{
-            mt: 1,
             px: 1.5,
             py: 1,
             borderRadius: 2,
@@ -382,8 +387,8 @@ const Sidebar = ({
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-              mt: isSidebarOpen ? 2 : 1.5,
-              p: isSidebarOpen ? 1 : 2,
+              mt: isSidebarOpen ? 2 : 1,
+              p: isSidebarOpen ? 1 : 1.5,
               border: "1px solid #e0e0e0",
               borderRadius: 2,
               backgroundColor: "#f0f4f8",
@@ -391,8 +396,8 @@ const Sidebar = ({
           >
             <Avatar
               sx={{
-                width: isSidebarOpen ? 40 : 80,
-                height: isSidebarOpen ? 40 : 80,
+                width: 50,
+                height: 50,
                 bgcolor:
                   cityInfo?.incomeLevel === "High"
                     ? "green"
@@ -409,12 +414,78 @@ const Sidebar = ({
                 ml: 2,
                 color: "#555",
                 textAlign: "center",
-                fontSize: isSidebarOpen ? 12 : 14,
+                fontSize: isSidebarOpen ? 12 : 13,
               }}
             >
               The income level of {cityInfo?.name} is categorized as{" "}
               <strong>{cityInfo?.incomeLevel}</strong>.
             </Typography>
+          </Box>
+        )}
+        {/* Cities List */}
+        {activeTab === "county" && (
+          <Box
+            sx={{
+              mt: 1,
+              px: 1,
+              py: 1.2,
+              borderRadius: 2,
+              backgroundColor: "#e3f2fd",
+            }}
+          >
+            <Box sx={{ display: "flex", alignItems: "center", mb: 0.5 }}>
+              <LocationCityIcon sx={{ color: "green", mr: 0.5,fontSize:"16px" }} />
+              <Typography
+                variant="subtitle2"
+                fontWeight="bold"
+                color="primary"
+            
+              >
+                Top Energy Deficit Cities in {cityInfo?.name}
+              </Typography>
+            </Box>
+            <List sx={{ maxHeight: "100px", overflowY: "auto", p: 0 }}>
+              {topCityData?.length > 0 &&
+                topCityData.map((city, index) => (
+                  <ListItem
+                    key={index}
+                    sx={{
+                      minHeight: 30, // Ensuring compact row height
+                      py: 0.5,
+                      px: 0.5,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between", // Aligns text neatly
+                      borderBottom: "1px solid #ddd", // Separator for better visibility
+                    }}
+                  >
+                    {/* City Name with Icon */}
+                    <Box sx={{ display: "flex", alignItems: "center" }}>
+                      <PlaceIcon
+                        sx={{ color: "primary.main", fontSize: 16, mr: 0.5 }}
+                      />
+                      <Typography
+                        variant="body2"
+                        sx={{ fontWeight: "bold", fontSize: "0.8rem" }}
+                      >
+                        {city.city}
+                      </Typography>
+                    </Box>
+
+                    {/* Energy Deficit Display */}
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        fontWeight: "bold",
+                        fontSize: "0.75rem",
+                        color: "error.main",
+                      }}
+                    >
+                      {Math.abs(city.excessEnergy).toLocaleString()} kWh
+                    </Typography>
+                  </ListItem>
+                ))}
+            </List>
           </Box>
         )}
         {/* Heatmap Legend Section */}
@@ -472,7 +543,7 @@ const Sidebar = ({
               <Typography variant="body2">Low</Typography>
             </Box>
           </Box>
-          <Typography color="text.secondary" sx={{ mt: 2, fontSize: "12px" }}>
+          <Typography color="text.secondary" sx={{ mt: 0.8, fontSize: "12px" }}>
             <span style={{ color: "orangered" }}>Note:</span> The solar energy
             potential is currently based on data from 5 stores: Costco, BJs,
             Walmart, Target, and Home Depot.
