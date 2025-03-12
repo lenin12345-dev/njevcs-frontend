@@ -24,8 +24,7 @@ import {
 import useAutocomplete from "../hooks/useAutocomplete";
 import CountyBoundaries from "../components/CountyBoundaries";
 import CountyEvBoundaries from "../components/CountyEvBoundaries";
-import { counties,heatMapColors } from "../../constants";
-
+import { counties, heatMapColors } from "../../constants";
 
 const containerStyle = {
   width: "100%",
@@ -73,9 +72,9 @@ const EVChargingStationsMap = () => {
   const [selectedCounty, setSelectedCounty] = useState("");
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [searchText,setSearchText] =useState("")
-  const [isShowArrowIcon,setIsShowArrowIcon] = useState(true);
-  const [topCityData,setTopCityData] = useState([]);
+  const [searchText, setSearchText] = useState("");
+  const [isShowArrowIcon, setIsShowArrowIcon] = useState(true);
+  const [topCityData, setTopCityData] = useState([]);
 
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
@@ -89,7 +88,7 @@ const EVChargingStationsMap = () => {
     setIncomeData([]);
     clearInput();
     setSidebarVisible(false);
-    setIsShowArrowIcon(true)
+    setIsShowArrowIcon(true);
     setSearchText("");
     autocompleteRef.current = null;
   };
@@ -113,7 +112,7 @@ const EVChargingStationsMap = () => {
     setLoading(true);
     setCountyBoundaries([]);
     setIsSidebarOpen(false);
-    setIsShowArrowIcon(true)
+    setIsShowArrowIcon(true);
 
     try {
       const response = await fetch(
@@ -149,22 +148,22 @@ const EVChargingStationsMap = () => {
       setLoading(false);
     }
   };
-  const fetchTopCities = async(county)=>{
+  const fetchTopCities = async (county) => {
     county = county.replace(/ Township$/i, "").trim();
-     try {
+    setLoading(true);
+
+    try {
       const response = await fetch(`api/topcity/${county}`);
       const data = await response.json();
-        if (data.length){
-          setTopCityData(data);
-        }
-        console.log(data)
+      if (data.length) {
+        setTopCityData(data);
+      }
+      setLoading(false);
 
-      
-     } catch (error) {
-        console.error(error)
-     }
-  }
-  console.log('ggggg',topCityData)
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const showMessage = (msg) => {
     setMessage(msg);
@@ -176,7 +175,7 @@ const EVChargingStationsMap = () => {
     googleMapsApiKey: key,
     libraries: ["places"],
   });
- 
+
   const fetchCityBoundary = async (cityName) => {
     try {
       const response = await fetch(
@@ -243,7 +242,7 @@ const EVChargingStationsMap = () => {
         setCityInfo({ name, income: avgIncome, incomeLevel, ...data.data });
         updatePolygonFillColor(incomeLevel);
         setSidebarVisible(true);
-        
+
         setEvsCount(totalEvs);
       } else {
         console.error("No economy or EV details found.");
@@ -400,7 +399,7 @@ const EVChargingStationsMap = () => {
       setHoveredCounty(null);
       setEvcsData([]);
       setSidebarVisible(false);
-      setIsShowArrowIcon(true)
+      setIsShowArrowIcon(true);
       setCountyBoundary([]);
       setSelectedCounty("");
       setPlaces([]);
@@ -413,7 +412,7 @@ const EVChargingStationsMap = () => {
       setHoveredEvCounty(null);
       setIncomeData([]);
       setSidebarVisible(false);
-      setIsShowArrowIcon(true)
+      setIsShowArrowIcon(true);
       setCountyBoundary([]);
       setSelectedCounty("");
       setPlaces([]);
@@ -470,7 +469,7 @@ const EVChargingStationsMap = () => {
       setCityBoundary(null);
       setSidebarVisible(false);
       setPolygonOptions(null);
-      setIsShowArrowIcon(true)
+      setIsShowArrowIcon(true);
     }
   };
   const stateView = () => {
@@ -498,14 +497,14 @@ const EVChargingStationsMap = () => {
     setIncomeData([]);
     clearInput();
     setSidebarVisible(false);
-    setIsShowArrowIcon(true)
+    setIsShowArrowIcon(true);
     setCountyBoundary([]);
     setSelectedCounty("");
     setActiveTab("county");
   };
   const clearInput = () => {
     if (inputRef.current) {
-      inputRef.current.value = ""; 
+      inputRef.current.value = "";
     }
   };
   // Combine income level data with county boundaries
@@ -551,7 +550,7 @@ const EVChargingStationsMap = () => {
   const closeSidebar = () => {
     setSidebarVisible(false);
     setIsShowArrowIcon(false);
-  }
+  };
 
   const onLoad = (map) => {
     mapRef.current = map;
@@ -559,7 +558,7 @@ const EVChargingStationsMap = () => {
   };
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", height: "100vh"}}>
+    <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
       {isLoaded && (
         <Box
           sx={{
@@ -573,19 +572,19 @@ const EVChargingStationsMap = () => {
           {activeTab == "city" && (
             <div
               style={{
-                position: isMobile?"absolute":"relative",
+                position: isMobile ? "absolute" : "relative",
                 width: isMobile ? "80%" : "100%",
-                marginTop:isMobile?2:"auto"
+                marginTop: isMobile ? 2 : "auto",
               }}
             >
               <input
                 ref={inputRef}
                 type="text"
                 placeholder="Enter a city in New Jersey"
-                value={searchText} 
+                value={searchText}
                 onChange={(e) => {
                   setSearchText(e.target.value);
-                  handleInputChange(e); 
+                  handleInputChange(e);
                 }}
                 style={{
                   width: "100%",
@@ -598,24 +597,26 @@ const EVChargingStationsMap = () => {
                   top: isMobile ? "10px" : "auto",
                   left: isMobile ? "0" : "auto",
                   transform: isMobile ? "translateX(-25px)" : "none",
-                  paddingRight: "35px", 
+                  paddingRight: "35px",
                 }}
               />
               {searchText && (
                 <span
                   onClick={() => {
-                    setSearchText(""); 
-                    handleInputChange({ target: { value: "" } }); 
+                    setSearchText("");
+                    handleInputChange({ target: { value: "" } });
                   }}
                   style={{
                     position: "absolute",
-                    right: isMobile?"36px":"10px",
+                    right: isMobile ? "36px" : "10px",
                     top: "50%",
-                    transform: isMobile?"translateY(81%)":"translateY(-50%)",
+                    transform: isMobile
+                      ? "translateY(81%)"
+                      : "translateY(-50%)",
                     cursor: "pointer",
                     fontSize: "20px",
                     color: "black",
-                    zIndex:isMobile?9999:"auto"
+                    zIndex: isMobile ? 9999 : "auto",
                   }}
                 >
                   ×
@@ -668,11 +669,12 @@ const EVChargingStationsMap = () => {
         <Backdrop
           sx={{
             color: "#fff",
+            backgroundColor: "rgba(255, 255, 255, 0.2)",
             zIndex: (theme) => theme.zIndex.drawer + 1,
           }}
           open={!isLoaded || loading} // Open the backdrop while the map is loading
         >
-          <CircularProgress color="inherit" />
+            <CircularProgress sx={{ color: "#4CAF50" }} />
         </Backdrop>
       )}
 
@@ -756,7 +758,7 @@ const EVChargingStationsMap = () => {
             setIsShowArrowIcon={setIsShowArrowIcon}
             isShowArrowIcon={isShowArrowIcon}
             selectedCategory={selectedCategory}
-            setSidebarVisible = {setSidebarVisible}
+            setSidebarVisible={setSidebarVisible}
           />
         </GoogleMap>
       )}
