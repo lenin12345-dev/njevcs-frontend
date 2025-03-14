@@ -12,8 +12,7 @@ import Tooltip from "@mui/material/Tooltip";
 import InfoIcon from "@mui/icons-material/Info";
 import ExpandButton from "../components/ExpandButton";
 import PlaceIcon from "@mui/icons-material/Place";
-import LocationCityIcon from '@mui/icons-material/LocationCity';
-
+import LocationCityIcon from "@mui/icons-material/LocationCity";
 
 import {
   Drawer,
@@ -379,33 +378,41 @@ const Sidebar = ({
             </Grid>
           </Box>
         )}
-                {/* Cities List */}
-                {activeTab === "county" && (
+        {/* Cities List */}
+        {activeTab === "county" && (
           <Box
             sx={{
               mt: 1,
-              px: 1.5,
+              px: 1.2,
               py: 1.2,
               borderRadius: 2,
               backgroundColor: "#e3f2fd",
             }}
           >
-            <Box sx={{ display: "flex", alignItems: "center",justifyContent:"space-between", mb: 0.5 }}>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                mb: 0.5,
+              }}
+            >
               <Box display={"flex"} alignItems={"center"}>
-              <LocationCityIcon sx={{ color: "green", mr: 0.5,fontSize:"16px" }} />
-              <Typography
-                variant="subtitle1"
-                fontWeight="bold"
-                color="primary"
-            
-              >
-                Top Energy Deficit Cities 
-              </Typography>
+                <LocationCityIcon
+                  sx={{ color: "green", mr: 0.2, fontSize: "16px" }}
+                />
+                <Typography
+                  variant="subtitle1"
+                  fontWeight="bold"
+                  color="primary"
+                >
+                  Top Energy Deficit Cities
+                </Typography>
               </Box>
               <Typography
                 variant="body2"
                 color="text.secondary"
-                sx={{ mb: 0.3,fontSize:12 }}
+                sx={{ mb: 0.3, fontSize: 11 }}
               >
                 (Unit: kWh/day)
               </Typography>
@@ -413,46 +420,67 @@ const Sidebar = ({
             <List sx={{ maxHeight: "100px", overflowY: "auto", p: 0 }}>
               {topCityData?.length > 0 &&
                 topCityData.map((city, index) => (
-                  <ListItem
+                  <Tooltip
                     key={index}
-                    sx={{
-                      minHeight: 30, // Ensuring compact row height
-                      py: 0.5,
-                      px: 0.5,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between", // Aligns text neatly
-                      borderBottom: "1px solid #ddd", // Separator for better visibility
-                    }}
+                    title={
+                      <Box sx={{ p: 1 }}>
+                        <Typography variant="body2">
+                          <strong>Income Level:</strong> {city.incomeLevel}
+                        </Typography>
+                        <Typography variant="body2">
+                          <strong>Total EVs:</strong> {city.totalEvs}
+                        </Typography>
+                        <Typography variant="body2">
+                          <strong>Toal EV Energy Demand:</strong>{" "}
+                          {city.totalEVEnergyDemand} kWh
+                        </Typography>
+                      </Box>
+                    }
+                    arrow
+                    placement="right"
                   >
-                    {/* City Name with Icon */}
-                    <Box sx={{ display: "flex", alignItems: "center" }}>
-                      <PlaceIcon
-                        sx={{ color: "primary.main", fontSize: 16, mr: 0.5 }}
-                      />
-                      <Typography
-                        variant="body2"
-                        sx={{ fontWeight: "bold", fontSize: "0.8rem" }}
-                      >
-                        {city.city}
-                      </Typography>
-                    </Box>
-
-                    {/* Energy Deficit Display */}
-                    <Typography
-                      variant="body2"
+                    <ListItem
                       sx={{
-                        fontWeight: "bold",
-                        fontSize: "0.75rem",
-                        color: "error.main",
-                        px:1
+                        minHeight: 30,
+                        py: 0.5,
+                        px: 0.5,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        borderBottom: "1px solid #ddd",
+                        cursor:"pointer"
                       }}
                     >
-                      {Math.abs(city.excessEnergy).toLocaleString()}
-                    </Typography>
-                  </ListItem>
+                      {/* City Name with Icon */}
+                      <Box sx={{ display: "flex", alignItems: "center" }}>
+                        <PlaceIcon
+                          sx={{ color: "primary.main", fontSize: 16, mr: 0.5 }}
+                        />
+                        <Typography
+                          variant="body2"
+                          sx={{ fontWeight: "bold", fontSize: "0.8rem" }}
+                        >
+                          {city.city}
+                        </Typography>
+                      </Box>
+
+                      {/* Energy Deficit Display */}
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          fontWeight: "bold",
+                          fontSize: "0.75rem",
+                          color: "error.main",
+                          px: 1,
+                        }}
+                      >
+                        {Math.abs(city.excessEnergy).toLocaleString()} kWh
+                      </Typography>
+                    </ListItem>
+                  </Tooltip>
                 ))}
             </List>
+            
           </Box>
         )}
 
