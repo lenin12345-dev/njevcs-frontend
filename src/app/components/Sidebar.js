@@ -420,26 +420,9 @@ const Sidebar = ({
             <List sx={{ maxHeight: "100px", overflowY: "auto", p: 0 }}>
               {topCityData?.length > 0 &&
                 topCityData.map((city, index) => (
-                  <Tooltip
-                    key={index}
-                    title={
-                      <Box sx={{ p: 1 }}>
-                        <Typography variant="body2">
-                          <strong>Income Level:</strong> {city.incomeLevel}
-                        </Typography>
-                        <Typography variant="body2">
-                          <strong>Total EVs:</strong> {city.totalEvs}
-                        </Typography>
-                        <Typography variant="body2">
-                          <strong>Toal EV Energy Demand:</strong>{" "}
-                          {city.totalEVEnergyDemand} kWh
-                        </Typography>
-                      </Box>
-                    }
-                    arrow
-                    placement="right"
-                  >
+           
                     <ListItem
+                    key={index}
                       sx={{
                         minHeight: 30,
                         py: 0.5,
@@ -448,7 +431,6 @@ const Sidebar = ({
                         alignItems: "center",
                         justifyContent: "space-between",
                         borderBottom: "1px solid #ddd",
-                        cursor:"pointer"
                       }}
                     >
                       {/* City Name with Icon */}
@@ -462,6 +444,35 @@ const Sidebar = ({
                         >
                           {city.city}
                         </Typography>
+                        <Tooltip
+                    key={index}
+                    title={
+                      <Box sx={{ p: 1 }}>
+                        <Typography variant="body2">
+                          <strong>Income Level:</strong> {city.avgIncome}
+                        </Typography>
+                        <Typography variant="body2">
+                          <strong>Total EVs:</strong> {city.totalEvs}
+                        </Typography>
+                        <Typography variant="body2">
+                          <strong>EV Energy Demand:</strong>{" "}
+                          {city.totalEVEnergyDemand} kWh
+                        </Typography>
+                      </Box>
+                    }
+                    arrow
+                    placement="right"
+                  >
+                        <InfoIcon
+                          fontSize="small"
+                          sx={{
+                            ml: 0.5,
+                            verticalAlign: "middle",
+                            color: "primary.main",
+                          }}
+                        />
+                  </Tooltip>
+
                       </Box>
 
                       {/* Energy Deficit Display */}
@@ -477,10 +488,8 @@ const Sidebar = ({
                         {Math.abs(city.excessEnergy).toLocaleString()} kWh
                       </Typography>
                     </ListItem>
-                  </Tooltip>
                 ))}
             </List>
-            
           </Box>
         )}
 
