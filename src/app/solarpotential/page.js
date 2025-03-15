@@ -106,13 +106,15 @@ const EVChargingStationsMap = () => {
     mapInstance.fitBounds(bounds);
   };
 
-  const handleCountyChange = async (e) => {
-    const county = e.target.value;
+  const handleCountyChange = async (e,countName) => {
+    const county = e?.target?.value || countName ;
     setSelectedCounty(county);
     setLoading(true);
     setCountyBoundaries([]);
     setIsSidebarOpen(false);
     setIsShowArrowIcon(true);
+    setHoveredEvCounty(null);
+    setHoveredCounty(null);
 
     try {
       const response = await fetch(
@@ -373,7 +375,7 @@ const EVChargingStationsMap = () => {
 
       setIncomeData(incomeDataResponse.data);
       stateView();
-      showMessage("Hover over a county to see the income details.");
+      showMessage("Hover over a county to see income details, click on a county to view full insights.");
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -452,7 +454,7 @@ const EVChargingStationsMap = () => {
       setEvcsData(evcsDataResponse.data);
 
       stateView();
-      showMessage("Hover over a county to see the demand details.");
+      showMessage("Hover over a county to see demand details, click on a county to view full insights.");
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -733,6 +735,7 @@ const EVChargingStationsMap = () => {
               getAvgIncome={getAvgIncome}
               setHoveredCounty={setHoveredCounty}
               setHoveredEvCounty={setHoveredEvCounty}
+              handleCountyChange={handleCountyChange}
             />
           )}
 
@@ -743,6 +746,7 @@ const EVChargingStationsMap = () => {
               setHoveredEvCounty={setHoveredEvCounty}
               setHoveredCounty={setHoveredCounty}
               getColorBasedOnDemand={getColorBasedOnDemand}
+              handleCountyChange={handleCountyChange}
             />
           )}
           <Sidebar

@@ -6,7 +6,8 @@ const CountyEvBoundaries = ({
   getCountyData,
   setHoveredEvCounty,
   setHoveredCounty,
-  getColorBasedOnDemand
+  getColorBasedOnDemand,
+  handleCountyChange
 }) => {
   const handleMouseOver = (countyName, coordinates) => {
   
@@ -63,6 +64,7 @@ const CountyEvBoundaries = ({
             }}
             onMouseOver={() => handleMouseOver(countyName, coordinates)}
             onMouseOut={handleMouseOut}
+            onClick={()=>handleCountyChange('',countyName)}
           />
         );
       })}

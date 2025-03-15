@@ -10,6 +10,7 @@ const CountyBoundaries = ({
   getAvgIncome,
   setHoveredCounty,
   setHoveredEvCounty,
+  handleCountyChange
 }) => {
   const handleMouseOver = (county, coordinates) => {
     const countyName = county.name;
@@ -61,6 +62,7 @@ const CountyBoundaries = ({
             }}
             onMouseOver={() => handleMouseOver(county, coordinates)}
             onMouseOut={handleMouseOut}
+            onClick={()=>handleCountyChange('',county?.name)}
           />
         );
       })}
