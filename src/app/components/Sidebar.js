@@ -449,7 +449,7 @@ const Sidebar = ({
                     title={
                       <Box sx={{ p: 1 }}>
                         <Typography variant="body2">
-                          <strong>Income Level:</strong> {city.avgIncome}
+                          <strong>Average Income:</strong> {city.avgIncome}
                         </Typography>
                         <Typography variant="body2">
                           <strong>Total EVs:</strong> {city.totalEvs}
