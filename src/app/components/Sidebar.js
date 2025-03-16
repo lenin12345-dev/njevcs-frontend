@@ -43,7 +43,7 @@ const Sidebar = ({
   setSidebarVisible,
   topCityData,
   topStateCityData,
-  topCityloading
+  topCityLoading
 }) => {
   const appBarHeight = (theme.mixins.toolbar.minHeight || 56) + 8;
 
@@ -462,7 +462,7 @@ const Sidebar = ({
               </Typography>
             </Box>
 
-            <CityList loading={topCityloading} selectedCategory={selectedCategory} data={(selectedCategory =="economicZones" ||  selectedCategory =="demand")?topStateCityData:topCityData} />
+            <CityList loading={topCityLoading} selectedCategory={selectedCategory} data={(selectedCategory =="economicZones" ||  selectedCategory =="demand")?topStateCityData:topCityData} />
           </Box>
         )}
 

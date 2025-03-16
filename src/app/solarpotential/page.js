@@ -38,7 +38,6 @@ const center = {
 const key = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
 
 const EVChargingStationsMap = () => {
-  const [isMapLoaded, setIsMapLoaded] = useState(false);
   const [places, setPlaces] = useState([]);
   const [cityCoordinates, setCityCoordinates] = useState(center);
   const [warning, setWarning] = useState(false);
@@ -46,7 +45,7 @@ const EVChargingStationsMap = () => {
   const [selectedCategory, setSelectedCategory] = useState("charging");
   // const [showFilter, setShowFilter] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [topCityloading, setTopCityLoading] = useState(false);
+  const [topCityLoading, setTopCityLoading] = useState(false);
 
   const [cityBoundary, setCityBoundary] = useState(null);
   const [polygonOptions, setPolygonOptions] = useState(null);
@@ -60,7 +59,6 @@ const EVChargingStationsMap = () => {
 
   const [evsCount, setEvsCount] = useState("");
   const [evcsData, setEvcsData] = useState([]);
-  const [demand, setDemand] = useState([]);
 
   const inputRef = useRef(null); // Ref for the input field
   const autocompleteRef = useRef(null); // Ref for the autocomplete instance
@@ -192,11 +190,12 @@ const EVChargingStationsMap = () => {
     setMessage(msg);
     setOpenSnackbar(true);
   };
+  const libraries = ["places"]; 
 
   // Load Google Maps API
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: key,
-    libraries: ["places"],
+    libraries: libraries,
   });
 
   const fetchCityBoundary = async (cityName) => {
@@ -495,7 +494,6 @@ const EVChargingStationsMap = () => {
 
       // setCountyBoundaries([]);
 
-      setDemand(true);
     } else {
       if (activeTab === "city") {
         fetchCityPlaces(cityCoordinates, null, cityName, category);
@@ -603,7 +601,6 @@ const EVChargingStationsMap = () => {
 
   const onLoad = (map) => {
     mapRef.current = map;
-    setIsMapLoaded(true);
   };
 
   return (
@@ -811,7 +808,7 @@ const EVChargingStationsMap = () => {
             isShowArrowIcon={isShowArrowIcon}
             selectedCategory={selectedCategory}
             setSidebarVisible={setSidebarVisible}
-            topCityloading={topCityloading}
+            topCityLoading={topCityLoading}
           />
         </GoogleMap>
       )}
