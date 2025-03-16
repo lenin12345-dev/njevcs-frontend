@@ -46,6 +46,8 @@ const EVChargingStationsMap = () => {
   const [selectedCategory, setSelectedCategory] = useState("charging");
   // const [showFilter, setShowFilter] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [topCityloading, setTopCityLoading] = useState(false);
+
   const [cityBoundary, setCityBoundary] = useState(null);
   const [polygonOptions, setPolygonOptions] = useState(null);
   const [cityInfo, setCityInfo] = useState(null);
@@ -75,6 +77,8 @@ const EVChargingStationsMap = () => {
   const [searchText, setSearchText] = useState("");
   const [isShowArrowIcon, setIsShowArrowIcon] = useState(true);
   const [topCityData, setTopCityData] = useState([]);
+  const [topStateCityData, setStateTopCityData] = useState([]);
+
 
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
@@ -90,6 +94,8 @@ const EVChargingStationsMap = () => {
     setSidebarVisible(false);
     setIsShowArrowIcon(true);
     setSearchText("");
+    setTopCityData([]);
+    setStateTopCityData([]);
     autocompleteRef.current = null;
   };
   const zoomToBoundary = (coordinates) => {
@@ -106,15 +112,17 @@ const EVChargingStationsMap = () => {
     mapInstance.fitBounds(bounds);
   };
 
-  const handleCountyChange = async (e,countName) => {
-    const county = e?.target?.value || countName ;
+  const handleCountyChange = async (e, countName) => {
+    const county = e?.target?.value || countName;
     setSelectedCounty(county);
+    setIsSidebarOpen(false);
     setLoading(true);
     setCountyBoundaries([]);
-    setIsSidebarOpen(false);
     setIsShowArrowIcon(true);
     setHoveredEvCounty(null);
     setHoveredCounty(null);
+    setTopCityData([]);
+
 
     try {
       const response = await fetch(
@@ -152,7 +160,7 @@ const EVChargingStationsMap = () => {
   };
   const fetchTopCities = async (county) => {
     county = county.replace(/ Township$/i, "").trim();
-    setLoading(true);
+    setTopCityLoading(true);
 
     try {
       const response = await fetch(`api/topcity/${county}`);
@@ -160,8 +168,21 @@ const EVChargingStationsMap = () => {
       if (data.length) {
         setTopCityData(data);
       }
-      setLoading(false);
+      setTopCityLoading(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const fetchTopStateCities = async () => {
+    setTopCityLoading(true);
 
+    try {
+      const response = await fetch(`api/topStateCity`);
+      const data = await response.json();
+      if (data.length) {
+        setStateTopCityData(data);
+      }
+      setTopCityLoading(false);
     } catch (error) {
       console.error(error);
     }
@@ -373,9 +394,56 @@ const EVChargingStationsMap = () => {
       const incomeResponse = await fetch(`api/economy/counties`);
       const incomeDataResponse = await incomeResponse.json();
 
+      if (topStateCityData && topStateCityData.length==0){
+        await fetchTopStateCities();
+
+      }
+
       setIncomeData(incomeDataResponse.data);
+
       stateView();
-      showMessage("Hover over a county to see income details, click on a county to view full insights.");
+      setSidebarVisible(true);
+
+      showMessage(
+        "Hover over a county to see income details, click on a county to view full insights."
+      );
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  const fetchCountyEvData = async () => {
+    setLoading(true);
+
+    try {
+      if (countyBoundaries && countyBoundaries.length == 0) {
+        // Fetch county boundaries from the API
+        const countyBoundariesResponse = await fetch(
+          "https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/us-county-boundaries/records?limit=20&refine=stusab%3A%22NJ%22"
+        );
+        const countyBoundariesData = await countyBoundariesResponse.json();
+        setCountyBoundaries(countyBoundariesData.results);
+      }
+
+      // Fetch EVCS data from your local API
+      const evcsResponse = await fetch(`api/evs/counties`);
+      const evcsDataResponse = await evcsResponse.json();
+      if (topStateCityData && topStateCityData.length==0){
+        await fetchTopStateCities();
+
+      }
+
+      // Update state with the fetched data
+
+      setEvcsData(evcsDataResponse.data);
+
+      stateView();
+      setSidebarVisible(true);
+
+      showMessage(
+        "Hover over a county to see demand details, click on a county to view full insights."
+      );
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -396,30 +464,34 @@ const EVChargingStationsMap = () => {
       : "Unknown City";
 
     if (category === "economicZones") {
+
       fetchCountyData();
+      setIsSidebarOpen(false);
+
       setHoveredEvCounty(null);
       setHoveredCounty(null);
       setEvcsData([]);
-      setSidebarVisible(false);
+      // setSidebarVisible(false);
       setIsShowArrowIcon(true);
       setCountyBoundary([]);
       setSelectedCounty("");
       setPlaces([]);
-      setIsSidebarOpen(false);
+      setSelectedCategory("economicZones");
 
       // setCountyBoundaries([]);
     } else if (category === "demand") {
       fetchCountyEvData();
+      setIsSidebarOpen(false);
+
       setHoveredCounty(null);
       setHoveredEvCounty(null);
       setIncomeData([]);
-      setSidebarVisible(false);
+      // setSidebarVisible(false);
       setIsShowArrowIcon(true);
       setCountyBoundary([]);
       setSelectedCounty("");
       setPlaces([]);
-
-      setIsSidebarOpen(false);
+      setSelectedCategory("demand");
 
       // setCountyBoundaries([]);
 
@@ -432,35 +504,7 @@ const EVChargingStationsMap = () => {
       }
     }
   };
-  const fetchCountyEvData = async () => {
-    setLoading(true);
 
-    try {
-      if (countyBoundaries && countyBoundaries.length == 0) {
-        // Fetch county boundaries from the API
-        const countyBoundariesResponse = await fetch(
-          "https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/us-county-boundaries/records?limit=20&refine=stusab%3A%22NJ%22"
-        );
-        const countyBoundariesData = await countyBoundariesResponse.json();
-        setCountyBoundaries(countyBoundariesData.results);
-      }
-
-      // Fetch EVCS data from your local API
-      const evcsResponse = await fetch(`api/evs/counties`);
-      const evcsDataResponse = await evcsResponse.json();
-
-      // Update state with the fetched data
-
-      setEvcsData(evcsDataResponse.data);
-
-      stateView();
-      showMessage("Hover over a county to see demand details, click on a county to view full insights.");
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
   const handleInputChange = (event) => {
     const value = event.target.value;
 
@@ -503,6 +547,9 @@ const EVChargingStationsMap = () => {
     setCountyBoundary([]);
     setSelectedCounty("");
     setActiveTab("county");
+    setTopCityData([]);
+    setStateTopCityData([]);
+
   };
   const clearInput = () => {
     if (inputRef.current) {
@@ -676,7 +723,7 @@ const EVChargingStationsMap = () => {
           }}
           open={!isLoaded || loading} // Open the backdrop while the map is loading
         >
-            <CircularProgress sx={{ color: "#4CAF50" }} />
+          <CircularProgress sx={{ color: "#4CAF50" }} />
         </Backdrop>
       )}
 
@@ -752,6 +799,7 @@ const EVChargingStationsMap = () => {
           <Sidebar
             activeTab={activeTab}
             topCityData={topCityData}
+            topStateCityData={topStateCityData}
             cityInfo={cityInfo}
             visible={sidebarVisible}
             onClose={closeSidebar}
@@ -763,6 +811,7 @@ const EVChargingStationsMap = () => {
             isShowArrowIcon={isShowArrowIcon}
             selectedCategory={selectedCategory}
             setSidebarVisible={setSidebarVisible}
+            topCityloading={topCityloading}
           />
         </GoogleMap>
       )}
