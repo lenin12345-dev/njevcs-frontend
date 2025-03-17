@@ -40,10 +40,13 @@ const SkeletonLoader = ({ itemCount = 5 }) => (
     </>
   );
   
-  const CityList = ({ loading, data,selectedCategory }) => (
+  const CityList = ({ loading, data, selectedCategory }) => (
     <List
       sx={{
-        maxHeight: selectedCategory === "economicZones" || selectedCategory === "demand" ? "auto" : "100px",
+        maxHeight:
+          selectedCategory === "economicZones" || selectedCategory === "demand"
+            ? "auto"
+            : "100px",
         overflowY: "auto",
         p: 0,
       }}
@@ -67,7 +70,10 @@ const SkeletonLoader = ({ itemCount = 5 }) => (
             {/* City Name with Icon */}
             <Box sx={{ display: "flex", alignItems: "center" }}>
               <PlaceIcon sx={{ color: "primary.main", fontSize: 16, mr: 0.5 }} />
-              <Typography variant="body2" sx={{ fontWeight: "bold", fontSize: "0.8rem" }}>
+              <Typography
+                variant="body2"
+                sx={{ fontWeight: "bold", fontSize: "0.8rem" }}
+              >
                 {city.city}
               </Typography>
               <Tooltip
@@ -80,26 +86,46 @@ const SkeletonLoader = ({ itemCount = 5 }) => (
                       <strong>Total EVs:</strong> {city.totalEvs}
                     </Typography>
                     <Typography variant="body2">
-                      <strong>EV Energy Demand:</strong> {city?.totalEVEnergyDemand.toLocaleString()} kWh
+                      <strong>EV Energy Demand:</strong>{" "}
+                      {city?.totalEVEnergyDemand.toLocaleString()} kWh
                     </Typography>
                   </Box>
                 }
                 arrow
                 placement="right"
               >
-                <InfoIcon fontSize="small" sx={{ ml: 0.5, verticalAlign: "middle", color: "primary.main" }} />
+                <InfoIcon
+                  fontSize="small"
+                  sx={{
+                    ml: 0.5,
+                    verticalAlign: "middle",
+                    color: "primary.main",
+                  }}
+                />
               </Tooltip>
             </Box>
   
             {/* Energy Deficit Display */}
-            <Typography variant="body2" sx={{ fontWeight: "bold", fontSize: "0.75rem", color: "error.main", px: 1 }}>
-              {Math.abs(city.excessEnergy).toLocaleString()} kWh
+            <Typography
+              variant="body2"
+              sx={{
+                fontWeight: "bold",
+                fontSize: "0.75rem",
+                color: "error.main",
+                px: 1,
+              }}
+            >
+              {Math.abs(city.excessEnergy).toLocaleString()}
             </Typography>
           </ListItem>
         ))
-      ) : (
-        <Typography sx={{ textAlign: "center", py: 2, fontSize: "0.9rem", color: "gray" }}>No data available</Typography>
-      )}
+      ) : data.length === 0 && !loading ? ( // Only show "No data available" if loading is false
+        <Typography
+          sx={{ textAlign: "center", py: 2, fontSize: "0.9rem", color: "gray" }}
+        >
+          No data available
+        </Typography>
+      ) : null}
     </List>
   );
 
