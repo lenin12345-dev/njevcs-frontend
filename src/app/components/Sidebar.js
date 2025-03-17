@@ -63,7 +63,7 @@ const Sidebar = ({
             height: isMobile ? (isExpanded ? "50vh" : "18vh") : "auto",
             maxHeight: isMobile ? "60vh" : "90vh",
             top: isMobile ? "auto" : `${appBarHeight}px`,
-            padding: isMobile || (selectedCategory =="economicZones" ||  selectedCategory =="demand") ? 1 : 2,
+            padding: isMobile || (selectedCategory =="economicZones" ||  selectedCategory =="demand") ? 1.2 : 2,
             backgroundColor: "#f9f9f9",
             boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
             borderRadius: isMobile ? "16px 16px 0 0" : "8px 0 0 8px",
@@ -139,9 +139,9 @@ const Sidebar = ({
             </IconButton>
           </Box>
         )}
-        {(selectedCategory === "charging" || selectedCategory == "stores") && (
+     
           <Divider />
-        )}
+        
 
         {/* Content Section */}
         {(selectedCategory === "charging" || selectedCategory == "stores") && (
