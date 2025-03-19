@@ -75,7 +75,14 @@ const EVChargingStationsMap = () => {
   const [searchText, setSearchText] = useState("");
   const [isShowArrowIcon, setIsShowArrowIcon] = useState(true);
   const [topCityData, setTopCityData] = useState([]);
-  const [topStateCityData, setStateTopCityData] = useState([]);
+  const [topStateCityData, setTopStateCityData] = useState([]);
+  const libraries = ["places"]; 
+
+  // Load Google Maps API
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: key,
+    libraries: libraries,
+  });
 
 
   const handleTabChange = (event, newValue) => {
@@ -93,7 +100,7 @@ const EVChargingStationsMap = () => {
     setIsShowArrowIcon(true);
     setSearchText("");
     setTopCityData([]);
-    setStateTopCityData([]);
+    setTopStateCityData([]);
     autocompleteRef.current = null;
   };
   const zoomToBoundary = (coordinates) => {
@@ -178,7 +185,7 @@ const EVChargingStationsMap = () => {
       const response = await fetch(`api/topStateCity`);
       const data = await response.json();
       if (data.length) {
-        setStateTopCityData(data);
+        setTopStateCityData(data);
       }
       setTopCityLoading(false);
     } catch (error) {
@@ -190,13 +197,7 @@ const EVChargingStationsMap = () => {
     setMessage(msg);
     setOpenSnackbar(true);
   };
-  const libraries = ["places"]; 
 
-  // Load Google Maps API
-  const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: key,
-    libraries: libraries,
-  });
 
   const fetchCityBoundary = async (cityName) => {
     try {
@@ -546,7 +547,7 @@ const EVChargingStationsMap = () => {
     setSelectedCounty("");
     setActiveTab("county");
     setTopCityData([]);
-    setStateTopCityData([]);
+    setTopStateCityData([]);
 
   };
   const clearInput = () => {
