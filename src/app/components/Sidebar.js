@@ -427,7 +427,7 @@ const Sidebar = ({
           <Box
             sx={{
               mt: 1,
-              px:(selectedCategory =="economicZones" ||  selectedCategory =="demand")?0.5: 1.2,
+              px:(selectedCategory =="economicZones" ||  selectedCategory =="demand")?0.5: 1.5,
               py: 1.2,
               borderRadius: 2,
               backgroundColor: "#e3f2fd",
