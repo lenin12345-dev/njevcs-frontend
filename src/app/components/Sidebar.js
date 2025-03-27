@@ -12,7 +12,7 @@ import Tooltip from "@mui/material/Tooltip";
 import InfoIcon from "@mui/icons-material/Info";
 import ExpandButton from "../components/ExpandButton";
 import LocationCityIcon from "@mui/icons-material/LocationCity";
-import CityList from './CityList'
+import CityList from "./CityList";
 
 import {
   Drawer,
@@ -43,12 +43,22 @@ const Sidebar = ({
   setSidebarVisible,
   topCityData,
   topStateCityData,
-  topCityLoading
+  topCityLoading,
 }) => {
   const appBarHeight = (theme.mixins.toolbar.minHeight || 56) + 8;
 
   const [isExpanded, setIsExpanded] = useState(false);
 
+  const incomeLevels = [
+    { label: "< $60,000 (Low)", color: "#ff0000" },
+    { label: "$60,000 - $100,000 (Medium)", color: "#ffa500" },
+    { label: "> $100,000 (High)", color: "#008000" },
+  ];
+  const demandLevels = [
+    { label: "< 50,000 (Low)", color: "#ff0000" }, 
+    { label: "50,000 - 150,000 (Moderate)", color: "#ffa500" }, 
+    { label: ">150,000 (High)", color: "#008000" }, 
+  ];
 
   return (
     <>
@@ -63,7 +73,12 @@ const Sidebar = ({
             height: isMobile ? (isExpanded ? "50vh" : "18vh") : "auto",
             maxHeight: isMobile ? "60vh" : "90vh",
             top: isMobile ? "auto" : `${appBarHeight}px`,
-            padding: isMobile || (selectedCategory =="economicZones" ||  selectedCategory =="demand") ? 1.2 : 2,
+            padding:
+              isMobile ||
+              selectedCategory == "economicZones" ||
+              selectedCategory == "demand"
+                ? 1.2
+                : 2,
             backgroundColor: "#f9f9f9",
             boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
             borderRadius: isMobile ? "16px 16px 0 0" : "8px 0 0 8px",
@@ -139,9 +154,8 @@ const Sidebar = ({
             </IconButton>
           </Box>
         )}
-     
-          <Divider />
-        
+
+        <Divider />
 
         {/* Content Section */}
         {(selectedCategory === "charging" || selectedCategory == "stores") && (
@@ -427,7 +441,11 @@ const Sidebar = ({
           <Box
             sx={{
               mt: 1,
-              px:(selectedCategory =="economicZones" ||  selectedCategory =="demand")?0.5: 1.5,
+              px:
+                selectedCategory == "economicZones" ||
+                selectedCategory == "demand"
+                  ? 0.5
+                  : 1.5,
               py: 1.2,
               borderRadius: 2,
               backgroundColor: "#e3f2fd",
@@ -450,7 +468,12 @@ const Sidebar = ({
                   fontWeight="bold"
                   color="primary"
                 >
-                  Top {(selectedCategory =="economicZones" ||  selectedCategory =="demand")?"10":""} Energy Deficit Cities 
+                  Top{" "}
+                  {selectedCategory == "economicZones" ||
+                  selectedCategory == "demand"
+                    ? "10"
+                    : ""}{" "}
+                  Energy Deficit Cities
                 </Typography>
               </Box>
               <Typography
@@ -462,7 +485,16 @@ const Sidebar = ({
               </Typography>
             </Box>
 
-            <CityList loading={topCityLoading} selectedCategory={selectedCategory} data={(selectedCategory =="economicZones" ||  selectedCategory =="demand")?topStateCityData:topCityData} />
+            <CityList
+              loading={topCityLoading}
+              selectedCategory={selectedCategory}
+              data={
+                selectedCategory == "economicZones" ||
+                selectedCategory == "demand"
+                  ? topStateCityData
+                  : topCityData
+              }
+            />
           </Box>
         )}
 
@@ -514,67 +546,65 @@ const Sidebar = ({
         {/* Heatmap Legend Section */}
         <Box
           sx={{
-            mt: isMobile ? 2 : 1,
+            mt: 1,
             px: 2,
-            py: 1,
+            pb: 1,
             borderRadius: 2,
             backgroundColor: "#f0f4f8",
+            boxShadow: "0px 2px 8px rgba(0, 0, 0, 0.1)",
           }}
         >
-          <Typography variant="subtitle2" fontWeight="bold" sx={{ mb: 1 }}>
-            Indicator Guide
-          </Typography>
-          <Box
-            display={"flex"}
-            justifyContent={"space-between"}
-            alignItems={"center"}
+
+
+          {/* Conditional Rendering: Demand Guide OR Income Guide */}
+          <Box display={'flex'} alignItems={"center"}>
+          <Typography
+            variant="subtitle2"
+            fontWeight="bold"
+            sx={{ mt: 1, mb: 1,mr:0.8 }}
           >
-            <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
-              <Box
-                sx={{
-                  width: 20,
-                  height: 20,
-                  backgroundColor: "#008000",
-                  borderRadius: "50%",
-                  mr: 1,
-                }}
-              />
-              <Typography variant="body2">High</Typography>
-            </Box>
-            <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
-              <Box
-                sx={{
-                  width: 20,
-                  height: 20,
-                  backgroundColor: "#ffa500",
-                  borderRadius: "50%",
-                  mr: 1,
-                }}
-              />
-              <Typography variant="body2">Medium</Typography>
-            </Box>
-            <Box sx={{ display: "flex", alignItems: "center" }}>
-              <Box
-                sx={{
-                  width: 20,
-                  height: 20,
-                  backgroundColor: "#ff0000",
-                  borderRadius: "50%",
-                  mr: 1,
-                }}
-              />
-              <Typography variant="body2">Low</Typography>
-            </Box>
+            {selectedCategory === "demand" ? "Demand Indicator Guide " : "Income Indicator Guide"}       
+          </Typography>
+     { selectedCategory === "demand" &&    <Typography
+                variant="body2"
+                color="text.secondary"
+                sx={{ fontSize: 11 }}
+              >
+                (Unit: kWh/day)
+              </Typography>}
           </Box>
+
+          <Box display="flex" flexDirection="column">
+            {(selectedCategory === "demand" ? demandLevels : incomeLevels).map(
+              ({ label, color }) => (
+                <Box
+                  key={label}
+                  sx={{ display: "flex", alignItems: "center", mb: 0.5 }}
+                >
+                  <Box
+                    sx={{
+                      width: 20,
+                      height: 20,
+                      backgroundColor: color,
+                      borderRadius: "50%",
+                      mr: 1,
+                    }}
+                  />
+                  <Typography variant="body2">{label}</Typography>
+                </Box>
+              )
+            )}
+          </Box>
+
+          {/* Note */}
           {(selectedCategory === "charging" ||
-            selectedCategory == "stores") && (
-            <Typography
-              color="text.secondary"
-              sx={{ mt: 0.8, fontSize: "12px" }}
-            >
-              <span style={{ color: "orangered" }}>Note:</span> The solar energy
-              potential is currently based on data from 5 stores: Costco, BJs,
-              Walmart, Target, and Home Depot.
+            selectedCategory === "stores") && (
+            <Typography color="text.secondary" sx={{ mt: 1, fontSize: "12px" }}>
+              <span style={{ color: "orangered", fontWeight: "bold" }}>
+                Note:
+              </span>{" "}
+              The solar energy potential is currently based on data from 5
+              stores: Costco, BJs, Walmart, Target, and Home Depot.
             </Typography>
           )}
         </Box>
