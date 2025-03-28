@@ -247,7 +247,7 @@ const FilterBox = ({
                 visibility: activeTab === "county" ? "visible" : "hidden",
               }}
             >
-              Economic Zones
+              Income Profile
             </Button>
           </Grid>
           <Grid item xs={4}>

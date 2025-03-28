@@ -437,66 +437,41 @@ const Sidebar = ({
             </Box>
           )}
         {/* Cities List */}
-        {activeTab == "county" && (
-          <Box
-            sx={{
-              mt: 1,
-              px:
-                selectedCategory == "economicZones" ||
-                selectedCategory == "demand"
-                  ? 0.5
-                  : 1.5,
-              py: 1.2,
-              borderRadius: 2,
-              backgroundColor: "#e3f2fd",
-            }}
-          >
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                mb: 0.5,
-              }}
-            >
-              <Box display={"flex"} alignItems={"center"}>
-                <LocationCityIcon
-                  sx={{ color: "green", mr: 0.2, fontSize: "16px" }}
-                />
-                <Typography
-                  variant="subtitle1"
-                  fontWeight="bold"
-                  color="primary"
-                >
-                  Top{" "}
-                  {selectedCategory == "economicZones" ||
-                  selectedCategory == "demand"
-                    ? "10"
-                    : ""}{" "}
-                  Energy Deficit Cities
-                </Typography>
-              </Box>
-              <Typography
-                variant="body2"
-                color="text.secondary"
-                sx={{ mb: 0.3, fontSize: 11 }}
-              >
-                (Unit: kWh/day)
-              </Typography>
-            </Box>
+        {activeTab == "county" &&
+  selectedCategory !== "economicZones" &&
+  selectedCategory !== "demand" && (
+    <Box
+      sx={{
+        mt: 1,
+        px: 1.5,
+        py: 1.2,
+        borderRadius: 2,
+        backgroundColor: "#e3f2fd",
+      }}
+    >
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          mb: 0.5,
+        }}
+      >
+        <Box display={"flex"} alignItems={"center"}>
+          <LocationCityIcon sx={{ color: "green", mr: 0.2, fontSize: "16px" }} />
+          <Typography variant="subtitle1" fontWeight="bold" color="primary">
+            Top Energy Deficit Cities
+          </Typography>
+        </Box>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 0.3, fontSize: 11 }}>
+          (Unit: kWh/day)
+        </Typography>
+      </Box>
 
-            <CityList
-              loading={topCityLoading}
-              selectedCategory={selectedCategory}
-              data={
-                selectedCategory == "economicZones" ||
-                selectedCategory == "demand"
-                  ? topStateCityData
-                  : topCityData
-              }
-            />
-          </Box>
-        )}
+      <CityList loading={topCityLoading} selectedCategory={selectedCategory} data={topCityData} />
+    </Box>
+  )}
+
 
         {/* Visual Section */}
         {!isMobile &&
@@ -563,7 +538,7 @@ const Sidebar = ({
             fontWeight="bold"
             sx={{ mt: 1, mb: 1,mr:0.8 }}
           >
-            {selectedCategory === "demand" ? "Demand Indicator Guide " : "Income Indicator Guide"}       
+            {selectedCategory === "demand" ? "Energy Demand Profile " : "Income Profile"}       
           </Typography>
      { selectedCategory === "demand" &&    <Typography
                 variant="body2"
