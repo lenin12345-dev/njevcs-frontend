@@ -79,6 +79,9 @@ const SkeletonLoader = ({ itemCount = 5 }) => (
               <Tooltip
                 title={
                   <Box sx={{ p: 1 }}>
+                      <Typography variant="body2">
+                      <strong>City:</strong>  {city?.city}
+                    </Typography>
                     <Typography variant="body2">
                       <strong>Average Income:</strong> ${city.avgIncome.toLocaleString()}
                     </Typography>
@@ -87,7 +90,7 @@ const SkeletonLoader = ({ itemCount = 5 }) => (
                     </Typography>
                     <Typography variant="body2">
                       <strong>EV Energy Demand:</strong>{" "}
-                      {city?.totalEVEnergyDemand.toLocaleString()} kWh
+                      {city?.totalEVEnergyDemand.toLocaleString()} kWh/day
                     </Typography>
                   </Box>
                 }
