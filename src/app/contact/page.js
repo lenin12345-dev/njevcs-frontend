@@ -11,15 +11,20 @@ import {
   Snackbar,
   styled,
   Alert,
+  Box,
 } from "@mui/material";
 import emailjs from "@emailjs/browser";
-
 const StyledCard = styled(Card)(({ theme }) => ({
-  maxWidth: 600,
-  margin: "4rem auto",
-  padding: theme.spacing(2),
+  width: "90%", 
+  maxWidth: 700,
+  padding: theme.spacing(3),
   boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
+  
+  [theme.breakpoints.up("sm")]: {
+    width: 500, 
+  },
 }));
+
 
 const FormContainer = styled("form")(({ theme }) => ({
   display: "flex",
@@ -43,23 +48,15 @@ const Page = () => {
 
   const validateForm = () => {
     const newErrors = {};
-    if (!formData.name.trim()) {
-      newErrors.name = "Name is required";
-    }
-    if (!formData.email.trim()) {
-      newErrors.email = "Email is required";
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+    if (!formData.name.trim()) newErrors.name = "Name is required";
+    if (!formData.email.trim()) newErrors.email = "Email is required";
+    else if (!/\S+@\S+\.\S+/.test(formData.email))
       newErrors.email = "Please enter a valid email";
-    }
-    if (!formData.message.trim()) {
-      newErrors.message = "Message is required";
-    }
-    if (Object.keys(newErrors).length === 0) {
-      return true;
-    } else {
-      setErrors(newErrors);
-      return false;
-    }
+    if (!formData.message.trim()) newErrors.message = "Message is required";
+
+    if (Object.keys(newErrors).length === 0) return true;
+    setErrors(newErrors);
+    return false;
   };
 
   const handleChange = (e) => {
@@ -92,11 +89,7 @@ const Page = () => {
             message: "Message sent successfully!",
             severity: "success",
           });
-          setFormData({
-            name: "",
-            email: "",
-            message: "",
-          });
+          setFormData({ name: "", email: "", message: "" });
           setErrors({});
           setLoading(false);
         },
@@ -113,14 +106,29 @@ const Page = () => {
   };
 
   return (
-    <Container>
+    <Box
+      sx={{
+        position: "relative",
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "url('/contact.jpg') center/cover no-repeat",
+      }}
+    >
       <StyledCard>
         <CardContent>
-          <Typography style={{color:"#4E9268"}} variant="h4" component={"h1"} gutterBottom align="center">
+          <Typography
+            style={{ color: "#4E9268" }}
+            variant="h4"
+            component="h1"
+            gutterBottom
+            align="center"
+          >
             Contact Us
           </Typography>
           <FormContainer onSubmit={handleSubmit} noValidate>
-            <FormControl component={"fieldset"}>
+            <FormControl component="fieldset">
               <TextField
                 margin="normal"
                 fullWidth
@@ -157,7 +165,6 @@ const Page = () => {
                 onChange={handleChange}
               />
               <Button
-           
                 fullWidth
                 size="large"
                 variant="contained"
@@ -166,12 +173,9 @@ const Page = () => {
                 disabled={loading}
                 sx={{
                   marginTop: 3,
-                  
-                 
                   background: "#4E9268",
                   color: "#fff",
                   fontWeight: "bold",
-               
                   textTransform: "none",
                   boxShadow: "0 4px 10px rgba(0,0,0,0.3)",
                   "&:hover": {
@@ -186,6 +190,7 @@ const Page = () => {
           </FormContainer>
         </CardContent>
       </StyledCard>
+
       <Snackbar
         open={snackbar.open}
         autoHideDuration={6000}
@@ -199,7 +204,7 @@ const Page = () => {
           {snackbar.message}
         </Alert>
       </Snackbar>
-    </Container>
+    </Box>
   );
 };
 
