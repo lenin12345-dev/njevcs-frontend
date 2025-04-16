@@ -47,6 +47,10 @@ const RenewableEnergySection = () => {
                 height: "400px", 
                 objectFit: "cover",
                 boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
+                transition:"transform 0.4s ease-in-out",
+                "&:hover":{
+                  transform:"scale(1.05)"
+                }
               }}
             />
 
@@ -151,6 +155,10 @@ const RenewableEnergySection = () => {
                 height: "400px", 
                 objectFit: "cover",
                 boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
+                transition:"transform 0.4s ease-in-out",
+                "&:hover":{
+                  transform:"scale(1.05)"
+                }
               }}
             />
 
