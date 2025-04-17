@@ -1,13 +1,14 @@
 import React from "react";
 import { Polygon } from "@react-google-maps/api";
+import {getColorBasedOnDemand} from "../../utils"
 
 const CountyEvBoundaries = ({
   countyBoundaries,
   getCountyData,
   setHoveredEvCounty,
   setHoveredCounty,
-  getColorBasedOnDemand,
-  handleCountyChange
+  handleCountyChange,
+  evcsData
 }) => {
   const handleMouseOver = (countyName, coordinates) => {
   
@@ -59,7 +60,7 @@ const CountyEvBoundaries = ({
               strokeColor: "#0000FF",
               strokeOpacity: 0.8,
               strokeWeight: 2,
-              fillColor: getColorBasedOnDemand(countyName), // Color based on energy demand
+              fillColor: getColorBasedOnDemand(countyName,evcsData), // Color based on energy demand
               fillOpacity: 0.4,
             }}
             onMouseOver={() => handleMouseOver(countyName, coordinates)}

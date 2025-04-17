@@ -25,3 +25,12 @@ export  const parseCoordinates = (geometry) => {
 
     return latLngPairs;
   };
+
+  export const getColorBasedOnDemand = (name,data)=>{
+       const county = data.find((each)=>each.county==name)
+       if(!county) return "gray";
+       const { totalEVEnergyDemand } = county;
+       if (totalEVEnergyDemand < 50000) return "red";
+       if (totalEVEnergyDemand < 150000) return "orange";
+       return "green";
+  }

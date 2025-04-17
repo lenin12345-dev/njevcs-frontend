@@ -579,17 +579,7 @@ const EVChargingStationsMap = () => {
     };
   };
 
-  const getColorBasedOnDemand = (name) => {
-    let county = evcsData.find((item) => item.county === name);
-    const { totalEVEnergyDemand } = county;
-    if (totalEVEnergyDemand < 50000) {
-      return "red"; // Low demand
-    } else if (totalEVEnergyDemand >= 50000 && totalEVEnergyDemand < 150000) {
-      return "orange"; // Medium demand
-    } else {
-      return "green"; // High demand
-    }
-  };
+
   const getAvgIncome = (countyName) => {
     const countyIncome = incomeData.find((item) => item.county === countyName);
     return countyIncome ? countyIncome.income : 0;
@@ -790,7 +780,7 @@ const EVChargingStationsMap = () => {
               getCountyData={getCountyData}
               setHoveredEvCounty={setHoveredEvCounty}
               setHoveredCounty={setHoveredCounty}
-              getColorBasedOnDemand={getColorBasedOnDemand}
+              evcsData={evcsData}
               handleCountyChange={handleCountyChange}
             />
           )}
