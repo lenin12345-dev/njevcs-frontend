@@ -4,13 +4,29 @@ import {getColorBasedOnDemand} from "../../utils"
 
 const CountyEvBoundaries = ({
   countyBoundaries,
-  getCountyData,
   setHoveredEvCounty,
   setHoveredCounty,
   handleCountyChange,
   evcsData
 }) => {
   const handleMouseOver = (countyName, coordinates) => {
+    const getCountyData = (countyName) => {
+      const countyEvcs = evcsData.find((item) => item.county === countyName);
+  
+      if (!countyEvcs) {
+        return {
+          evcsLevel: "Medium",
+          evcsCount: 0,
+          totalEVEnergyDemand: 0,
+        };
+      }
+  
+      return {
+        evcsLevel: countyEvcs.incomeLevel || "Medium",
+        evcsCount: countyEvcs.totalEvs || 0,
+        totalEVEnergyDemand: countyEvcs.totalEVEnergyDemand || 0,
+      };
+    };
   
     const {evcsLevel,evcsCount,totalEVEnergyDemand} = getCountyData(countyName);
  

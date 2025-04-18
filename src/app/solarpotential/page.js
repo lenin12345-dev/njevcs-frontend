@@ -561,23 +561,7 @@ const EVChargingStationsMap = () => {
     return countyIncome ? countyIncome.incomeLevel : "Medium";
   };
 
-  const getCountyData = (countyName) => {
-    const countyEvcs = evcsData.find((item) => item.county === countyName);
 
-    if (!countyEvcs) {
-      return {
-        evcsLevel: "Medium",
-        evcsCount: 0,
-        totalEVEnergyDemand: 0,
-      };
-    }
-
-    return {
-      evcsLevel: countyEvcs.incomeLevel || "Medium",
-      evcsCount: countyEvcs.totalEvs || 0,
-      totalEVEnergyDemand: countyEvcs.totalEVEnergyDemand || 0,
-    };
-  };
 
 
   const getAvgIncome = (countyName) => {
@@ -777,7 +761,6 @@ const EVChargingStationsMap = () => {
           {countyBoundaries.length > 0 && evcsData.length > 0 && (
             <CountyEvBoundaries
               countyBoundaries={countyBoundaries}
-              getCountyData={getCountyData}
               setHoveredEvCounty={setHoveredEvCounty}
               setHoveredCounty={setHoveredCounty}
               evcsData={evcsData}
