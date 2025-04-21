@@ -3,7 +3,6 @@ import CloseIcon from "@mui/icons-material/Close";
 import j1772 from "../../../public/j1772.png";
 import tesla from "../../../public/tesla.png";
 import chademo from "../../../public/chademo.png";
-import nema1450 from "../../../public/nema1450.png";
 import nema515 from "../../../public/nema515.png";
 import nema520 from "../../../public/nema520.png";
 import combo from "../../../public/combo.png";
@@ -23,9 +22,6 @@ import {
   Avatar,
   Grid,
   Button,
-  List,
-  ListItem,
-  Skeleton,
 } from "@mui/material";
 
 const Sidebar = ({
