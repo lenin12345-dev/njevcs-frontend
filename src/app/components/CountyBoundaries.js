@@ -70,4 +70,5 @@ const CountyBoundaries = ({
   );
 };
 
-export default CountyBoundaries;
+
+export default React.memo(CountyBoundaries);

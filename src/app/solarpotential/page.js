@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import { GoogleMap, useJsApiLoader, Polygon } from "@react-google-maps/api";
 import {
   Box,
@@ -556,18 +556,18 @@ const EVChargingStationsMap = () => {
     }
   };
   // Combine income level data with county boundaries
-  const getIncomeLevel = (countyName) => {
+  const getIncomeLevel = useCallback((countyName) => {
     const countyIncome = incomeData.find((item) => item.county === countyName);
     return countyIncome ? countyIncome.incomeLevel : "Medium";
-  };
+  },[incomeData]);
 
 
 
 
-  const getAvgIncome = (countyName) => {
+  const getAvgIncome = useCallback((countyName) => {
     const countyIncome = incomeData.find((item) => item.county === countyName);
     return countyIncome ? countyIncome.income : 0;
-  };
+  },[incomeData]);
 
   const closeSidebar = () => {
     setSidebarVisible(false);

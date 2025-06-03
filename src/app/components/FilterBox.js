@@ -33,6 +33,7 @@ const FilterBox = ({
   const isCountyBoundaryEmpty =
     activeTab == "county" &&
     (countyBoundary == null || countyBoundary.length === 0);
+    console.log("mmm")
 
   return (
     <Box>
