@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Typography, Grid,Button } from "@mui/material";
+import { Box, Typography, Grid, Button } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import Link from "next/link";
 
@@ -17,10 +17,9 @@ const RenewableEnergySection = () => {
             sx={{
               display: "flex",
               flexDirection: "column",
-              alignItems:{xs:"center",sm: "flex-start"},
+              alignItems: { xs: "center", sm: "flex-start" },
             }}
           >
-    
             <Typography
               variant="h4"
               component="h2"
@@ -29,28 +28,27 @@ const RenewableEnergySection = () => {
                 color: "#333",
                 marginBottom: 4,
                 fontSize: { xs: "1.8rem", sm: "2.2rem", md: "2.3rem" },
-                textAlign:{xs:"center",sm:"auto"}
+                textAlign: { xs: "center", sm: "auto" },
               }}
             >
-              How We <span style={{color:"#4E9268"}}>Help You</span>
+              How We <span style={{ color: "#4E9268" }}>Help You</span>
             </Typography>
 
-           
             <Box
               component="img"
-              src="/h1.webp" 
+              src="/h1.webp"
               alt="Renewable Innovation"
               loading="lazy"
               sx={{
                 width: "100%",
                 borderRadius: "10px",
-                height: "400px", 
+                height: "400px",
                 objectFit: "cover",
                 boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
-                transition:"transform 0.4s ease-in-out",
-                "&:hover":{
-                  transform:"scale(1.05)"
-                }
+                transition: "transform 0.4s ease-in-out",
+                "&:hover": {
+                  transform: "scale(1.05)",
+                },
               }}
             />
 
@@ -64,7 +62,10 @@ const RenewableEnergySection = () => {
                 maxWidth: "650px",
               }}
             >
-             Explore our interactive mapping tool to identify optimal solar generation sites in cities and counties of New Jersey. Gain insights into solar energy production potential and make informed decisions for installations.
+              Explore our interactive mapping tool to identify optimal solar
+              generation sites in cities and counties of New Jersey. Gain
+              insights into solar energy production potential and make informed
+              decisions for installations.
             </Typography>
           </Box>
         </Grid>
@@ -85,15 +86,14 @@ const RenewableEnergySection = () => {
           {/* Quote Icon */}
           <Box
             component="img"
+            alt="Clean Solar Energy"
             src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4huM9RARVto1VYaN8H07r6xdVl5lxIWN8Sg&s"
             sx={{
               width: "40px",
               height: "40px",
             }}
           />
-         
 
-         
           <Typography
             variant="h6"
             sx={{
@@ -114,8 +114,8 @@ const RenewableEnergySection = () => {
             component={Link}
             href="/solarpotential"
             sx={{
-              marginTop: {xs:"12px",sm:"20px"},
-              
+              marginTop: { xs: "12px", sm: "20px" },
+
               padding: { xs: "8px 16px", sm: "10px 20px" },
               background: "#4E9268",
               color: "#fff",
@@ -143,22 +143,21 @@ const RenewableEnergySection = () => {
               alignItems: "flex-end",
             }}
           >
-       
             <Box
               component="img"
-              src="/h2.webp" 
+              src="/h2.webp"
               alt="Clean Energy"
               loading="lazy"
               sx={{
                 width: "100%",
                 borderRadius: "10px",
-                height: "400px", 
+                height: "400px",
                 objectFit: "cover",
                 boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
-                transition:"transform 0.4s ease-in-out",
-                "&:hover":{
-                  transform:"scale(1.05)"
-                }
+                transition: "transform 0.4s ease-in-out",
+                "&:hover": {
+                  transform: "scale(1.05)",
+                },
               }}
             />
 
@@ -167,12 +166,14 @@ const RenewableEnergySection = () => {
               sx={{
                 color: "#666",
                 lineHeight: "1.6",
-             
+
                 marginTop: "10px",
                 maxWidth: "700px",
               }}
             >
-            Discover how solar PV awnings can harness seasonal solar flux to power retail parking areas, driving both energy efficiency and environmental impact.
+              Discover how solar PV awnings can harness seasonal solar flux to
+              power retail parking areas, driving both energy efficiency and
+              environmental impact.
             </Typography>
           </Box>
         </Grid>

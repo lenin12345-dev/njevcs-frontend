@@ -19,7 +19,7 @@ export default function CoverPage() {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        height: { xs: "100vh", sm: "80vh" }, 
+        height: { xs: "100vh", sm: "80vh" },
         backgroundImage: "url('/cover.webp')",
         backgroundSize: "cover",
         backgroundPosition: "center",
@@ -37,7 +37,7 @@ export default function CoverPage() {
             position: "absolute",
             top: { xs: "5%", sm: "10%" },
             left: { xs: "5%", sm: "5%" },
-            maxWidth: { xs: "90%", sm: "700px" }, 
+            maxWidth: { xs: "90%", sm: "700px" },
           }}
         >
           <Typography
@@ -86,8 +86,8 @@ export default function CoverPage() {
             component={Link}
             href="/solarpotential"
             sx={{
-              marginTop: {sx:"10px",sm:"20px"},
-              
+              marginTop: { sx: "10px", sm: "20px" },
+
               padding: { xs: "8px 16px", sm: "10px 20px" },
               background: "#4E9268",
               color: "#fff",
@@ -106,7 +106,6 @@ export default function CoverPage() {
           </Button>
         </Box>
 
-   
         <Box
           sx={{
             position: "absolute",
@@ -114,7 +113,7 @@ export default function CoverPage() {
             left: { xs: "5%", sm: "5%" },
             right: { xs: "5%", sm: "5%" },
             display: "flex",
-            flexWrap: "wrap", 
+            flexWrap: "wrap",
             justifyContent: "center",
             gap: "20px",
             zIndex: 1,
@@ -129,8 +128,8 @@ export default function CoverPage() {
           <Card
             sx={{
               display: "flex",
-              flexDirection: { xs: "column", sm: "row" }, 
-              height:  "200px",
+              flexDirection: { xs: "column", sm: "row" },
+              height: "200px",
               width: { xs: "100%", sm: "500px" },
               borderRadius: "10px",
               boxShadow: "0 6px 15px rgba(0, 0, 0, 0.3)",
@@ -141,7 +140,7 @@ export default function CoverPage() {
             <Box
               sx={{
                 width: { xs: "100%", sm: "60%" },
-                height: {xs:"40%",sm:"auto"},
+                height: { xs: "40%", sm: "auto" },
                 backgroundImage: "url('/top1.jpg')",
                 backgroundSize: "cover",
                 backgroundPosition: "center",
@@ -154,17 +153,24 @@ export default function CoverPage() {
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "center",
-                padding: {xs:"10px",sm:"30px"},
-                width: {xs:"auto",sm:"60%"},
+                padding: { xs: "10px", sm: "30px" },
+                width: { xs: "auto", sm: "60%" },
                 color: "#fff",
-                height: {xs:"60%",sm:"auto"},
+                height: { xs: "60%", sm: "auto" },
               }}
             >
-              <Typography variant="h7" sx={{ fontWeight: "bold", color: "#fff" }}>
+              <Typography
+                variant="h7"
+                sx={{ fontWeight: "bold", color: "#fff" }}
+              >
                 Solar Canopy Potential
               </Typography>
-              <Typography variant="body2" sx={{ fontSize: "0.8rem", lineHeight: "1.5", color: "#fff" }}>
-                Harnessing the power of the sun while providing shelter and energy efficiency to local businesses.
+              <Typography
+                variant="body2"
+                sx={{ fontSize: "0.8rem", lineHeight: "1.5", color: "#fff" }}
+              >
+                Harnessing the power of the sun while providing shelter and
+                energy efficiency to local businesses.
               </Typography>
             </CardContent>
           </Card>
@@ -183,7 +189,8 @@ export default function CoverPage() {
             <CardMedia
               sx={{ height: "100%" }}
               image="/top2.jpg"
-              title="green iguana"
+              role="img"
+              aria-label="Solar installation over parking canopy"
             />
           </Card>
 
@@ -201,11 +208,13 @@ export default function CoverPage() {
             <CardMedia
               sx={{ height: 120 }}
               image="/top3.jpg"
-              title="green iguana"
+              role="img"
+              aria-label="Solar installation over parking canopy"
             />
             <CardContent>
               <Typography variant="body2" sx={{ color: "#fff" }}>
-                Our solar panels deliver maximum efficiency, ensuring you get the most out of it.
+                Our solar panels deliver maximum efficiency, ensuring you get
+                the most out of it.
               </Typography>
             </CardContent>
           </Card>

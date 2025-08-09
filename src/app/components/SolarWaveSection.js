@@ -53,7 +53,6 @@ const cardData = [
   },
 ];
 
-
 const SolarWaveSection = () => {
   return (
     <Box
@@ -91,6 +90,7 @@ const SolarWaveSection = () => {
         </Typography>
         <Typography
           variant="h6"
+          component="p"
           sx={{
             color: "#666",
             lineHeight: "1.6",
@@ -139,7 +139,7 @@ const SolarWaveSection = () => {
                   height: "100%",
                   transformStyle: "preserve-3d",
                   transition: "transform 0.4s",
-                  cursor:"pointer",
+                  cursor: "pointer",
                   "&:hover": {
                     transform: "rotateY(180deg)",
                   },
@@ -216,16 +216,19 @@ const SolarWaveSection = () => {
                     boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
                   }}
                 >
-           
                   <Typography
                     variant="body2"
                     sx={{
                       textAlign: "center",
                       lineHeight: "1.6",
-                      fontSize: { xs: "0.8rem", sm: "0.9rem",fontWeight:"bold" },
+                      fontSize: {
+                        xs: "0.8rem",
+                        sm: "0.9rem",
+                        fontWeight: "bold",
+                      },
                     }}
                   >
-                 {card.backDescription}
+                    {card.backDescription}
                   </Typography>
                 </Box>
               </Box>
