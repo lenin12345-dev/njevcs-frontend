@@ -17,7 +17,7 @@ const CustomMarker = ({ places, selectedCategory, setHoveredPlace }) => {
       const isChargingStation = selectedCategory === "charging";
       return isChargingStation
         ? {
-            url: "https://energysolutions.homeserve.ca/wp-content/uploads/2022/02/BS_PD_2618_ev_icon_400px.png",
+            url: "https://play-lh.googleusercontent.com/j9zxjESeBR046sA55jqBmgEBNObrFNMt55a_y9PQOw_QG-RaoBI1xboc8vz79NnN92KtjZ_NjPCLswtJl7zmzQ",
             scaledSize: new window.google.maps.Size(30, 30),
           }
         : {
